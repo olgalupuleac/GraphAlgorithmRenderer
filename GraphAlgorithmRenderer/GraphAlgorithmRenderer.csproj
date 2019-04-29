@@ -54,7 +54,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Config\ConditionalProperty.cs" />
+    <Compile Include="Config\GraphConfig.cs" />
+    <Compile Include="Config\IdentifierTemplate.cs" />
+    <Compile Include="Config\IEdgeProperty.cs" />
+    <Compile Include="Config\INodeProperty.cs" />
+    <Compile Include="GraphElementIdentifier\Identifier.cs" />
+    <Compile Include="GraphRenderer\GraphRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializer\ConfigSerializer.cs" />
     <Compile Include="SettingsWindow.cs" />
     <Compile Include="SettingsWindowCommand.cs" />
     <Compile Include="SettingsWindowControl.xaml.cs">
@@ -72,6 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
+    <Content Include="Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\SettingsWindowCommand.png" />
     <Content Include="Resources\SettingsWindowPackage.ico" />
     <VSCTCompile Include="SettingsWindowPackage.vsct">
@@ -164,6 +176,9 @@
     <Reference Include="Microsoft.VisualStudio.Validation, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.15.0.82\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -195,10 +210,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphConfig\GraphConfig.csproj">
-      <Project>{8d51767c-428b-4499-b250-9162dbce0b16}</Project>
-      <Name>GraphConfig</Name>
-    </ProjectReference>
+    <Folder Include="ConfigSamples\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

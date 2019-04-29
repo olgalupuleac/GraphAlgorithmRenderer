@@ -1,4 +1,6 @@
-﻿namespace GraphAlgorithmRenderer
+﻿using System.Diagnostics;
+
+namespace GraphAlgorithmRenderer
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
@@ -15,20 +17,23 @@
         public SettingsWindowControl()
         {
             this.InitializeComponent();
+            this.DataContext = this;
         }
 
-        /// <summary>
-        /// Handles click on the button by displaying a message box.
-        /// </summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event args.</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
-        private void button1_Click(object sender, RoutedEventArgs e)
+        public string JsonConfig { get; set; }
+
+        public bool IsReady { get; set; }
+
+
+        private void Load_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-                string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                "SettingsWindow");
+            Debug.WriteLine(JsonConfig);
+            IsReady = true;
+        }
+
+        private void Config_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsReady = false;
         }
     }
 }

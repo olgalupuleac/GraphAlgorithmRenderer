@@ -4,12 +4,15 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
+using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRenderer.Serializer;
 using GraphConfig.Config;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.VisualStudio.Shell;
 using Condition = GraphConfig.Config.Condition;
-using GraphRenderer = GraphConfig.GraphRenderer.GraphRenderer;
+using Debugger = EnvDTE.Debugger;
+using GraphRenderer = GraphAlgorithmRenderer.GraphRenderer.GraphRenderer;
 using Process = EnvDTE.Process;
 using Size = System.Drawing.Size;
 using StackFrame = EnvDTE.StackFrame;
@@ -19,7 +22,7 @@ namespace GraphAlgorithmRenderer
     using System;
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
-    using GraphConfig = GraphConfig.Config.GraphConfig;
+    using GraphConfig = Config.GraphConfig;
 
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -45,21 +48,23 @@ namespace GraphAlgorithmRenderer
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            this.Content = new SettingsWindowControl();
+            _control = new SettingsWindowControl();
+            base.Content = _control;
         }
 
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var applicationObject = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+            var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
             _config = CreateGraphConfig();
+            var serialized = ConfigSerializer.ToJson(_config);
+            Debug.WriteLine(serialized);
+            _control.JsonConfig = serialized;
+            var deserialized = ConfigSerializer.FromJson(serialized);
             _debugEvents = applicationObject.Events.DebuggerEvents;
             _debugEvents.OnContextChanged +=
                 Update;
-            var debugger = applicationObject.Debugger;
-
-            _renderer = new GraphRenderer(_config,
-                debugger);
+            _debugger = applicationObject.Debugger;
 
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
@@ -84,23 +89,38 @@ namespace GraphAlgorithmRenderer
         }
 
         private GraphConfig _config;
+
         private Form _form;
-        private GraphRenderer _renderer;
+
+        //private GraphRenderer.GraphRenderer _renderer;
         private DebuggerEvents _debugEvents;
-        private bool _shouldBeRedrawn = true;
+        private bool _shouldBeRedrawn = false;
         private DispatcherTimer _dispatcherTimer;
+        private SettingsWindowControl _control;
+        private Debugger _debugger;
 
 
         private void DrawGraph()
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            Graph graph = _renderer.RenderGraph();
+            if (_control.IsReady)
+            {
+                _config = ConfigSerializer.FromJson(_control.JsonConfig);
+            }
+
+            if (_config == null)
+            {
+                return;
+            }
+
+            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
+            Graph graph = renderer.RenderGraph();
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             Debug.WriteLine(elapsedTime);
-            GViewer viewer = new GViewer { Graph = graph, Dock = DockStyle.Fill };
+            GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
             if (_form == null)
             {
                 _form = new Form {Size = new Size(800, 800)};
@@ -143,10 +163,10 @@ namespace GraphAlgorithmRenderer
                     {
                         new IdentifierPartTemplate("a", "0", "n"),
                         new IdentifierPartTemplate("x", "0", "n")
-                    }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__a__" }),
-                    new EdgeFamily.EdgeEnd(nodes, new List<string> { "g[__a__][__x__]" }), true
+                    }, new EdgeFamily.EdgeEnd(nodes, new List<string> {"__a__"}),
+                    new EdgeFamily.EdgeEnd(nodes, new List<string> {"g[__a__][__x__]"}), true
                 )
-                { ValidationTemplate = "__x__ < g[__a__].size()" };
+                {ValidationTemplate = "__x__ < g[__a__].size()"};
 
             var dfsEdges = new ConditionalProperty<IEdgeProperty>(
                 new Condition("p[g[__a__][__x__]].first == __a__ && p[g[__a__][__x__]].second == __x__"),
@@ -155,8 +175,8 @@ namespace GraphAlgorithmRenderer
             edges.ConditionalProperties.Add(dfsEdges);
             return new GraphConfig
             {
-                Edges = new HashSet<EdgeFamily> { edges },
-                Nodes = new HashSet<NodeFamily> { nodes }
+                Edges = new HashSet<EdgeFamily> {edges},
+                Nodes = new HashSet<NodeFamily> {nodes}
             };
         }
     }
