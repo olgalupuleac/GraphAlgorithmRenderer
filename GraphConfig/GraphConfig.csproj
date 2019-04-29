@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Config\ConditionalProperty.cs" />
     <Compile Include="Config\GraphConfig.cs" />
+    <Compile Include="Config\IdentifierTemplate.cs" />
     <Compile Include="Config\IEdgeProperty.cs" />
     <Compile Include="Config\INodeProperty.cs" />
     <Compile Include="GraphElementIdentifier\Identifier.cs" />
