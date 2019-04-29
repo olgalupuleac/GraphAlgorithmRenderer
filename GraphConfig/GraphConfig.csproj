@@ -60,6 +60,7 @@
     <Compile Include="Config\IEdgeProperty.cs" />
     <Compile Include="Config\INodeProperty.cs" />
     <Compile Include="GraphElementIdentifier\Identifier.cs" />
+    <Compile Include="GraphRenderer\GraphRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

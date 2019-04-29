@@ -1,7 +1,6 @@
 ﻿using System;
 using EnvDTE;
 using GraphConfig.GraphElementIdentifier;
-using GraphConfiguration.GraphElementIdentifier;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
