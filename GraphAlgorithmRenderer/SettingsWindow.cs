@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
 using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRenderer.ConfigSamples;
 using GraphAlgorithmRenderer.Serializer;
 using GraphConfig.Config;
 using Microsoft.Msagl.Drawing;
@@ -56,16 +57,12 @@ namespace GraphAlgorithmRenderer
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
-            _config = CreateGraphConfig();
-            var serialized = ConfigSerializer.ToJson(_config);
-            Debug.WriteLine(serialized);
-            _control.JsonConfig = serialized;
-            var deserialized = ConfigSerializer.FromJson(serialized);
             _debugEvents = applicationObject.Events.DebuggerEvents;
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
-
+            var config = ConfigCreator.DfsConfig;
+            Debug.WriteLine(ConfigSerializer.ToJson(config));
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
@@ -96,7 +93,7 @@ namespace GraphAlgorithmRenderer
         private DebuggerEvents _debugEvents;
         private bool _shouldBeRedrawn = false;
         private DispatcherTimer _dispatcherTimer;
-        private SettingsWindowControl _control;
+        private readonly SettingsWindowControl _control;
         private Debugger _debugger;
 
 
@@ -131,53 +128,6 @@ namespace GraphAlgorithmRenderer
             _form.Controls.Add(viewer);
             _form.ResumeLayout();
             _form.Show();
-        }
-
-        public GraphConfig CreateGraphConfig()
-        {
-            var visitedNode =
-                new ConditionalProperty<INodeProperty>(
-                    new Condition("visited[__v__]", @"^dfs$"),
-                    new FillColorNodeProperty(Color.Green));
-            ;
-            var dfsNode = new ConditionalProperty<INodeProperty>(
-                new Condition("__ARG1__ == __v__", @"^dfs$",
-                    ConditionMode.AllStackFrames), new FillColorNodeProperty(Color.Gray));
-
-            var currentNode = new ConditionalProperty<INodeProperty>(
-                new Condition("__ARG1__ == __v__", @"^dfs$"),
-                new FillColorNodeProperty(Color.Red));
-
-            NodeFamily nodes = new NodeFamily(
-                new List<IdentifierPartTemplate>()
-                {
-                    new IdentifierPartTemplate("v", "0", "n")
-                }
-            );
-            nodes.ConditionalProperties.Add(visitedNode);
-            nodes.ConditionalProperties.Add(dfsNode);
-            nodes.ConditionalProperties.Add(currentNode);
-
-            EdgeFamily edges = new EdgeFamily(
-                    new List<IdentifierPartTemplate>
-                    {
-                        new IdentifierPartTemplate("a", "0", "n"),
-                        new IdentifierPartTemplate("x", "0", "n")
-                    }, new EdgeFamily.EdgeEnd(nodes, new List<string> {"__a__"}),
-                    new EdgeFamily.EdgeEnd(nodes, new List<string> {"g[__a__][__x__]"}), true
-                )
-                {ValidationTemplate = "__x__ < g[__a__].size()"};
-
-            var dfsEdges = new ConditionalProperty<IEdgeProperty>(
-                new Condition("p[g[__a__][__x__]].first == __a__ && p[g[__a__][__x__]].second == __x__"),
-                new LineColorEdgeProperty(Color.Red));
-
-            edges.ConditionalProperties.Add(dfsEdges);
-            return new GraphConfig
-            {
-                Edges = new HashSet<EdgeFamily> {edges},
-                Nodes = new HashSet<NodeFamily> {nodes}
-            };
         }
     }
 }
