@@ -9,6 +9,7 @@ namespace GraphAlgorithmRenderer.Config
 {
     public abstract class GraphElementFamily<T>
     {
+        public string Name { get; set; } = "";
         protected GraphElementFamily(List<IdentifierPartTemplate> ranges)
         {
             Ranges = ranges;

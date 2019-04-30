@@ -55,6 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConfigSamples\ConfigCreator.cs" />
+    <Compile Include="Config\AbstractLabelProperty.cs" />
     <Compile Include="Config\ConditionalProperty.cs" />
     <Compile Include="Config\GraphConfig.cs" />
     <Compile Include="Config\IdentifierTemplate.cs" />

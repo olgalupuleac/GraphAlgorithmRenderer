@@ -43,15 +43,18 @@ namespace GraphConfig.GraphElementIdentifier
 
     public class Identifier
     {
-        public Identifier(params IdentifierPart[] parts)
+        public string Name { get; }
+        public Identifier(string name, params IdentifierPart[] parts)
         {
+            Name = name;
             var identifiersList = new List<IdentifierPart>();
             identifiersList.AddRange(parts);
             IdentifierParts = identifiersList.AsReadOnly();
         }
 
-        public Identifier(List<IdentifierPart> parts)
+        public Identifier(string name, List<IdentifierPart> parts)
         {
+            Name = name;
             IdentifierParts = parts.AsReadOnly();
         }
 
@@ -70,10 +73,11 @@ namespace GraphConfig.GraphElementIdentifier
 
         public string Id()
         {
-            return String.Join("#", IdentifierParts.Select(i => i.Name + " " + i.Value.ToString()));
+            return Name + "@" + String.Join("#", IdentifierParts.Select(i => i.Name + " " + i.Value.ToString()));
         }
 
-        public static List<Identifier> GetAllIdentifiersInRange(List<IdentifierPartRange> ranges)
+
+        public static List<Identifier> GetAllIdentifiersInRange(string name, List<IdentifierPartRange> ranges)
         {
             var result = new List<Identifier>();
             var currentPermutation = new List<IdentifierPart>();
@@ -86,7 +90,7 @@ namespace GraphConfig.GraphElementIdentifier
             while (true)
             {
                 //TODO simplify this deep copy (or change type of current permutation to List<int>)
-                result.Add(new Identifier(currentPermutation
+                result.Add(new Identifier(name, currentPermutation
                     .Select(x => new IdentifierPart(x.Name, x.Value)).ToList()
                 ));
                 for (var indexToIncrease = currentPermutation.Count - 1; indexToIncrease >= -1; indexToIncrease--)

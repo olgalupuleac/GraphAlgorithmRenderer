@@ -78,8 +78,8 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             Identifier identifier)
         {
             //TODO check IsValidValue
-            var source = NodeIdentifier(edgeFamily.Source, identifier).Id();
-            var target = NodeIdentifier(edgeFamily.Target, identifier).Id();
+            var source = NodeIdentifier(edgeFamily.Name, edgeFamily.Source, identifier).Id();
+            var target = NodeIdentifier(edgeFamily.Name, edgeFamily.Target, identifier).Id();
             var sourceNode = _graph.FindNode(source);
             var targetNode = _graph.FindNode(target);
             if (targetNode == null || sourceNode == null)
@@ -202,7 +202,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 }
             }
 
-            return Identifier.GetAllIdentifiersInRange(ranges);
+            return Identifier.GetAllIdentifiersInRange(family.Name, ranges);
         }
 
         private List<Identifier> GetIdentifiersForCondition(List<Identifier> identifiers, string conditionTemplate)
@@ -253,7 +253,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         }
 
 
-        private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
+        private Identifier NodeIdentifier(string name, EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
         {
             var templates = edgeEnd.NamesWithTemplates;
             var res = new List<IdentifierPart>();
@@ -264,7 +264,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
-            return new Identifier(res);
+            return new Identifier(name, res);
         }
 
         private void SetStackFrame(StackFrame stackFrame)
