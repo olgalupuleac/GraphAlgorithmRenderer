@@ -42,25 +42,25 @@ namespace GraphAlgorithmRenderer
     /// </para>
     /// </remarks>
     [Guid("52a96019-a6a1-4390-a42a-d6f3b1e160cc")]
-    public class SettingsWindow : ToolWindowPane
+    public class GraphAlgorithmRenderer : ToolWindowPane
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SettingsWindow"/> class.
+        /// Initializes a new instance of the <see cref="GraphAlgorithmRenderer"/> class.
         /// </summary>
-        public SettingsWindow() : base(null)
+        public GraphAlgorithmRenderer() : base(null)
         {
-            this.Caption = "SettingsWindow";
+            this.Caption = "GraphAlgorithmRenderer";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            _control = new SettingsWindowControl();
+            _control = new GraphAlgorithmRendererControl();
             base.Content = _control;
             _control.Load.Click += LoadOnClick;
-            _control.Export.Click += ExportOnClick;
+            _control.Get.Click += GetOnClick;
         }
 
-        private void ExportOnClick(object sender, RoutedEventArgs e)
+        private void GetOnClick(object sender, RoutedEventArgs e)
         {
             _control.Config.Text = ConfigSerializer.ToJson(_config);
         }
@@ -76,7 +76,9 @@ namespace GraphAlgorithmRenderer
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Cannot deserialize json", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var exceptionViewer = new ExceptionViewer("Exception while deserializing json", exception);
+                exceptionViewer.ShowDialog();
+                //MessageBox.Show("Cannot deserialize json", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -120,7 +122,7 @@ namespace GraphAlgorithmRenderer
         private DebuggerEvents _debugEvents;
         private bool _shouldBeRedrawn = false;
         private DispatcherTimer _dispatcherTimer;
-        private readonly SettingsWindowControl _control;
+        private readonly GraphAlgorithmRendererControl _control;
         private Debugger _debugger;
 
 
@@ -130,11 +132,6 @@ namespace GraphAlgorithmRenderer
             stopWatch.Start();
 #if TEST
             _config = ConfigCreator.TreapConfig;
-#else
-            if (_control.IsReady)
-            {
-                _config = ConfigSerializer.FromJson(_control.JsonConfig);
-            }
 #endif
             if (_config == null || _debugger == null)
             {

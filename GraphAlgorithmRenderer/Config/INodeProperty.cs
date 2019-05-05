@@ -69,6 +69,7 @@ namespace GraphAlgorithmRenderer.Config
                 string v = match.ToString();
                 v = v.Substring(1, v.Length - 2);
                 //Debug.WriteLine(v);
+                ThreadHelper.ThrowIfNotOnUIThread();
                 return debugger.GetExpression(v).Value;
             });
             node.Label.FontStyle = FontStyle ?? node.Label.FontStyle;

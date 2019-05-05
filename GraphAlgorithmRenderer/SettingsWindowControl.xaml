@@ -4,26 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
+             xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
     <Grid>
+        <TabControl>
+            <TabItem Header="UI">
 
-        <StackPanel Orientation="Vertical">
+               <properties:UIMainControl/>
+            </TabItem>
+            <TabItem Header="Json">
+                <StackPanel Orientation="Vertical" Margin="0,1,0,-1">
 
-            <TextBlock Margin="10" HorizontalAlignment="Center">Config Window</TextBlock>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBox x:Name="Config" Height="208" TextWrapping="Wrap" AcceptsReturn="True"
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <TextBox x:Name="Config" Height="208" TextWrapping="Wrap" AcceptsReturn="True"
                      Text="{Binding Path = JsonConfig, Mode=TwoWay}" TextChanged="Config_TextChanged" />
-            </ScrollViewer>
+                    </ScrollViewer>
+                    <Button x:Name="Load" Content="Load" Margin="0,0,223,0"/>
 
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-           
-            <Button x:Name="Get" Content="Get" Margin="22,263,211,10" Height="30" Width="74"/>
-            <Button x:Name="Load" Content="Load" Margin="120,263,32,10" Height="30" Width="74"/>
-        </StackPanel>
+                    <Button x:Name="Export" Content="Export" Margin="0,10,223,0"/>
+
+                </StackPanel>
+            </TabItem>
+            
+
+        </TabControl>
     </Grid>
 </UserControl>

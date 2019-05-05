@@ -35,5 +35,10 @@ namespace GraphAlgorithmRenderer
         {
             IsReady = false;
         }
+
+        private void Load_Copy_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
