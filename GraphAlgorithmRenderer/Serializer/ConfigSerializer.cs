@@ -16,7 +16,7 @@ namespace GraphAlgorithmRenderer.Serializer
                 TypeNameHandling = TypeNameHandling.All,
                 //TypeNameAssemblyFormat = FormatterAssemblyStyle.Full,
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                MaxDepth = 10
+                MaxDepth = 100
             };
             Debug.WriteLine("Initialized");
         }

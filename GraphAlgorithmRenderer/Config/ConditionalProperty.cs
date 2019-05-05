@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace GraphConfig.Config
 {
@@ -26,13 +27,19 @@ namespace GraphConfig.Config
     public class ConditionalProperty<T>
     {
         [JsonConstructor]
+        public ConditionalProperty(Condition condition, List<T> properties)
+        {
+            Condition = condition;
+            Properties = properties;
+        }
+
         public ConditionalProperty(Condition condition, T property)
         {
             Condition = condition;
-            Property = property;
+            Properties = new List<T> { property };
         }
 
         [JsonProperty] public Condition Condition { get; }
-        [JsonProperty] public T Property { get; }
+        [JsonProperty] public List<T> Properties { get; set; }
     }
 }

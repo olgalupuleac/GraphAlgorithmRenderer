@@ -10,11 +10,20 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
     <Grid>
+
         <StackPanel Orientation="Vertical">
-            <TextBlock Margin="10" HorizontalAlignment="Center">SettingsWindow</TextBlock>
-            <TextBox x:Name="Config" Height="208" TextWrapping="Wrap" AcceptsReturn="True"
+
+            <TextBlock Margin="10" HorizontalAlignment="Center">Config Window</TextBlock>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBox x:Name="Config" Height="208" TextWrapping="Wrap" AcceptsReturn="True"
                      Text="{Binding Path = JsonConfig, Mode=TwoWay}" TextChanged="Config_TextChanged" />
-            <Button x:Name="Load" Content="Load" Height="32" Margin="0,0,252,0" Click="Load_Click" />
+            </ScrollViewer>
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+           
+            <Button x:Name="Get" Content="Get" Margin="22,263,211,10" Height="30" Width="74"/>
+            <Button x:Name="Load" Content="Load" Margin="120,263,32,10" Height="30" Width="74"/>
         </StackPanel>
     </Grid>
 </UserControl>

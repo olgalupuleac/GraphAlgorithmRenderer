@@ -44,9 +44,11 @@ namespace GraphAlgorithmRenderer.Config
     {
         public class EdgeEnd
         {
+            public string NodeFamilyName { get; set; }
             public EdgeEnd(NodeFamily node, List<string> templates)
             {
                 NamesWithTemplates = GetTemplates(node, templates);
+                NodeFamilyName = node.Name;
             }
 
             [JsonConstructor]
@@ -92,13 +94,13 @@ namespace GraphAlgorithmRenderer.Config
 
     public class GraphConfig
     {
-        public HashSet<EdgeFamily> Edges { get; set; }
-        public HashSet<NodeFamily> Nodes { get; set; }
+        public List<EdgeFamily> Edges { get; set; }
+        public List<NodeFamily> Nodes { get; set; }
 
         public GraphConfig()
         {
-            Edges = new HashSet<EdgeFamily>();
-            Nodes = new HashSet<NodeFamily>();
+            Edges = new List<EdgeFamily>();
+            Nodes = new List<NodeFamily>();
         }
     }
 }

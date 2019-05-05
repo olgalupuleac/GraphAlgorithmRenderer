@@ -1,12 +1,13 @@
 ﻿using System;
-using EnvDTE;
-using GraphAlgorithmRenderer.GraphRenderer;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using GraphConfig.GraphElementIdentifier;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
+using Debugger = EnvDTE.Debugger;
 
-namespace GraphConfig.Config
+namespace GraphAlgorithmRenderer.Config
 {
     public interface INodeProperty
     {
@@ -62,8 +63,14 @@ namespace GraphConfig.Config
         public void Apply(Node node, Debugger debugger, Identifier identifier)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var expression = GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
-            var label = debugger.GetExpression(expression).Value;
+            var expression = GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
+            var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
+            {
+                string v = match.ToString();
+                v = v.Substring(1, v.Length - 2);
+                //Debug.WriteLine(v);
+                return debugger.GetExpression(v).Value;
+            });
             node.Label.FontStyle = FontStyle ?? node.Label.FontStyle;
             if (Math.Abs(FontSize) > 0.01)
             {

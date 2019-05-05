@@ -1,9 +1,11 @@
 ﻿using System;
-using EnvDTE;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using GraphConfig.GraphElementIdentifier;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
+using Debugger = EnvDTE.Debugger;
 
 namespace GraphAlgorithmRenderer.Config
 {
@@ -28,18 +30,23 @@ namespace GraphAlgorithmRenderer.Config
         public bool HighlightIfChanged { get; set; }
         public Color? ColorToHighLight { get; set; }
         [JsonProperty] public string LabelTextExpression { get; }
-        public double FontSize { get; set; }
+        public double FontSize { get; set; } = 6;
         public FontStyle? FontStyle { get; set; }
 
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+           
             var expression = global::GraphAlgorithmRenderer.GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
-            var label = debugger.GetExpression(expression).Value;
-            if (edge.Label == null)
+            var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
             {
-                edge.Label = new Label(label);
-            }
+                string v = match.ToString();
+                v = v.Substring(1, v.Length - 2);
+                //Debug.WriteLine(v);
+                return debugger.GetExpression(v).Value;
+            });
+
+            edge.LabelText = label;
 
             edge.Label.FontStyle = FontStyle ?? edge.Label.FontStyle;
             if (Math.Abs(FontSize) > 0.01)

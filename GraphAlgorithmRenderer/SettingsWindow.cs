@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿//#define TEST
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
@@ -11,12 +12,16 @@ using GraphConfig.Config;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.VisualStudio.Shell;
+using WpfExceptionViewer;
 using Condition = GraphConfig.Config.Condition;
 using Debugger = EnvDTE.Debugger;
 using GraphRenderer = GraphAlgorithmRenderer.GraphRenderer.GraphRenderer;
+using MessageBox = System.Windows.MessageBox;
 using Process = EnvDTE.Process;
 using Size = System.Drawing.Size;
 using StackFrame = EnvDTE.StackFrame;
+
+
 
 namespace GraphAlgorithmRenderer
 {
@@ -51,17 +56,39 @@ namespace GraphAlgorithmRenderer
             // the object returned by the Content property.
             _control = new SettingsWindowControl();
             base.Content = _control;
+            _control.Load.Click += LoadOnClick;
+            _control.Get.Click += GetOnClick;
+        }
+
+        private void GetOnClick(object sender, RoutedEventArgs e)
+        {
+            _control.Config.Text = ConfigSerializer.ToJson(_config);
+        }
+
+        private void LoadOnClick(object sender, RoutedEventArgs e)
+        {
+            var json = _control.Config.Text;
+            try
+            {
+                _config = ConfigSerializer.FromJson(json);
+                MessageBox.Show("Successfully created config!", "Info",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Cannot deserialize json", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+            var applicationObject = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
             _debugEvents = applicationObject.Events.DebuggerEvents;
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
-            var config = ConfigCreator.DfsConfig;
+            var config = ConfigCreator.TreapConfig;
             Debug.WriteLine(ConfigSerializer.ToJson(config));
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
@@ -101,12 +128,15 @@ namespace GraphAlgorithmRenderer
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
+#if TEST
+            _config = ConfigCreator.TreapConfig;
+#else
             if (_control.IsReady)
             {
                 _config = ConfigSerializer.FromJson(_control.JsonConfig);
             }
-
-            if (_config == null)
+#endif
+            if (_config == null || _debugger == null)
             {
                 return;
             }
@@ -116,11 +146,11 @@ namespace GraphAlgorithmRenderer
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-            Debug.WriteLine(elapsedTime);
-            GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
+            Debug.WriteLine($"total time {elapsedTime}");
+            GViewer viewer = new GViewer { Graph = graph, Dock = DockStyle.Fill };
             if (_form == null)
             {
-                _form = new Form {Size = new Size(800, 800)};
+                _form = new Form { Size = new Size(800, 800) };
             }
 
             _form.SuspendLayout();

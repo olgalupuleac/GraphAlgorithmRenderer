@@ -78,8 +78,8 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             Identifier identifier)
         {
             //TODO check IsValidValue
-            var source = NodeIdentifier(edgeFamily.Name, edgeFamily.Source, identifier).Id();
-            var target = NodeIdentifier(edgeFamily.Name, edgeFamily.Target, identifier).Id();
+            var source = NodeIdentifier(edgeFamily.Source, identifier).Id();
+            var target = NodeIdentifier(edgeFamily.Target, identifier).Id();
             var sourceNode = _graph.FindNode(source);
             var targetNode = _graph.FindNode(target);
             if (targetNode == null || sourceNode == null)
@@ -150,13 +150,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName, conditionalProperty.Condition.FunctionNameRegex))
+            if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName,
+                conditionalProperty.Condition.FunctionNameRegex))
             {
                 return;
             }
+
             identifiers.Where(id =>
                     CheckConditionForIdentifier(conditionalProperty.Condition.Template, id))
-                .ToList().ForEach(id => applyProperty(conditionalProperty.Property, id));
+                .ToList().ForEach(id => conditionalProperty.Properties.ForEach(p => applyProperty(p, id)));
         }
 
         private void ApplyPropertyForAllStackFrames<T>(IReadOnlyCollection<Identifier> identifiers,
@@ -166,7 +168,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ThreadHelper.ThrowIfNotOnUIThread();
             var currentStackFrame = _debugger.CurrentStackFrame;
             var stackFrames = _debugger.CurrentThread.StackFrames;
-            Debug.WriteLine("\n\nStack frames section");
+            //Debug.WriteLine("\n\nStack frames section");
             foreach (StackFrame stackFrame in stackFrames)
             {
                 if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.FunctionNameRegex))
@@ -253,18 +255,21 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         }
 
 
-        private Identifier NodeIdentifier(string name, EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
+        private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var templates = edgeEnd.NamesWithTemplates;
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
                 //TODO safe
-                var value = Int32.Parse(GetExpression(template.Value, identifier).Value);
+                var debuggerRes = GetExpression(template.Value, identifier).Value;
+                //Debug.WriteLine($"should be int {debuggerRes}");
+                var value = Int32.Parse(debuggerRes);
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
-            return new Identifier(name, res);
+            return new Identifier(edgeEnd.NodeFamilyName, res);
         }
 
         private void SetStackFrame(StackFrame stackFrame)
