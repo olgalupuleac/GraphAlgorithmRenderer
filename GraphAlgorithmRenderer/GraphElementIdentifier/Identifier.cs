@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace GraphConfig.GraphElementIdentifier
+namespace GraphAlgorithmRenderer.GraphElementIdentifier
 {
     public class IdentifierPartRange
     {
-        public string Name { get; }
-        public int Begin { get; }
-        public int End { get; }
+        public string Name { get; set; }
+        public int Begin { get; set; }
+        public int End { get; set; }
 
         public IdentifierPartRange(string name, int begin, int end)
         {
@@ -44,6 +44,7 @@ namespace GraphConfig.GraphElementIdentifier
     public class Identifier
     {
         public string Name { get; }
+
         public Identifier(string name, params IdentifierPart[] parts)
         {
             Name = name;

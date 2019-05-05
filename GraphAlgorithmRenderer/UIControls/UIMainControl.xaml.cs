@@ -35,7 +35,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
-            Add(textBoxNode, _nodeFamilies, nodes, "Node");
+            Add(textBoxNode, _nodeFamilies, nodes, () => new NodeFamilyWindow(), "Node");
         }
 
         private void RemoveNode_Click(object sender, RoutedEventArgs e)
@@ -55,8 +55,10 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             list.Items.Remove(item);
         }
 
+        private delegate Window CreateWindow();
+
         private void Add(TextBox textBox, IDictionary<ListBoxItem, Window> families,
-            ItemsControl list, string type)
+            ItemsControl list, CreateWindow createWindow, string type)
         {
             var name = textBox.Text;
             if (families.Any(kv => kv.Key.Content.Equals(name)))
@@ -66,13 +68,16 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                 return;
             }
             var item = new ListBoxItem { Content = name };
-            families[item] = null;
+            item.Selected += (sender, args) => families[item]?.Show();
+            families[item] = createWindow();
+
             list.Items.Add(item);
+            families[item]?.Show();
         }
 
         private void AddEdge_Click(object sender, RoutedEventArgs e)
         {
-            Add(textBoxEdge, _edgeFamilies, edges, "Edge");
+            Add(textBoxEdge, _edgeFamilies, edges, () => null, "Edge");
         }
 
         private void RemoveEdge_Click(object sender, RoutedEventArgs e)
