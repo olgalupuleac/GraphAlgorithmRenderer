@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GraphAlgorithmRenderer.Config;
 
 namespace GraphAlgorithmRenderer.UIControls
 {
@@ -22,8 +23,10 @@ namespace GraphAlgorithmRenderer.UIControls
     public partial class EdgeEndControl : Window
     {
         public List<EdgeEndIdPart> EdgeEndIdParts;
-        public EdgeEndControl(List<string> nodeIds)
+        private string _nodeName;
+        public EdgeEndControl(List<string> nodeIds, string nodeName)
         {
+            _nodeName = nodeName;
             InitializeComponent();
             EdgeEndIdParts = new List<EdgeEndIdPart>();
             nodeIds.ForEach(id => EdgeEndIdParts.Add(new EdgeEndIdPart{IdPart = id}));
@@ -39,6 +42,20 @@ namespace GraphAlgorithmRenderer.UIControls
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
             Hide();
+        }
+
+        public EdgeFamily.EdgeEnd EdgeEnd
+        {
+            get
+            {
+                return new EdgeFamily.EdgeEnd
+                {
+                    //TODO check for null and throw exception
+                    NamesWithTemplates
+                        = EdgeEndIdParts.ToDictionary(x => x.IdPart, x => x.Template),
+                    NodeFamilyName = _nodeName
+                };
+            }
         }
     }
 

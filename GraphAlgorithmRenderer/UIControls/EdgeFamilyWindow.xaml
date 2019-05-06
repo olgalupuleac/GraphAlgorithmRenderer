@@ -16,14 +16,22 @@
         </DataGrid>
         <Button x:Name="AddId" Content="Add id" HorizontalAlignment="Left" Margin="81,338,0,0" VerticalAlignment="Top" Width="75" Click="AddId_Click"/>
         <Button x:Name="RemoveId" Content="Remove id" HorizontalAlignment="Left" Margin="81,374,0,0" VerticalAlignment="Top" Width="75" Click="RemoveId_Click"/>
-        <Expander x:Name="targetExpander" Header="Target Node Family" HorizontalAlignment="Left" Height="100" Margin="439,338,0,-17.333" VerticalAlignment="Top" Width="135">
+        <Expander x:Name="targetExpander" Header="Target Node Family" HorizontalAlignment="Left" Height="100" Margin="498,201,0,0" VerticalAlignment="Top" Width="135">
             <StackPanel x:Name="TargetPanel"></StackPanel>
         </Expander>
-        <Button x:Name="targetButton" Content="Target" HorizontalAlignment="Left" Margin="439,301,0,0" VerticalAlignment="Top" Width="75" Click="TargetButton_Click"/>
-        <Button x:Name="sourceButton" Content="Source" HorizontalAlignment="Left" Margin="625,301,0,0" VerticalAlignment="Top" Width="75" Click="SourceButton_Click"/>
-        <Expander x:Name="sourceExpander" Header="Source Node Family" HorizontalAlignment="Left" Height="100" Margin="627,338,0,-17.333" VerticalAlignment="Top" Width="137">
+        <Button x:Name="targetButton" Content="Target" HorizontalAlignment="Left" Margin="527,162,0,0" VerticalAlignment="Top" Width="75" Click="TargetButton_Click"/>
+        <Button x:Name="sourceButton" Content="Source" HorizontalAlignment="Left" Margin="681,161,0,0" VerticalAlignment="Top" Width="75" Click="SourceButton_Click"/>
+        <Expander x:Name="sourceExpander" Header="Source Node Family" HorizontalAlignment="Left" Height="100" Margin="651,202,0,0" VerticalAlignment="Top" Width="137">
             <StackPanel x:Name="SourcePanel"></StackPanel>
         </Expander>
+        <TextBox x:Name="validationTemplateBox" HorizontalAlignment="Left" Height="23" Margin="394,57,0,0" TextWrapping="Wrap" Text="true" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="Validation template" HorizontalAlignment="Left" Margin="394,32,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="directed" Content="Directed" HorizontalAlignment="Left" Margin="606,58,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="properties" HorizontalAlignment="Left" Height="162" Margin="346,139,0,0" VerticalAlignment="Top" Width="113"/>
+        <Label x:Name="label1" Content="Conditional properties" HorizontalAlignment="Left" Margin="336,110,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" Margin="681,379,0,0" VerticalAlignment="Top" Width="75" Click="Ok_Click"/>
+        <Button x:Name="AddProperty" Content="Add property" HorizontalAlignment="Left" Margin="349,338,0,0" VerticalAlignment="Top" Width="110" Click="AddProperty_Click"/>
+        <Button x:Name="RemoveProperty" Content="Remove property" HorizontalAlignment="Left" Margin="349,374,0,0" VerticalAlignment="Top" Width="110" Click="RemoveProperty_Click"/>
 
 
     </Grid>

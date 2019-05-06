@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -28,10 +29,12 @@ namespace GraphAlgorithmRenderer.UIControls
         private readonly Dictionary<string, NodeFamilyWindow> _availableNodes;
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
+        public Dictionary<ListBoxItem, EdgeConditionalPropertyWindow> _properties;
 
         public EdgeFamilyWindow(Dictionary<string, NodeFamilyWindow> availableNodes)
         {
             _availableNodes = availableNodes;
+            _properties = new Dictionary<ListBoxItem, EdgeConditionalPropertyWindow>();
             InitializeComponent();
             Ranges = new ObservableCollection<IdentifierPartTemplate>();
             identifiers.ItemsSource = Ranges;
@@ -39,11 +42,11 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var targetRadioButton = new RadioButton {Content = node, GroupName = "TargetNodes"};
                 targetRadioButton.Checked += (sender, args) => 
-                    _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList()); 
+                    _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node); 
                 TargetPanel.Children.Add(targetRadioButton);
                 var sourceRadioButton = new RadioButton {Content = node, GroupName = "SourceNodes"};
                 sourceRadioButton.Checked += (sender, args) =>
-                    _sourceWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList());
+                    _sourceWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 SourcePanel.Children.Add(sourceRadioButton);
             }
         }
@@ -86,8 +89,63 @@ namespace GraphAlgorithmRenderer.UIControls
         private void SourceButton_Click(object sender, RoutedEventArgs e)
         {
             ShowEdgeEnd(_sourceWindow, "Source");
-            var w = new EdgeConditionalPropertyWindow();
-            w.Show();
+        }
+
+        private void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var range in Ranges)
+            {
+                if (!IsNullOrEmpty(range.Name) &&
+                    (IsNullOrEmpty(range.BeginTemplate) || IsNullOrEmpty(range.EndTemplate))) continue;
+                MessageBox.Show("Identifier range is not finished", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+            Hide();
+        }
+
+        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        {
+            var priority = _properties.Count + 1;
+            var item = new ListBoxItem {Content = $"Property#{priority}"};
+            
+            _properties[item] = new EdgeConditionalPropertyWindow(priority);
+            item.MouseDoubleClick += (o, args) => _properties[item].Show();
+            properties.Items.Add(item);
+            _properties[item].Show();
+        }
+
+        private void RemoveProperty_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(properties.SelectedItem is ListBoxItem item))
+            {
+                return;
+            }
+            _properties[item].Hide();
+            _properties.Remove(item);
+            properties.Items.Remove(item);
+            for (var i = 0; i < properties.Items.Count; i++)
+            {
+                ((ListBoxItem) properties.Items[i]).Content = $"Property#{i + 1}";
+                _properties[((ListBoxItem) properties.Items[i])].Priority = i;
+            }
+        }
+
+        public EdgeFamily EdgeFamily
+        {
+            get
+            {
+                var conditionalProperties = _properties.Values.OrderBy(w => w.Priority)
+                    .Select(w => w.ConditionalProperty).ToList();
+                conditionalProperties.Reverse();
+                //TODO check for null
+                return new EdgeFamily(Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
+                    directed.IsChecked != null && (bool) directed.IsChecked)
+                {
+                    ValidationTemplate = validationTemplateBox.Text,
+                    ConditionalProperties = conditionalProperties
+                };
+            }
         }
     }
 }

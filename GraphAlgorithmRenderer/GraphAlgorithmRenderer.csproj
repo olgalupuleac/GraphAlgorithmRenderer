@@ -83,9 +83,6 @@
     <Compile Include="UIControls\NodeFamilyWindow.xaml.cs">
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIControls\Properties\ColorPropertyWindow.xaml.cs">
-      <DependentUpon>ColorPropertyWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UIControls\UIMainControl.xaml.cs">
       <DependentUpon>UIMainControl.xaml</DependentUpon>
     </Compile>
@@ -253,10 +250,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\NodeFamilyWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIControls\Properties\ColorPropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

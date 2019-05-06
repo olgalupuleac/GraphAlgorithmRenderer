@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using GraphAlgorithmRenderer.Config;
 using static System.Single;
@@ -28,7 +29,9 @@ namespace GraphAlgorithmRenderer.UIControls
             {"Solid", Microsoft.Msagl.Drawing.Style.Solid}
         };
 
-        public EdgeConditionalPropertyWindow()
+        public int Priority { get; set; }
+
+        public EdgeConditionalPropertyWindow(int priority)
         {
             InitializeComponent();
             labelTextBox.IsEnabled = false;

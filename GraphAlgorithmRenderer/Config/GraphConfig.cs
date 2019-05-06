@@ -51,7 +51,7 @@ namespace GraphAlgorithmRenderer.Config
             }
 
             [JsonConstructor]
-            private EdgeEnd()
+            public EdgeEnd()
             {
             }
 

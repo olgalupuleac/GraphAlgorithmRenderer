@@ -68,7 +68,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                 return;
             }
             var item = new ListBoxItem { Content = name };
-            item.Selected += (sender, args) => families[item]?.Show();
+            item.MouseDoubleClick += (sender, args) => families[item]?.Show();
             families[item] = createWindow();
 
             list.Items.Add(item);
