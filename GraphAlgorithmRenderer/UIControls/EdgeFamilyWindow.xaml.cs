@@ -86,6 +86,8 @@ namespace GraphAlgorithmRenderer.UIControls
         private void SourceButton_Click(object sender, RoutedEventArgs e)
         {
             ShowEdgeEnd(_sourceWindow, "Source");
+            var w = new EdgeConditionalPropertyWindow();
+            w.Show();
         }
     }
 }
