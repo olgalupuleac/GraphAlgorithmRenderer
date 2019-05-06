@@ -12,9 +12,9 @@
         <Label x:Name="conditionLabel" Content="Condition" HorizontalAlignment="Left" Margin="36,22,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="regexBox" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="23" Margin="38,106,0,0" TextWrapping="Wrap" Text=".*" VerticalAlignment="Top" Width="120"/>
         <Label x:Name="regexLabel" Content="Function regex" HorizontalAlignment="Left" Margin="36,80,0,0" VerticalAlignment="Top"/>
-        <StackPanel HorizontalAlignment="Left" Height="51" Margin="38,158,0,0" VerticalAlignment="Top" Width="118">
-            <RadioButton GroupName="Mode" Content="Current stackframe" IsChecked="True"/>
-            <RadioButton GroupName="Mode" Content="All stackframes" />
+        <StackPanel x:Name="ModePanel" HorizontalAlignment="Left" Height="51" Margin="38,158,0,0" VerticalAlignment="Top" Width="118">
+            <RadioButton x:Name="CurSf" GroupName="Mode" Content="Current stackframe" IsChecked="True"/>
+            <RadioButton x:Name="AllSf" GroupName="Mode" Content="All stackframes" />
         </StackPanel>
         <Rectangle HorizontalAlignment="Left" Height="187" Margin="196,22,0,0" Stroke="Black" VerticalAlignment="Top" Width="121"/>
         <CheckBox x:Name="labelCheckBox" Content="Label" HorizontalAlignment="Left" Margin="196,33,0,0" VerticalAlignment="Top"/>
