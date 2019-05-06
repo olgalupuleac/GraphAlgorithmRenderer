@@ -80,6 +80,9 @@
     <Compile Include="UIControls\EdgeFamilyWindow.xaml.cs">
       <DependentUpon>EdgeFamilyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\NodeConditionalPropertyWindow.xaml.cs">
+      <DependentUpon>NodeConditionalPropertyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\NodeFamilyWindow.xaml.cs">
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
@@ -246,6 +249,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\EdgeFamilyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\NodeConditionalPropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

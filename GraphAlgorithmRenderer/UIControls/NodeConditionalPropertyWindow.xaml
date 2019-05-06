@@ -1,0 +1,67 @@
+﻿<Window x:Class="GraphAlgorithmRenderer.UIControls.NodeConditionalPropertyWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <TextBox x:Name="conditionBox" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="23" Margin="36,50,0,0" TextWrapping="Wrap" Text="true" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="conditionLabel" Content="Condition" HorizontalAlignment="Left" Margin="36,22,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="regexBox" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="23" Margin="38,106,0,0" TextWrapping="Wrap" Text=".*" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="regexLabel" Content="Function regex" HorizontalAlignment="Left" Margin="36,80,0,0" VerticalAlignment="Top"/>
+        <StackPanel x:Name="ModePanel" HorizontalAlignment="Left" Height="51" Margin="38,158,0,0" VerticalAlignment="Top" Width="118">
+            <RadioButton x:Name="CurSf" GroupName="Mode" Content="Current stackframe" IsChecked="True"/>
+            <RadioButton x:Name="AllSf" GroupName="Mode" Content="All stackframes" />
+        </StackPanel>
+        <Rectangle HorizontalAlignment="Left" Height="187" Margin="196,22,0,0" Stroke="Black" VerticalAlignment="Top" Width="121"/>
+        <CheckBox x:Name="labelCheckBox" Content="Label" HorizontalAlignment="Left" Margin="196,33,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="labelTextBox" HorizontalScrollBarVisibility="Auto"  HorizontalAlignment="Left" Height="26" Margin="200,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="89"/>
+        <Label x:Name="label" Content="Label template" HorizontalAlignment="Left" Margin="196,73,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="labelFontSizeBox"  HorizontalAlignment="Left" Height="26" Margin="200,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="53"/>
+        <Label x:Name="labelFontSize" Content="Font size" HorizontalAlignment="Left" Margin="196,139,0,0" VerticalAlignment="Top"/>
+        <Rectangle HorizontalAlignment="Left" Height="84" Margin="379,22,0,0" Stroke="Black" VerticalAlignment="Top" Width="146"/>
+        <CheckBox x:Name="lineWidthCheckBox" Content="Border width" HorizontalAlignment="Left" Margin="379,33,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="lineWidthBox" HorizontalAlignment="Left" Height="26" Margin="384,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.502,0.141"/>
+        <Rectangle HorizontalAlignment="Left" Height="83" Margin="379,126,0,0" Stroke="Black" VerticalAlignment="Top" Width="146"/>
+        <CheckBox x:Name="colorCheckBox" Content="Border color" HorizontalAlignment="Left" Margin="384,139,0,0" VerticalAlignment="Top"/>
+        <toolkit:ColorPicker Name="colorPicker" SelectedColor="Black" Margin="317,148,436.333,232.667" RenderTransformOrigin="-0.468,0.744" Width="40" Height="40"></toolkit:ColorPicker>
+        <Rectangle HorizontalAlignment="Left" Height="215" Margin="596,22,0,0" Stroke="Black" VerticalAlignment="Top" Width="146"/>
+        <CheckBox x:Name="styleCheckBox" Content="Border styles" HorizontalAlignment="Left" Margin="596,48,0,0" VerticalAlignment="Top"/>
+        <StackPanel x:Name="Styles" HorizontalAlignment="Left" Height="123" Margin="608,85,0,0" VerticalAlignment="Top" Width="100">
+            <CheckBox x:Name="Bold">Bold</CheckBox>
+            <CheckBox x:Name="Dashed">Dashed</CheckBox>
+            <CheckBox x:Name="Diagonals">Diagonals</CheckBox>
+            <CheckBox x:Name="Dotted">Dotted</CheckBox>
+            <CheckBox x:Name="Filled">Filled</CheckBox>
+            <CheckBox x:Name="Invis">Invis</CheckBox>
+            <CheckBox x:Name="Rounded">Rounded</CheckBox>
+            <CheckBox x:Name="Solid">Solid</CheckBox>
+        </StackPanel>
+        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" Margin="646,359,0,0" VerticalAlignment="Top" Width="75" Click="Ok_Click"/>
+        <Rectangle HorizontalAlignment="Left" Height="161" Margin="10,250,0,0" Stroke="Black" VerticalAlignment="Top" Width="307"/>
+        <CheckBox x:Name="shapeCheckBox" Content="Shape" HorizontalAlignment="Left" Margin="8,262,0,0" VerticalAlignment="Top"/>
+        <StackPanel x:Name="Shapes1" HorizontalAlignment="Left" Height="129" Margin="10,282,0,0" VerticalAlignment="Top" Width="115">
+            <RadioButton GroupName="Shape">Box</RadioButton>
+            <RadioButton GroupName="Shape">Circle</RadioButton>
+            <RadioButton GroupName="Shape">Diamond</RadioButton>
+            <RadioButton GroupName="Shape">DoubleCircle</RadioButton>
+            <RadioButton GroupName="Shape">Ellipse</RadioButton>
+            <RadioButton GroupName="Shape">House</RadioButton>
+
+        </StackPanel>
+        <StackPanel x:Name="Shapes2" HorizontalAlignment="Left" Height="113" Margin="196,282,0,0" VerticalAlignment="Top" Width="115">
+            <RadioButton GroupName="Shape">Octagon</RadioButton>
+            <RadioButton GroupName="Shape">Parallelogram</RadioButton>
+            <RadioButton GroupName="Shape">Point</RadioButton>
+            <RadioButton GroupName="Shape">Polygon</RadioButton>
+            <RadioButton GroupName="Shape">Trapezium</RadioButton>
+            <RadioButton GroupName="Shape">Triangle</RadioButton>
+        </StackPanel>
+        <Rectangle HorizontalAlignment="Left" Height="83" Margin="379,252,0,0" Stroke="Black" VerticalAlignment="Top" Width="146"/>
+        <CheckBox x:Name="fillColorCheckBox" Content="Fill color" HorizontalAlignment="Left" Margin="384,265,0,0" VerticalAlignment="Top"/>
+        <toolkit:ColorPicker x:Name="fillColorPicker" SelectedColor="White" Margin="317,272,436.333,108.667" RenderTransformOrigin="-0.468,0.744" Width="40" Height="40"/>
+    </Grid>
+</Window>

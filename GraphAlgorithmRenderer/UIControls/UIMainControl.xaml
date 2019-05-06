@@ -23,7 +23,7 @@
         <Button x:Name="RemoveEdge" Content="Remove edge" HorizontalAlignment="Left" Margin="545,387,0,0" VerticalAlignment="Top" Width="95" Height="20" Click="RemoveEdge_Click"/>
         <Label x:Name="NodeLabel" Content="Node Families" HorizontalAlignment="Left" Margin="74,38,0,0" VerticalAlignment="Top"/>
         <Label x:Name="EdgeLabel" Content="Edge Families" HorizontalAlignment="Left" Margin="552,38,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Generate config" HorizontalAlignment="Left" Margin="356,387,0,0" VerticalAlignment="Top" Width="91" Height="40"/>
+        <Button x:Name="button" Content="Generate config" HorizontalAlignment="Left" Margin="356,387,0,0" VerticalAlignment="Top" Width="91" Height="40" Click="Button_Click"/>
 
     </Grid>
 </UserControl>
