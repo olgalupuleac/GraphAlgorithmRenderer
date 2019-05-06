@@ -15,7 +15,7 @@
         <TabControl>
             <TabItem Header="UI">
 
-               <properties:UIMainControl/>
+               <properties:UIMainControl x:Name="MainControl"/>
             </TabItem>
             <TabItem Header="Json">
                 <StackPanel Orientation="Vertical" Margin="0,1,0,-1">

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.GraphElementIdentifier;
+using static System.String;
 
 namespace GraphAlgorithmRenderer.UIControls
 {
@@ -24,12 +24,15 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class NodeFamilyWindow : Window
     {
+        private Dictionary<ListBoxItem, NodeConditionalPropertyWindow> _properties
+            ;
         public ObservableCollection<IdentifierPartTemplate> Ranges { get; set; }
         public NodeFamilyWindow()
         {
             InitializeComponent();
             Ranges = new ObservableCollection<IdentifierPartTemplate>();
             identifiers.ItemsSource = Ranges;
+            _properties = new Dictionary<ListBoxItem, NodeConditionalPropertyWindow>();
         }
 
         private void AddId_Click(object sender, RoutedEventArgs e)
@@ -49,6 +52,62 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             e.Cancel = true;  // cancels the window close    
             Hide();      // Programmatically hides the window
+        }
+
+        private void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var range in Ranges)
+            {
+                if (IsNullOrEmpty(range.Name) ||
+                    !IsNullOrEmpty(range.BeginTemplate) && !IsNullOrEmpty(range.EndTemplate)) continue;
+                MessageBox.Show($"Identifier range {range.Name} is not finished", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+            Hide();
+        }
+
+        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        {
+            var priority = _properties.Count + 1;
+            var item = new ListBoxItem { Content = $"Property#{priority}" };
+
+            _properties[item] = new NodeConditionalPropertyWindow(priority);
+            item.MouseDoubleClick += (o, args) => _properties[item].Show();
+            properties.Items.Add(item);
+            _properties[item].Show();
+        }
+
+        private void RemoveProperty_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(properties.SelectedItem is ListBoxItem item))
+            {
+                return;
+            }
+            _properties[item].Hide();
+            _properties.Remove(item);
+            properties.Items.Remove(item);
+            for (var i = 0; i < properties.Items.Count; i++)
+            {
+                ((ListBoxItem)properties.Items[i]).Content = $"Property#{i + 1}";
+                _properties[((ListBoxItem)properties.Items[i])].Priority = i;
+            }
+        }
+
+        public NodeFamily NodeFamily
+        {
+            get
+            {
+                var conditionalProperties = _properties.Values.OrderBy(w => w.Priority)
+                    .Select(w => w.ConditionalProperty).ToList();
+                conditionalProperties.Reverse();
+                //TODO check for null
+                return new NodeFamily(Ranges.ToList())
+                {
+                    ValidationTemplate = validationTemplateBox.Text,
+                    ConditionalProperties = conditionalProperties
+                };
+            }
         }
     }
 }

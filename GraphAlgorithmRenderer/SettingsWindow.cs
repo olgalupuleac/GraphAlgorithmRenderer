@@ -70,12 +70,13 @@ namespace GraphAlgorithmRenderer
             try
             {
                 _config = ConfigSerializer.FromJson(json);
-                MessageBox.Show("Successfully created config!", "Info",
+                MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Cannot deserialize json", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var exceptionViewer = new ExceptionViewer("Json deserialization error", exception);
+                exceptionViewer.ShowDialog();
             }
         }
 
@@ -93,6 +94,22 @@ namespace GraphAlgorithmRenderer
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             _dispatcherTimer.Start();
+            _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
+        }
+
+        private void GenerateConfigOnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _config = _control.MainControl.Config;
+                MessageBox.Show("Successfully created config!", "Info",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception exception)
+            {
+                var exceptionViewer = new ExceptionViewer("Error while creating config", exception);
+                exceptionViewer.ShowDialog();
+            }
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -127,14 +144,7 @@ namespace GraphAlgorithmRenderer
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-#if TEST
-            _config = ConfigCreator.TreapConfig;
-#else
-            if (_control.IsReady)
-            {
-                _config = ConfigSerializer.FromJson(_control.JsonConfig);
-            }
-#endif
+
             if (_config == null || _debugger == null)
             {
                 return;

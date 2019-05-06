@@ -95,12 +95,27 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             foreach (var range in Ranges)
             {
-                if (!IsNullOrEmpty(range.Name) &&
-                    (IsNullOrEmpty(range.BeginTemplate) || IsNullOrEmpty(range.EndTemplate))) continue;
-                MessageBox.Show("Identifier range is not finished", "Error", MessageBoxButton.OK,
+                if (IsNullOrEmpty(range.Name) ||
+                    !IsNullOrEmpty(range.BeginTemplate) && !IsNullOrEmpty(range.EndTemplate)) continue;
+                MessageBox.Show($"Identifier range {range.Name} is not finished", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return;
             }
+
+            if (_sourceWindow == null)
+            {
+                MessageBox.Show("Source node is not specified", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            if (_targetWindow == null)
+            {
+                MessageBox.Show("Target node is not specified", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
             Hide();
         }
 

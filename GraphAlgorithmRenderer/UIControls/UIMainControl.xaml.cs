@@ -85,10 +85,16 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             Remove(_edgeFamilies, edges);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public GraphConfig Config
         {
-            var w = new NodeConditionalPropertyWindow(0);
-            w.Show();
+            get
+            {
+                return new GraphConfig
+                {
+                    Edges = _edgeFamilies.Values.Select(w => ((EdgeFamilyWindow) w).EdgeFamily).ToList(),
+                    Nodes = _nodeFamilies.Values.Select(w => ((NodeFamilyWindow) w).NodeFamily).ToList()
+                };
+            }
         }
     }
 }
