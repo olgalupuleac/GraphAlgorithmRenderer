@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace GraphConfig.Config
+namespace GraphAlgorithmRenderer.Config
 {
     public enum ConditionMode
     {
