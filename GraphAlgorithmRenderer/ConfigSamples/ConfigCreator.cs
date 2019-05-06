@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using GraphAlgorithmRenderer.Config;
-using GraphConfig.Config;
 using Microsoft.Msagl.Drawing;
 using GraphConfig = GraphAlgorithmRenderer.Config.GraphConfig;
 

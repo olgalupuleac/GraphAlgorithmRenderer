@@ -22,16 +22,10 @@ namespace GraphAlgorithmRenderer.Config
             LabelTextExpression = labelTextExpression;
         }
 
-        public string SubstitutedLabelTextExpression(Identifier identifier)
-        {
-            return identifier.Substitute(LabelTextExpression);
-        }
-
         public bool HighlightIfChanged { get; set; }
         public Color? ColorToHighLight { get; set; }
         [JsonProperty] public string LabelTextExpression { get; }
         public double FontSize { get; set; } = 6;
-        public FontStyle? FontStyle { get; set; }
 
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
@@ -48,7 +42,6 @@ namespace GraphAlgorithmRenderer.Config
 
             edge.LabelText = label;
 
-            edge.Label.FontStyle = FontStyle ?? edge.Label.FontStyle;
             if (Math.Abs(FontSize) > 0.01)
             {
                 edge.Label.FontSize = FontSize;

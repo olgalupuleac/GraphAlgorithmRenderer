@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using EnvDTE;
 using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.GraphElementIdentifier;
-using GraphConfig.Config;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Debugger = EnvDTE.Debugger;

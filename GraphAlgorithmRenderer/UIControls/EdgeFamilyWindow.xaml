@@ -17,12 +17,12 @@
         <Button x:Name="AddId" Content="Add id" HorizontalAlignment="Left" Margin="81,338,0,0" VerticalAlignment="Top" Width="75" Click="AddId_Click"/>
         <Button x:Name="RemoveId" Content="Remove id" HorizontalAlignment="Left" Margin="81,374,0,0" VerticalAlignment="Top" Width="75" Click="RemoveId_Click"/>
         <Expander x:Name="targetExpander" Header="Target Node Family" HorizontalAlignment="Left" Height="100" Margin="439,338,0,-17.333" VerticalAlignment="Top" Width="135">
-            <ListBox x:Name="TargetList"></ListBox>
+            <StackPanel x:Name="TargetPanel"></StackPanel>
         </Expander>
-        <Button x:Name="targetButton" Content="Target" HorizontalAlignment="Left" Margin="439,301,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="sourceButton" Content="Source" HorizontalAlignment="Left" Margin="625,301,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="targetButton" Content="Target" HorizontalAlignment="Left" Margin="439,301,0,0" VerticalAlignment="Top" Width="75" Click="TargetButton_Click"/>
+        <Button x:Name="sourceButton" Content="Source" HorizontalAlignment="Left" Margin="625,301,0,0" VerticalAlignment="Top" Width="75" Click="SourceButton_Click"/>
         <Expander x:Name="sourceExpander" Header="Source Node Family" HorizontalAlignment="Left" Height="100" Margin="627,338,0,-17.333" VerticalAlignment="Top" Width="137">
-            <ListBox x:Name="SourceList"/>
+            <StackPanel x:Name="SourcePanel"></StackPanel>
         </Expander>
 
 

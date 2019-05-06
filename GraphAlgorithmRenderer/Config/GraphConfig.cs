@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using GraphConfig.Config;
 using Newtonsoft.Json;
 
 namespace GraphAlgorithmRenderer.Config
