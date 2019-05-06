@@ -77,7 +77,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         private void AddEdge_Click(object sender, RoutedEventArgs e)
         {
-            Add(textBoxEdge, _edgeFamilies, edges, () => null, "Edge");
+            Add(textBoxEdge, _edgeFamilies, edges, () => new EdgeFamilyWindow(_nodeFamilies.ToDictionary(kv => kv.Key, kv => (NodeFamilyWindow)kv.Value)), "Edge");
         }
 
         private void RemoveEdge_Click(object sender, RoutedEventArgs e)
