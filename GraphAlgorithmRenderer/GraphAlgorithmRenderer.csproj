@@ -71,6 +71,9 @@
       <DependentUpon>SettingsWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsWindowPackage.cs" />
+    <Compile Include="UIControls\ConditionControl.xaml.cs">
+      <DependentUpon>ConditionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\ConfigGenerationException.cs" />
     <Compile Include="UIControls\EdgeConditionalPropertyWindow.xaml.cs">
       <DependentUpon>EdgeConditionalPropertyWindow.xaml</DependentUpon>
@@ -259,6 +262,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="SettingsWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\ConditionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

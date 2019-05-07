@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="GraphAlgorithmRenderer.UIControls.ConditionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
+             mc:Ignorable="d">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBox x:Name="ConditionBox" HorizontalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="true"/>
+            </ScrollViewer>
+            <Label Content="Condition" />
+            <TextBox x:Name="RegexBox" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Text=".*" VerticalAlignment="Top"/>
+            <Label Content="Function regex"/>
+            <StackPanel x:Name="ModePanel" >
+                <RadioButton x:Name="CurSf" GroupName="Mode" Content="Current stackframe" IsChecked="True"/>
+                <RadioButton x:Name="AllSf" GroupName="Mode" Content="All stackframes" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
