@@ -93,6 +93,9 @@
     <Compile Include="UIControls\Properties\LabelUiProperty.xaml.cs">
       <DependentUpon>LabelUiProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\Properties\LineColorUiProperty.xaml.cs">
+      <DependentUpon>LineColorUiProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\Properties\LineWidthUiProperty.xaml.cs">
       <DependentUpon>LineWidthUiProperty.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\Properties\LabelUiProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\Properties\LineColorUiProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
