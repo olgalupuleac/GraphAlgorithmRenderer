@@ -46,48 +46,16 @@ namespace GraphAlgorithmRenderer.Config
         }
     }
 
-    public class LabelNodeProperty : INodeProperty
+    public class LabelNodeProperty : AbstractLabelProperty, INodeProperty
     {
         [JsonConstructor]
-        public LabelNodeProperty(string labelTextExpression)
+        public LabelNodeProperty(string labelTextExpression) : base(labelTextExpression)
         {
-            LabelTextExpression = labelTextExpression;
         }
-
-        public bool HighlightIfChanged { get; set; }
-        public Color? ColorToHighLight { get; set; }
-        [JsonProperty] public string LabelTextExpression { get; }
-        public double FontSize { get; set; }
-        public FontStyle? FontStyle { get; set; }
 
         public void Apply(Node node, Debugger debugger, Identifier identifier)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var expression = GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
-            var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
-            {
-                string v = match.ToString();
-                v = v.Substring(1, v.Length - 2);
-                //Debug.WriteLine(v);
-                ThreadHelper.ThrowIfNotOnUIThread();
-                return debugger.GetExpression(v).Value;
-            });
-            node.Label.FontStyle = FontStyle ?? node.Label.FontStyle;
-            if (Math.Abs(FontSize) > 0.01)
-            {
-                node.Label.FontSize = FontSize;
-            }
-
-            if (label.Equals(node.LabelText))
-            {
-                return;
-            }
-
-            node.Label.Text = label;
-            if (HighlightIfChanged)
-            {
-                node.Label.FontColor = ColorToHighLight ?? Color.Red;
-            }
+            ApplyLabel(node, debugger, identifier);
         }
     }
 

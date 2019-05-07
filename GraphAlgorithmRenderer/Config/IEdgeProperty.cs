@@ -14,49 +14,21 @@ namespace GraphAlgorithmRenderer.Config
         void Apply(Edge edge, Debugger debugger, Identifier identifier);
     }
 
-    public class LabelEdgeProperty : IEdgeProperty
+    public class LabelEdgeProperty : AbstractLabelProperty, IEdgeProperty
     {
         [JsonConstructor]
-        public LabelEdgeProperty(string labelTextExpression)
+        public LabelEdgeProperty(string labelTextExpression) : base(labelTextExpression)
         {
-            LabelTextExpression = labelTextExpression;
+            FontSize = 6;
         }
-
-        public bool HighlightIfChanged { get; set; }
-        public Color? ColorToHighLight { get; set; }
-        [JsonProperty] public string LabelTextExpression { get; }
-        public double FontSize { get; set; } = 6;
 
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-           
-            var expression = global::GraphAlgorithmRenderer.GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
-            var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
+            if (edge.Label == null)
             {
-                string v = match.ToString();
-                v = v.Substring(1, v.Length - 2);
-                //Debug.WriteLine(v);
-                return debugger.GetExpression(v).Value;
-            });
-
-            edge.LabelText = label;
-
-            if (Math.Abs(FontSize) > 0.01)
-            {
-                edge.Label.FontSize = FontSize;
+                edge.LabelText = "";
             }
-
-            if (label.Equals(edge.Label.Text))
-            {
-                return;
-            }
-
-            edge.Label.Text = label;
-            if (HighlightIfChanged)
-            {
-                edge.Label.FontColor = ColorToHighLight ?? Color.Red;
-            }
+            ApplyLabel(edge, debugger, identifier);
         }
     }
 
