@@ -1,15 +1,16 @@
-﻿<UserControl x:Class="GraphAlgorithmRenderer.UIControls.Properties.LineWidthUiProperty"
+﻿<UserControl x:Class="GraphAlgorithmRenderer.UIControls.Properties.FillColorUiProperty"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" Height="35" Margin="0,0,-0.333,0.333" VerticalAlignment="Bottom">
+        <Border BorderBrush="Black" BorderThickness="1">
             <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="CheckBox">Line width</CheckBox>
-                <TextBox x:Name="TextBox" TextWrapping="Wrap"/>
+                <CheckBox x:Name="CheckBox">Line color</CheckBox>
+                <toolkit:ColorPicker Name="ColorPicker" />
             </StackPanel>
         </Border>
     </Grid>

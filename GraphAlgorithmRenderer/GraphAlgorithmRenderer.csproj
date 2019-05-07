@@ -88,6 +88,9 @@
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIControls\Properties\EdgeUIProperty.cs" />
+    <Compile Include="UIControls\Properties\FillColorUiProperty.xaml.cs">
+      <DependentUpon>FillColorUiProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\Properties\INodeUIProperty.cs" />
     <Compile Include="UIControls\Properties\IUiProperty.cs" />
     <Compile Include="UIControls\Properties\LabelUiProperty.xaml.cs">
@@ -276,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\NodeFamilyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\Properties\FillColorUiProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
