@@ -1,11 +1,11 @@
-﻿using GraphAlgorithmRenderer.Config;
+﻿using System.Collections.Generic;
+using GraphAlgorithmRenderer.Config;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties
 {
-    public interface IEdgeUiProperty
+    public interface IEdgeUiProperty : IUiProperty
     {
         void FromIEdgeProperty(IEdgeProperty property);
-        IEdgeProperty EdgeProperty { get; }
-        void Reset();
+        List<IEdgeProperty> EdgeProperty { get; }    
     }
 }

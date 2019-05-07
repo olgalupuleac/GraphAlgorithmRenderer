@@ -10,7 +10,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
     /// <summary>
     /// Interaction logic for ShapeProperty.xaml
     /// </summary>
-    public partial class ShapeProperty : UserControl, INodeUiProperty
+    public partial class ShapeUiProperty : UserControl, INodeUiProperty
     {
         private static readonly IReadOnlyDictionary<string, Shape> ShapesToMsaglTypes =
             new Dictionary<string, Shape>
@@ -31,7 +31,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         private List<RadioButton> _shapeRadioButtons;
 
-        public ShapeProperty()
+        public ShapeUiProperty()
         {
             InitializeComponent();
             _shapeRadioButtons = new List<RadioButton>();
@@ -42,7 +42,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             CheckBox.Unchecked += (sender, args) => Disable();
         }
 
-        private void Disable()
+        public void Disable()
         {
             _shapeRadioButtons.ForEach(r =>
             {
@@ -51,7 +51,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             });
         }
 
-        private void Enable()
+        public void Enable()
         {
             _shapeRadioButtons.ForEach(r => r.IsEnabled = true);
         }
@@ -87,13 +87,13 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             _shapeRadioButtons.Where(r => r.ContentStringFormat == shapeName).ToList().ForEach(r => r.IsChecked = true);
         }
 
-        public INodeProperty NodeProperty
+        public List<INodeProperty> NodeProperty
         {
             get
             {
                 if (CheckBox.IsChecked != true)
                 {
-                    return null;
+                    return new List<INodeProperty>();
                 }
 
                 var shapeOr = GetSelectedShape();
@@ -102,7 +102,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                     throw new ConfigGenerationException("Shape property is enabled but shape is not defined");
                 }
 
-                return new ShapeNodeProperty(shapeOr.Value);
+                return new List<INodeProperty> {new ShapeNodeProperty(shapeOr.Value)};
             }
         }
 

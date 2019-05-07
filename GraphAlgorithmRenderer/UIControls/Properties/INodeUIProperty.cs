@@ -1,11 +1,11 @@
-﻿using GraphAlgorithmRenderer.Config;
+﻿using System.Collections.Generic;
+using GraphAlgorithmRenderer.Config;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties
 {
-    public interface INodeUiProperty
+    public interface INodeUiProperty : IUiProperty
     {
         void FromINodeProperty(INodeProperty property);
-        INodeProperty NodeProperty { get; }
-        void Reset();
+        List<INodeProperty> NodeProperty { get; }
     }
 }
