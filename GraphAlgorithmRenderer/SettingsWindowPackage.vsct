@@ -46,7 +46,7 @@
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>SettingsWindow</ButtonText>
+          <ButtonText>Graph Visualization Settings</ButtonText>
         </Strings>
       </Button>
     </Buttons>

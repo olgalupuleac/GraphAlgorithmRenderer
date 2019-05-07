@@ -86,6 +86,9 @@
     <Compile Include="UIControls\NodeFamilyWindow.xaml.cs">
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\Properties\ShapeProperty.xaml.cs">
+      <DependentUpon>ShapeProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\UIMainControl.xaml.cs">
       <DependentUpon>UIMainControl.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\NodeFamilyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\Properties\ShapeProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
