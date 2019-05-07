@@ -33,6 +33,19 @@ namespace GraphAlgorithmRenderer.UIControls
             dataGrid.ItemsSource = EdgeEndIdParts;
         }
 
+        public EdgeEndControl(EdgeFamily.EdgeEnd edgeEnd)
+        {
+            _nodeName = edgeEnd.NodeFamilyName;
+            InitializeComponent();
+            EdgeEndIdParts = new List<EdgeEndIdPart>();
+            foreach (var kv in edgeEnd.NamesWithTemplates)
+            {
+                EdgeEndIdParts.Add(new EdgeEndIdPart{IdPart = kv.Key, Template = kv.Value});
+            }
+
+            dataGrid.ItemsSource = EdgeEndIdParts;
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;  // cancels the window close    

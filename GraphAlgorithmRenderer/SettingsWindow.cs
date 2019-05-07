@@ -70,6 +70,7 @@ namespace GraphAlgorithmRenderer
             try
             {
                 _config = ConfigSerializer.FromJson(json);
+                
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -78,6 +79,7 @@ namespace GraphAlgorithmRenderer
                 var exceptionViewer = new ExceptionViewer("Json deserialization error", exception);
                 exceptionViewer.ShowDialog();
             }
+            _control.MainControl.FromConfig(_config);
         }
 
         protected override void Initialize()

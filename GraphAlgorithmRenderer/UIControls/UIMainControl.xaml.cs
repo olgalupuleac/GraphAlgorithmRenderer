@@ -25,22 +25,23 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
     {
         private readonly Dictionary<ListBoxItem, Window> _nodeFamilies;
         private readonly Dictionary<ListBoxItem, Window> _edgeFamilies;
+
         public UIMainControl()
         {
             _nodeFamilies = new Dictionary<ListBoxItem, Window>();
             _edgeFamilies = new Dictionary<ListBoxItem, Window>();
             InitializeComponent();
-            this.DataContext = this;        
+            this.DataContext = this;
         }
 
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
-            Add(textBoxNode, _nodeFamilies, nodes, () => new NodeFamilyWindow(), "Node");
+            Add(textBoxNode.Text, _nodeFamilies, nodes, () => new NodeFamilyWindow(), "Node");
         }
 
         private void RemoveNode_Click(object sender, RoutedEventArgs e)
         {
-           Remove(_nodeFamilies, nodes);
+            Remove(_nodeFamilies, nodes);
         }
 
         private void Remove(IDictionary<ListBoxItem, Window> families,
@@ -57,27 +58,29 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         private delegate Window CreateWindow();
 
-        private void Add(TextBox textBox, IDictionary<ListBoxItem, Window> families,
+        private void Add(string text, IDictionary<ListBoxItem, Window> families,
             ItemsControl list, CreateWindow createWindow, string type)
         {
-            var name = textBox.Text;
+            var name = text;
             if (families.Any(kv => kv.Key.Content.Equals(name)))
             {
                 MessageBox.Show($"{type} family already exists",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            var item = new ListBoxItem { Content = name };
+
+            var item = new ListBoxItem {Content = name};
             item.MouseDoubleClick += (sender, args) => families[item]?.Show();
             families[item] = createWindow();
 
             list.Items.Add(item);
-            families[item]?.Show();
         }
 
         private void AddEdge_Click(object sender, RoutedEventArgs e)
         {
-            Add(textBoxEdge, _edgeFamilies, edges, () => new EdgeFamilyWindow(_nodeFamilies.ToDictionary(kv => (string) kv.Key.Content, kv => (NodeFamilyWindow)kv.Value)), "Edge");
+            Add(textBoxEdge.Text, _edgeFamilies, edges,
+                () => new EdgeFamilyWindow(_nodeFamilies.ToDictionary(kv => (string) kv.Key.Content,
+                    kv => (NodeFamilyWindow) kv.Value)), "Edge");
         }
 
         private void RemoveEdge_Click(object sender, RoutedEventArgs e)
@@ -94,6 +97,32 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                     Edges = _edgeFamilies.Values.Select(w => ((EdgeFamilyWindow) w).EdgeFamily).ToList(),
                     Nodes = _nodeFamilies.Values.Select(w => ((NodeFamilyWindow) w).NodeFamily).ToList()
                 };
+            }
+        }
+
+        public void FromConfig(GraphConfig config)
+        {
+            _edgeFamilies.Clear();
+            _nodeFamilies.Clear();
+            nodes.Items.Clear();
+            edges.Items.Clear();
+            if (config == null)
+            {
+                return;
+            }
+            foreach (var node in config.Nodes)
+            {
+                var window = new NodeFamilyWindow();
+                window.FromNodeFamily(node);
+                Add(node.Name, _nodeFamilies, nodes, () => window, "Node");
+            }
+
+            foreach (var edge in config.Edges)
+            {
+                var window = new EdgeFamilyWindow(_nodeFamilies.ToDictionary(kv => (string) kv.Key.Content,
+                    kv => (NodeFamilyWindow) kv.Value));
+                window.FromEdgeFamily(edge, config.Nodes.Select(x => x.Name).ToList());
+                Add(edge.Name, _edgeFamilies, edges, () => window, "Edge");
             }
         }
     }

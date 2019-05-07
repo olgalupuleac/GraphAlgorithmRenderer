@@ -220,8 +220,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var result = expression.Replace("__CURRENT_FUNCTION__", stackFrame.FunctionName);
             for (int i = 1; i <= stackFrame.Arguments.Count; i++)
             {
+                if (result.IndexOf($"__ARG{i}__", StringComparison.Ordinal) == -1)
+                {
+                    continue;
+                }
                 result = result.Replace($"__ARG{i}__", stackFrame.Arguments.Item(i).Value);
-            }
+            };
 
             return identifier.Substitute(result);
         }
@@ -229,20 +233,20 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         private Expression GetExpression(string template, Identifier identifier)
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             string expression = identifier == null
                 ? template
                 : Substitute(template,
                     identifier, _debugger);
-            //Debug.WriteLine($"{expression}");
-            ThreadHelper.ThrowIfNotOnUIThread();
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            var result = _debugger.GetExpression(expression);
             TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-            // Debug.WriteLine($"get expression {_getExpressionCallsNumber} in {elapsedTime}");
             _getExpressionCallsNumber++;
             _getExpressionTimeSpan += ts;
+            //Debug.WriteLine($"{expression}");
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var result = _debugger.GetExpression(expression);
+            string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+            // Debug.WriteLine($"get expression {_getExpressionCallsNumber} in {elapsedTime}");
             return result;
         }
 

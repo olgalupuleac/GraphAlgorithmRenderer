@@ -24,9 +24,9 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class NodeFamilyWindow : Window
     {
-        private Dictionary<ListBoxItem, NodeConditionalPropertyWindow> _properties
-            ;
+        private Dictionary<ListBoxItem, NodeConditionalPropertyWindow> _properties;
         public ObservableCollection<IdentifierPartTemplate> Ranges { get; set; }
+
         public NodeFamilyWindow()
         {
             InitializeComponent();
@@ -50,8 +50,8 @@ namespace GraphAlgorithmRenderer.UIControls
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;  // cancels the window close    
-            Hide();      // Programmatically hides the window
+            e.Cancel = true; // cancels the window close    
+            Hide(); // Programmatically hides the window
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
@@ -64,10 +64,11 @@ namespace GraphAlgorithmRenderer.UIControls
                     MessageBoxImage.Error);
                 return;
             }
+
             Hide();
         }
 
-        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        private ListBoxItem AddNewProperty()
         {
             var priority = _properties.Count + 1;
             var item = new ListBoxItem { Content = $"Property#{priority}" };
@@ -75,6 +76,12 @@ namespace GraphAlgorithmRenderer.UIControls
             _properties[item] = new NodeConditionalPropertyWindow(priority);
             item.MouseDoubleClick += (o, args) => _properties[item].Show();
             properties.Items.Add(item);
+            return item;
+        }
+
+        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        {
+            var item = AddNewProperty();
             _properties[item].Show();
         }
 
@@ -84,13 +91,14 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 return;
             }
+
             _properties[item].Hide();
             _properties.Remove(item);
             properties.Items.Remove(item);
             for (var i = 0; i < properties.Items.Count; i++)
             {
-                ((ListBoxItem)properties.Items[i]).Content = $"Property#{i + 1}";
-                _properties[((ListBoxItem)properties.Items[i])].Priority = i;
+                ((ListBoxItem) properties.Items[i]).Content = $"Property#{i + 1}";
+                _properties[((ListBoxItem) properties.Items[i])].Priority = i;
             }
         }
 
@@ -108,6 +116,24 @@ namespace GraphAlgorithmRenderer.UIControls
                     ConditionalProperties = conditionalProperties
                 };
             }
+        }
+
+        public void FromNodeFamily(NodeFamily nodeFamily)
+        {
+            Ranges.Clear();
+            nodeFamily.Ranges.ForEach(r => Ranges.Add(r));
+            validationTemplateBox.Text = nodeFamily.ValidationTemplate;
+            var conditionalProperties = ((IEnumerable<ConditionalProperty<INodeProperty>>) nodeFamily.ConditionalProperties)
+                .Reverse().ToList();
+            properties.Items.Clear();
+            _properties.Clear();
+            for (int i = 0; i < conditionalProperties.Count; i++)
+            {
+                var item = AddNewProperty();
+                _properties[item].FromConditionalProperty(i + 1, conditionalProperties[i]);
+            }
+
+
         }
     }
 }

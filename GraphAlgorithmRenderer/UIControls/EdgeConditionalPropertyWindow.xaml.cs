@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,17 +19,18 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class EdgeConditionalPropertyWindow : Window
     {
-        private readonly IReadOnlyDictionary<string, Microsoft.Msagl.Drawing.Style> _styles = new Dictionary<string, Style>
-        {
-            {"Bold", Microsoft.Msagl.Drawing.Style.Bold},
-            {"Dashed", Microsoft.Msagl.Drawing.Style.Dashed},
-            {"Diagonals", Microsoft.Msagl.Drawing.Style.Diagonals},
-            {"Dotted", Microsoft.Msagl.Drawing.Style.Dotted},
-            {"Filled", Microsoft.Msagl.Drawing.Style.Filled},
-            {"Invis", Microsoft.Msagl.Drawing.Style.Invis},
-            {"Rounded", Microsoft.Msagl.Drawing.Style.Rounded},
-            {"Solid", Microsoft.Msagl.Drawing.Style.Solid}
-        };
+        private readonly IReadOnlyDictionary<string, Microsoft.Msagl.Drawing.Style> _styles =
+            new Dictionary<string, Style>
+            {
+                {"Bold", Microsoft.Msagl.Drawing.Style.Bold},
+                {"Dashed", Microsoft.Msagl.Drawing.Style.Dashed},
+                {"Diagonals", Microsoft.Msagl.Drawing.Style.Diagonals},
+                {"Dotted", Microsoft.Msagl.Drawing.Style.Dotted},
+                {"Filled", Microsoft.Msagl.Drawing.Style.Filled},
+                {"Invis", Microsoft.Msagl.Drawing.Style.Invis},
+                {"Rounded", Microsoft.Msagl.Drawing.Style.Rounded},
+                {"Solid", Microsoft.Msagl.Drawing.Style.Solid}
+            };
 
         public int Priority { get; set; }
 
@@ -36,23 +39,26 @@ namespace GraphAlgorithmRenderer.UIControls
             Priority = priority;
             InitializeComponent();
             labelTextBox.IsEnabled = false;
+
             labelFontSizeBox.IsEnabled = false;
+
             lineWidthBox.IsEnabled = false;
             colorPicker.IsEnabled = false;
+
+            foreach (var elem in Styles.Children)
+            {
+                if (elem is CheckBox box)
+                {
+                    box.IsChecked = false;
+                    box.IsEnabled = false;
+                }
+            }
             colorCheckBox.Checked += (sender, args) => colorPicker.IsEnabled = true;
             colorCheckBox.Unchecked += (sender, args) =>
             {
                 colorPicker.SelectedColor = new Color();
                 colorPicker.IsEnabled = false;
             };
-            foreach (var elem in Styles.Children)
-            {
-                if (elem is CheckBox box)
-                {
-                    box.IsEnabled = false;
-                }
-            }
-
             styleCheckBox.Checked += StyleCheckBoxOnChecked;
             styleCheckBox.Unchecked += StyleCheckBoxOnUnchecked;
             lineWidthCheckBox.Checked += (sender, args) => lineWidthBox.IsEnabled = true;
@@ -63,6 +69,14 @@ namespace GraphAlgorithmRenderer.UIControls
             };
             labelCheckBox.Checked += LabelCheckBoxOnChecked;
             labelCheckBox.Unchecked += LabelCheckBoxOnUnchecked;
+        }
+
+        private void Reset()
+        {
+            colorCheckBox.IsChecked = false;
+            labelCheckBox.IsChecked = false;
+            colorCheckBox.IsChecked = false;
+            lineWidthCheckBox.IsChecked = false;
         }
 
         private void StyleCheckBoxOnUnchecked(object sender, RoutedEventArgs e)
@@ -154,10 +168,83 @@ namespace GraphAlgorithmRenderer.UIControls
                 {
                     ModePanel.Children.OfType<CheckBox>()
                         .Where(cb => cb.IsChecked != null && (bool) cb.IsChecked)
-                        .ToList().ForEach(cb => properties.Add(new StyleEdgeProperty(_styles[cb.ContentStringFormat])) );
+                        .ToList().ForEach(cb => properties.Add(new StyleEdgeProperty(_styles[cb.ContentStringFormat])));
                 }
 
                 return new ConditionalProperty<IEdgeProperty>(condition, properties);
+            }
+        }
+
+
+        public void FromConditionalProperty(int priority, ConditionalProperty<IEdgeProperty> conditionalProperty)
+        {
+            Priority = priority;
+            Reset();
+            conditionBox.Text = conditionalProperty.Condition.Template;
+            regexBox.Text = conditionalProperty.Condition.FunctionNameRegex;
+            if (conditionalProperty.Condition.Mode == ConditionMode.AllStackFrames)
+            {
+                Debug.WriteLine($"Set checked all {AllSf.IsChecked}");
+                AllSf.IsChecked = true;
+                Debug.WriteLine($"{AllSf.IsChecked}");
+            }
+            else
+            {
+                Debug.WriteLine($"Set checked cur {CurSf.IsChecked}");
+                CurSf.IsChecked = true;
+                Debug.WriteLine($"{CurSf.IsChecked}");
+            }
+
+            var labelProperty =
+                (LabelEdgeProperty) conditionalProperty.Properties.FirstOrDefault(x => x is LabelEdgeProperty);
+            if (labelProperty != null)
+            {
+                labelCheckBox.IsChecked = true;
+                labelTextBox.Text = labelProperty.LabelTextExpression;
+                labelFontSizeBox.Text = $"{labelProperty.FontSize:0.00}";
+            }
+
+            LineWidthEdgeProperty lineWidthEdgeProperty =
+                (LineWidthEdgeProperty) conditionalProperty.Properties.FirstOrDefault(x => x is LineWidthEdgeProperty);
+            if (lineWidthEdgeProperty != null)
+            {
+                lineWidthCheckBox.IsChecked = true;
+                lineWidthBox.Text = $"{lineWidthEdgeProperty.LineWidth:0.00}";
+            }
+
+            LineColorEdgeProperty lineColorEdgeProperty =
+                (LineColorEdgeProperty) conditionalProperty.Properties.FirstOrDefault(x => x is LineColorEdgeProperty);
+            if (lineColorEdgeProperty != null)
+            {
+                colorCheckBox.IsChecked = true;
+
+                colorPicker.SelectedColor = new Color
+                {
+                    A = lineColorEdgeProperty.Color.A,
+                    G = lineColorEdgeProperty.Color.G, R = lineColorEdgeProperty.Color.R,
+                    B = lineColorEdgeProperty.Color.B
+                };
+            }
+
+            var styles = conditionalProperty.Properties
+                .Where(p => p is StyleEdgeProperty).Select(p => ((StyleEdgeProperty) p).Style).ToList();
+            if (styles.Count > 0)
+            {
+                styleCheckBox.IsChecked = true;
+                foreach (var style in styles)
+                {
+                    KeyValuePair<string, Style> content = _styles.FirstOrDefault(kv => kv.Value == style);
+                    if (!content.Equals(default(KeyValuePair<string, Style>)))
+                    {
+                        foreach (var child in Styles.Children)
+                        {
+                            if (child is CheckBox cb && cb.ContentStringFormat == content.Key)
+                            {
+                                cb.IsChecked = true;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

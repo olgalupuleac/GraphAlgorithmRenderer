@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -222,6 +223,119 @@ namespace GraphAlgorithmRenderer.UIControls
                 }
 
                 return new ConditionalProperty<INodeProperty>(condition, properties);
+            }
+        }
+
+
+        private void Reset()
+        {
+            colorCheckBox.IsChecked = false;
+            labelCheckBox.IsChecked = false;
+            colorCheckBox.IsChecked = false;
+            lineWidthCheckBox.IsChecked = false;
+            fillColorCheckBox.IsChecked = false;
+            shapeCheckBox.IsChecked = false;
+        }
+
+
+        public void FromConditionalProperty(int priority, ConditionalProperty<INodeProperty> conditionalProperty)
+        {
+            Priority = priority;
+            Reset();
+            conditionBox.Text = conditionalProperty.Condition.Template;
+            regexBox.Text = conditionalProperty.Condition.FunctionNameRegex;
+            if (conditionalProperty.Condition.Mode == ConditionMode.AllStackFrames)
+            {
+                Debug.WriteLine($"Node set checked all {AllSf.IsChecked}");
+                AllSf.IsChecked = true;
+                Debug.WriteLine($"{AllSf.IsChecked}");
+            }
+            else
+            {
+                Debug.WriteLine($"Node set checked cur {CurSf.IsChecked}");
+                CurSf.IsChecked = true;
+                Debug.WriteLine($"{CurSf.IsChecked}");
+            }
+
+            var labelProperty =
+                (LabelNodeProperty)conditionalProperty.Properties.FirstOrDefault(x => x is LabelNodeProperty);
+            if (labelProperty != null)
+            {
+                labelCheckBox.IsChecked = true;
+                labelTextBox.Text = labelProperty.LabelTextExpression;
+                labelFontSizeBox.Text = $"{labelProperty.FontSize:0.00}";
+            }
+
+            var lineWidthEdgeProperty =
+                (LineWidthNodeProperty)conditionalProperty.Properties.FirstOrDefault(x => x is LineWidthNodeProperty);
+            if (lineWidthEdgeProperty != null)
+            {
+                lineWidthCheckBox.IsChecked = true;
+                lineWidthBox.Text = $"{lineWidthEdgeProperty.LineWidth:0.00}";
+            }
+
+            var lineColorEdgeProperty =
+                (LineColorNodeProperty)conditionalProperty.Properties.FirstOrDefault(x => x is LineColorNodeProperty);
+            if (lineColorEdgeProperty != null)
+            {
+                colorCheckBox.IsChecked = true;
+
+                colorPicker.SelectedColor = new Color
+                {
+                    A = lineColorEdgeProperty.Color.A,
+                    G = lineColorEdgeProperty.Color.G,
+                    R = lineColorEdgeProperty.Color.R,
+                    B = lineColorEdgeProperty.Color.B
+                };
+            }
+
+            var styles = conditionalProperty.Properties
+                .Where(p => p is StyleNodeProperty).Select(p => ((StyleNodeProperty)p).Style).ToList();
+            if (styles.Count > 0)
+            {
+                styleCheckBox.IsChecked = true;
+                foreach (var style in styles)
+                {
+                    KeyValuePair<string, Style> content = _styles.FirstOrDefault(kv => kv.Value == style);
+                    if (!content.Equals(default(KeyValuePair<string, Style>)))
+                    {
+                        foreach (var child in Styles.Children)
+                        {
+                            if (child is CheckBox cb && cb.ContentStringFormat == content.Key)
+                            {
+                                cb.IsChecked = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            var fillColorEdgeProperty =
+                (FillColorNodeProperty)conditionalProperty.Properties.FirstOrDefault(x => x is FillColorNodeProperty);
+            if (fillColorEdgeProperty != null)
+            {
+                fillColorCheckBox.IsChecked = true;
+
+                fillColorPicker.SelectedColor = new Color
+                {
+                    A = fillColorEdgeProperty.Color.A,
+                    G = fillColorEdgeProperty.Color.G,
+                    R = fillColorEdgeProperty.Color.R,
+                    B = fillColorEdgeProperty.Color.B
+                };
+            }
+
+            var shape = (ShapeNodeProperty)conditionalProperty.Properties.FirstOrDefault(x => x is ShapeNodeProperty);
+            if (shape != null)
+            {
+                shapeCheckBox.IsChecked = true;
+                foreach (var kv in _shapesDict)
+                {
+                    if (kv.Value.Equals(shape.Shape))
+                    {
+                        _shapeRadioButtons.Where(r => r.ContentStringFormat == kv.Key).ToList().ForEach(r => r.IsChecked = true);
+                    }
+                }
             }
         }
     }

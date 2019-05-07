@@ -40,11 +40,12 @@ namespace GraphAlgorithmRenderer.UIControls
             identifiers.ItemsSource = Ranges;
             foreach (var node in _availableNodes.Keys)
             {
-                var targetRadioButton = new RadioButton {Content = node, GroupName = "TargetNodes"};
-                targetRadioButton.Checked += (sender, args) => 
-                    _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node); 
+
+                var targetRadioButton = new RadioButton { Content = node, GroupName = "TargetNodes" };
+                targetRadioButton.Checked += (sender, args) =>
+                    _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 TargetPanel.Children.Add(targetRadioButton);
-                var sourceRadioButton = new RadioButton {Content = node, GroupName = "SourceNodes"};
+                var sourceRadioButton = new RadioButton { Content = node, GroupName = "SourceNodes" };
                 sourceRadioButton.Checked += (sender, args) =>
                     _sourceWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 SourcePanel.Children.Add(sourceRadioButton);
@@ -119,14 +120,20 @@ namespace GraphAlgorithmRenderer.UIControls
             Hide();
         }
 
-        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        private ListBoxItem AddNewProperty()
         {
             var priority = _properties.Count + 1;
-            var item = new ListBoxItem {Content = $"Property#{priority}"};
-            
+            var item = new ListBoxItem { Content = $"Property#{priority}" };
+
             _properties[item] = new EdgeConditionalPropertyWindow(priority);
             item.MouseDoubleClick += (o, args) => _properties[item].Show();
             properties.Items.Add(item);
+            return item;
+        }
+
+        private void AddProperty_Click(object sender, RoutedEventArgs e)
+        {
+            var item = AddNewProperty();
             _properties[item].Show();
         }
 
@@ -160,6 +167,45 @@ namespace GraphAlgorithmRenderer.UIControls
                     ValidationTemplate = validationTemplateBox.Text,
                     ConditionalProperties = conditionalProperties
                 };
+            }
+        }
+
+        private void SetNodeFamilies(string target, string source)
+        {
+            foreach (var child in TargetPanel.Children)
+            {
+                if (child is RadioButton rb && rb.ContentStringFormat == target)
+                {
+                    rb.IsChecked = true;
+                }
+            }
+
+            foreach (var child in SourcePanel.Children)
+            {
+                if (child is RadioButton rb && rb.ContentStringFormat == source)
+                {
+                    rb.IsChecked = true;
+                }
+            }
+        }
+
+        public void FromEdgeFamily(EdgeFamily edgeFamily, List<string> nodeNames)
+        {
+            Ranges.Clear();
+            edgeFamily.Ranges.ForEach(r => Ranges.Add(r));
+            directed.IsChecked = edgeFamily.IsDirected;
+            validationTemplateBox.Text = edgeFamily.ValidationTemplate;
+            _targetWindow = new EdgeEndControl(edgeFamily.Target);
+            _sourceWindow = new EdgeEndControl(edgeFamily.Source);
+            SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
+            var conditionalProperties = ((IEnumerable<ConditionalProperty<IEdgeProperty>>)edgeFamily.ConditionalProperties)
+                .Reverse().ToList();
+            properties.Items.Clear();
+            _properties.Clear();
+            for (int i = 0; i < conditionalProperties.Count; i++)
+            {
+                var item = AddNewProperty();
+                _properties[item].FromConditionalProperty(i + 1, conditionalProperties[i]);
             }
         }
     }
