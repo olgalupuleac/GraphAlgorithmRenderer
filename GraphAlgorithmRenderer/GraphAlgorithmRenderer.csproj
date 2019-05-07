@@ -71,6 +71,7 @@
       <DependentUpon>SettingsWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsWindowPackage.cs" />
+    <Compile Include="UIControls\ConfigGenerationException.cs" />
     <Compile Include="UIControls\EdgeConditionalPropertyWindow.xaml.cs">
       <DependentUpon>EdgeConditionalPropertyWindow.xaml</DependentUpon>
     </Compile>
@@ -86,6 +87,8 @@
     <Compile Include="UIControls\NodeFamilyWindow.xaml.cs">
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\Properties\EdgeUIProperty.cs" />
+    <Compile Include="UIControls\Properties\INodeUIProperty.cs" />
     <Compile Include="UIControls\Properties\ShapeProperty.xaml.cs">
       <DependentUpon>ShapeProperty.xaml</DependentUpon>
     </Compile>
