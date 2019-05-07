@@ -90,6 +90,9 @@
     <Compile Include="UIControls\Properties\EdgeUIProperty.cs" />
     <Compile Include="UIControls\Properties\INodeUIProperty.cs" />
     <Compile Include="UIControls\Properties\IUiProperty.cs" />
+    <Compile Include="UIControls\Properties\LabelUiProperty.xaml.cs">
+      <DependentUpon>LabelUiProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\Properties\ShapeUiProperty.xaml.cs">
       <DependentUpon>ShapeUiProperty.xaml</DependentUpon>
     </Compile>
@@ -267,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\NodeFamilyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\Properties\LabelUiProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

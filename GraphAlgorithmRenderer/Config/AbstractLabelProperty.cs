@@ -18,7 +18,7 @@ namespace GraphAlgorithmRenderer.Config
         public bool HighlightIfChanged { get; set; }
         public Color? ColorToHighLight { get; set; }
         [JsonProperty] public string LabelTextExpression { get; }
-        public double FontSize { get; set; }
+        public double? FontSize { get; set; }
 
         public void ApplyLabel(ILabeledObject graphElement, Debugger debugger, Identifier identifier)
         {
@@ -33,9 +33,9 @@ namespace GraphAlgorithmRenderer.Config
                 return debugger.GetExpression(v).Value;
             });
 
-            if (Math.Abs(FontSize) > 0.01)
+            if (FontSize.HasValue)
             {
-                graphElement.Label.FontSize = FontSize;
+                graphElement.Label.FontSize = FontSize.Value;
             }
 
             if (label.Equals(graphElement.Label.Text))
