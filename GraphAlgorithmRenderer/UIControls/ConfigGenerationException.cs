@@ -8,7 +8,11 @@ namespace GraphAlgorithmRenderer.UIControls
 {
     public class ConfigGenerationException : Exception
     {
-        public ConfigGenerationException(string msg) : base(msg)
+        public ConfigGenerationException(string message) : base(message)
+        {
+        }
+
+        public ConfigGenerationException(string message, Exception exception) : base(message, exception)
         {
         }
     }
