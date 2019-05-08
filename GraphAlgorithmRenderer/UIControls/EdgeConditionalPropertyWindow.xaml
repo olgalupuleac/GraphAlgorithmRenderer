@@ -29,20 +29,9 @@
 
             <properties:LineColorUiProperty Margin="8" Grid.Column="0" Grid.Row="0" x:Name="LineColorUiProperty" />
             <properties:LineWidthUiProperty Margin="8" Grid.Column="0" Grid.Row="1" x:Name="LineWidthUiProperty" />
-            <Grid Grid.Column="0" Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Button x:Name="ok" Grid.Column="3" Grid.Row="1" Content="Ok" Click="Ok_Click" />
-            </Grid>
+            <StackPanel Grid.Column="0" Grid.Row="2">
+                <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

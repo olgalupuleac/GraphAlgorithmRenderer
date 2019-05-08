@@ -7,12 +7,12 @@
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d">
     <StackPanel Orientation="Vertical">
-        <DataGrid x:Name="identifiers" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=Ranges}">
+        <DataGrid x:Name="identifiers" Margin="15" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=Ranges}">
             <DataGrid.Resources>
                 <collections:ArrayList x:Key="Ranges" />
             </DataGrid.Resources>
         </DataGrid>
-        <Button x:Name="AddId" Content="Add id" Click="AddId_Click"/>
-        <Button x:Name="RemoveId" Content="Remove id" Click="RemoveId_Click"/>
+        <Button x:Name="AddId" Margin="15" Content="Add id" Click="AddId_Click"/>
+        <Button x:Name="RemoveId" Margin="15" Content="Remove id" Click="RemoveId_Click"/>
     </StackPanel>
 </UserControl>

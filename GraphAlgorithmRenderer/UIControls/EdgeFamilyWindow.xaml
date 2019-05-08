@@ -8,16 +8,7 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Vertical">
-            <DataGrid Margin="15" x:Name="identifiers" AutoGenerateColumns="True"
-                      ItemsSource="{DynamicResource ResourceKey=Ranges}">
-                <DataGrid.Resources>
-                    <collections:ArrayList x:Key="Ranges" />
-                </DataGrid.Resources>
-            </DataGrid>
-            <Button Margin="15" x:Name="AddId" Content="Add id" Click="AddId_Click" />
-            <Button Margin="15" x:Name="RemoveId" Content="Remove id" Click="RemoveId_Click" />
-        </StackPanel>
+        <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
             <Button x:Name="targetButton" Content="Target" Margin="15" Click="TargetButton_Click" />
             <Expander x:Name="targetExpander" Header="Target Node Family" Margin="16">

@@ -13,8 +13,7 @@ namespace GraphAlgorithmRenderer.UIControls
     /// Interaction logic for EdgeFamilyWindow.xaml
     /// </summary>
     public partial class EdgeFamilyWindow : Window
-    {
-        public ObservableCollection<IdentifierPartTemplate> Ranges { get; set; }
+    { 
         private readonly Dictionary<string, NodeFamilyWindow> _availableNodes;
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
@@ -25,8 +24,6 @@ namespace GraphAlgorithmRenderer.UIControls
             _availableNodes = availableNodes;
             
             InitializeComponent();
-            Ranges = new ObservableCollection<IdentifierPartTemplate>();
-            identifiers.ItemsSource = Ranges;
        
             PropertiesControl.WindowGenerator = () => new EdgeConditionalPropertyWindow();
             PropertiesControl.Description = w => ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
@@ -49,19 +46,7 @@ namespace GraphAlgorithmRenderer.UIControls
                 SourcePanel.Children.Add(sourceRadioButton);
             }
         }
-       
-        private void AddId_Click(object sender, RoutedEventArgs e)
-        {
-            Ranges.Add(new IdentifierPartTemplate());
-        }
-
-        private void RemoveId_Click(object sender, RoutedEventArgs e)
-        {
-            if (identifiers.SelectedItem is IdentifierPartTemplate id)
-            {
-                Ranges.Remove(id);
-            }
-        }
+      
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -92,7 +77,7 @@ namespace GraphAlgorithmRenderer.UIControls
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var range in Ranges)
+            foreach (var range in IdentifierPartRangeControl.Ranges)
             {
                 if (IsNullOrEmpty(range.Name) ||
                     !IsNullOrEmpty(range.BeginTemplate) && !IsNullOrEmpty(range.EndTemplate)) continue;
@@ -128,7 +113,7 @@ namespace GraphAlgorithmRenderer.UIControls
                     .Select(w => w.ConditionalProperty).ToList();
                 conditionalProperties.Reverse();
                 //TODO check for null
-                return new EdgeFamily(Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
+                return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
                     directed.IsChecked == true)
                 {
                     ValidationTemplate = validationTemplateBox.Text,
@@ -158,8 +143,7 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public void FromEdgeFamily(EdgeFamily edgeFamily, List<string> nodeNames)
         {
-            Ranges.Clear();
-            edgeFamily.Ranges.ForEach(r => Ranges.Add(r));
+            IdentifierPartRangeControl.FromRanges(edgeFamily.Ranges);
             directed.IsChecked = edgeFamily.IsDirected;
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
