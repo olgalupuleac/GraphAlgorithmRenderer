@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -124,17 +125,23 @@ namespace GraphAlgorithmRenderer.UIControls
 
         private void SetNodeFamilies(string target, string source)
         {
+            Debug.WriteLine($"target {target}");
             foreach (var child in TargetPanel.Children)
             {
-                if (child is RadioButton rb && rb.ContentStringFormat == target)
+                if (child is RadioButton rb)
                 {
+                    Debug.WriteLine($"{rb.Content}");
+                    if ((string) rb.Content != target)
+                    {
+                        continue;
+                    }
                     rb.IsChecked = true;
                 }
             }
 
             foreach (var child in SourcePanel.Children)
             {
-                if (child is RadioButton rb && rb.ContentStringFormat == source)
+                if (child is RadioButton rb && (string)rb.Content == source)
                 {
                     rb.IsChecked = true;
                 }
