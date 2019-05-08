@@ -39,11 +39,18 @@ namespace GraphAlgorithmRenderer.UIControls
 
                 var targetRadioButton = new RadioButton { Content = node, GroupName = $"TargetNodes{GetHashCode()}" };
                 targetRadioButton.Checked += (sender, args) =>
-                    _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
+                {
+                    Debug.WriteLine("Creating new window");
+                    _targetWindow =
+                        new EdgeEndControl(
+                            _availableNodes[node].IdentifierPartRangeControl.Ranges
+                                .Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
+                };
+                    
                 TargetPanel.Children.Add(targetRadioButton);
                 var sourceRadioButton = new RadioButton { Content = node, GroupName = $"SourceNodes{GetHashCode()}" };
                 sourceRadioButton.Checked += (sender, args) =>
-                    _sourceWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
+                    _sourceWindow = new EdgeEndControl(_availableNodes[node].IdentifierPartRangeControl.Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 SourcePanel.Children.Add(sourceRadioButton);
             }
         }
@@ -153,9 +160,12 @@ namespace GraphAlgorithmRenderer.UIControls
             IdentifierPartRangeControl.FromRanges(edgeFamily.Ranges);
             directed.IsChecked = edgeFamily.IsDirected;
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
+          
+           
+            SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
             _sourceWindow = new EdgeEndControl(edgeFamily.Source);
-            SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
+            _targetWindow.EdgeEndIdParts.ForEach(x => Debug.WriteLine($"{x.IdPart}, {x.Template}"));
             var conditionalProperties = ((IEnumerable<ConditionalProperty<IEdgeProperty>>)edgeFamily.ConditionalProperties)
                 .Reverse().ToList();
             var windows = new List<Window>();
