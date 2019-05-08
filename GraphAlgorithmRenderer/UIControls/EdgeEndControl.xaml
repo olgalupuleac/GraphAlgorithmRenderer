@@ -6,15 +6,15 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d" Height="424.667" Width="497.333">
-    <Grid>
-        <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=EdgeEndIdParts}" HorizontalAlignment="Left" Height="251" Margin="73,76,0,0" VerticalAlignment="Top" Width="296">
+    <StackPanel Orientation="Vertical">
+        <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=EdgeEndIdParts}" >
             <DataGrid.Resources>
                 <collections:ArrayList x:Key="EdgeEndIdParts">
                    
                 </collections:ArrayList>
             </DataGrid.Resources>
         </DataGrid>
-        <Button x:Name="Ok" Content="Ok" HorizontalAlignment="Left" Margin="397,364,0,0" VerticalAlignment="Top" Width="75" Click="Ok_Click"/>
+        <Button x:Name="Ok" Content="Ok"  Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
 
-    </Grid>
+    </StackPanel>
 </Window>

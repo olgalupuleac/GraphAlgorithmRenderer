@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
-             xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
+             xmlns:ui="clr-namespace:GraphAlgorithmRenderer.UIControls"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -15,19 +15,19 @@
         <TabControl>
             <TabItem Header="UI">
 
-               <properties:UIMainControl x:Name="MainControl"/>
+               <ui:MainControl x:Name="MainControl"/>
             </TabItem>
             <TabItem Header="Json">
-                <StackPanel Orientation="Vertical" Margin="0,1,0,-1">
+                <StackPanel Orientation="Vertical">
 
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <TextBox x:Name="Config" Height="208" TextWrapping="Wrap" AcceptsReturn="True"
+                        <TextBox x:Name="Config" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="220"
                      Text="{Binding Path = JsonConfig, Mode=TwoWay}" TextChanged="Config_TextChanged" />
                     </ScrollViewer>
-                    <Button x:Name="Load" Content="Load" Margin="0,0,223,0"/>
+                    <Button x:Name="Load" Content="Load" Margin="20"/>
 
-                    <Button x:Name="Export" Content="Export" Margin="0,10,223,0"/>
+                    <Button x:Name="Export" Content="Export" Margin="20"/>
 
                 </StackPanel>
             </TabItem>

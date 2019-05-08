@@ -30,7 +30,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="5" Grid.Column="1" Click="Ok_Click">Ok</Button>
+                <Button x:Name="ok" Grid.Row="5" Grid.Column="1" Click="Ok_Click">Ok</Button>
             </Grid>
         </StackPanel>
    

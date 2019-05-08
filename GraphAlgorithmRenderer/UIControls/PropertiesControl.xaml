@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              mc:Ignorable="d" >
     <StackPanel Orientation="Vertical">
-        <Label Content="Conditional properties" Margin="15" />
+        <Label x:Name="Label" Content="Conditional properties" Margin="15" />
         <ListBox x:Name="properties" Margin="10" />
 
 
-        <Button x:Name="AddProperty" Content="Add property" Margin="10" Click="AddProperty_Click" />
-        <Button x:Name="RemoveProperty" Content="Remove property" Margin="10" Click="RemoveProperty_Click" />
+        <Button x:Name="AddProperty" Content="Add" Margin="10" Click="AddProperty_Click" />
+        <Button x:Name="RemoveProperty" Content="Remove" Margin="10" Click="RemoveProperty_Click" />
         <Button x:Name="Up" Margin="10" Click="Up_Click">Move up</Button>
         <Button x:Name="Down" Margin="10" Click="Down_Click">Move down</Button>
     </StackPanel>

@@ -86,7 +86,14 @@ namespace GraphAlgorithmRenderer.UIControls
             properties.Items.Insert(index - 1, item);
         }
 
-        
+        public Dictionary<string, Window> WindowsWithDescriptions
+        {
+            get
+            {
+                return _itemsToWindow.ToDictionary(kv => (string)kv.Key.Content, kv => kv.Value);
+            }
+           
+        }
 
         public void SetNewWindows(List<Window> windows)
         {

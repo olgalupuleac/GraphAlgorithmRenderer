@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
         xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        ResizeMode="CanResize">
     <StackPanel Orientation="Horizontal">
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
@@ -22,8 +22,12 @@
             </Expander>
         </StackPanel>
         <StackPanel Orientation="Vertical">
+            <Label Content="Name" Margin="15" />
+            <TextBox x:Name="familyName" Margin="10" TextWrapping="Wrap" />
+            <Separator></Separator>
             <Label x:Name="label" Content="Validation template" Margin="15" />
             <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />
+            <Separator></Separator>
             <CheckBox x:Name="directed" Content="Directed" HorizontalAlignment="Left" Margin="40" />
         </StackPanel>
 

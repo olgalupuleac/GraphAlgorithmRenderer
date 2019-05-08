@@ -1,20 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using GraphAlgorithmRenderer.Config;
-using GraphAlgorithmRenderer.GraphElementIdentifier;
 using static System.String;
 
 namespace GraphAlgorithmRenderer.UIControls
@@ -24,29 +12,21 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class NodeFamilyWindow : Window
     {
-        private Dictionary<ListBoxItem, NodeConditionalPropertyWindow> _properties;
-        public ObservableCollection<IdentifierPartTemplate> Ranges { get; set; }
 
         public NodeFamilyWindow()
         {
             InitializeComponent();
-            Ranges = new ObservableCollection<IdentifierPartTemplate>();
-            identifiers.ItemsSource = Ranges;
-            _properties = new Dictionary<ListBoxItem, NodeConditionalPropertyWindow>();
-        }
 
-        private void AddId_Click(object sender, RoutedEventArgs e)
-        {
-            Ranges.Add(new IdentifierPartTemplate());
-        }
-
-        private void RemoveId_Click(object sender, RoutedEventArgs e)
-        {
-            if (identifiers.SelectedItem is IdentifierPartTemplate id)
+            PropertiesControl.WindowGenerator = () => new NodeConditionalPropertyWindow();
+            PropertiesControl.Description = w => ((NodeConditionalPropertyWindow)w).ConditionControl.Description;
+            PropertiesControl.UpdateDescription = (w, i) =>
             {
-                Ranges.Remove(id);
-            }
+                ((NodeConditionalPropertyWindow)w).ok.Click += (o, sender) =>
+                    i.Content = ((NodeConditionalPropertyWindow)w).ConditionControl.Description;
+
+            };
         }
+
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -56,7 +36,7 @@ namespace GraphAlgorithmRenderer.UIControls
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var range in Ranges)
+            foreach (var range in IdentifierPartRangeControl.Ranges)
             {
                 if (IsNullOrEmpty(range.Name) ||
                     !IsNullOrEmpty(range.BeginTemplate) && !IsNullOrEmpty(range.EndTemplate)) continue;
@@ -68,49 +48,19 @@ namespace GraphAlgorithmRenderer.UIControls
             Hide();
         }
 
-        private ListBoxItem AddNewProperty()
-        {
-            var priority = _properties.Count + 1;
-            var item = new ListBoxItem { Content = $"Property#{priority}" };
-
-            _properties[item] = new NodeConditionalPropertyWindow(priority);
-            item.MouseDoubleClick += (o, args) => _properties[item].Show();
-            properties.Items.Add(item);
-            return item;
-        }
-
-        private void AddProperty_Click(object sender, RoutedEventArgs e)
-        {
-            var item = AddNewProperty();
-            _properties[item].Show();
-        }
-
-        private void RemoveProperty_Click(object sender, RoutedEventArgs e)
-        {
-            if (!(properties.SelectedItem is ListBoxItem item))
-            {
-                return;
-            }
-
-            _properties[item].Hide();
-            _properties.Remove(item);
-            properties.Items.Remove(item);
-            for (var i = 0; i < properties.Items.Count; i++)
-            {
-                ((ListBoxItem) properties.Items[i]).Content = $"Property#{i + 1}";
-            }
-        }
+        
 
         public NodeFamily NodeFamily
         {
             get
             {
-                var conditionalProperties = properties.Items.OfType<ListBoxItem>()
-                    .Select(i => _properties[i].ConditionalProperty).ToList();
+                var conditionalProperties = PropertiesControl.Windows.Cast<NodeConditionalPropertyWindow>()
+                    .Select(w => w.ConditionalProperty).ToList();
                 conditionalProperties.Reverse();
                 //TODO check for null
-                return new NodeFamily(Ranges.ToList())
+                return new NodeFamily(IdentifierPartRangeControl.Ranges.ToList())
                 {
+                    Name = familyName.Text,
                     ValidationTemplate = validationTemplateBox.Text,
                     ConditionalProperties = conditionalProperties
                 };
@@ -119,20 +69,19 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public void FromNodeFamily(NodeFamily nodeFamily)
         {
-            Ranges.Clear();
-            nodeFamily.Ranges.ForEach(r => Ranges.Add(r));
+            IdentifierPartRangeControl.FromRanges(nodeFamily.Ranges);
             validationTemplateBox.Text = nodeFamily.ValidationTemplate;
+            familyName.Text = nodeFamily.Name;
             var conditionalProperties = ((IEnumerable<ConditionalProperty<INodeProperty>>) nodeFamily.ConditionalProperties)
                 .Reverse().ToList();
-            properties.Items.Clear();
-            _properties.Clear();
-            for (int i = 0; i < conditionalProperties.Count; i++)
+            var windows = new List<Window>();
+            foreach (var conditionalProperty in conditionalProperties)
             {
-                var item = AddNewProperty();
-                _properties[item].FromConditionalProperty(conditionalProperties[i]);
+                var window = new NodeConditionalPropertyWindow();
+                window.FromConditionalProperty(conditionalProperty);
+                windows.Add(window);
             }
-
-
+            PropertiesControl.SetNewWindows(windows);
         }
     }
 }

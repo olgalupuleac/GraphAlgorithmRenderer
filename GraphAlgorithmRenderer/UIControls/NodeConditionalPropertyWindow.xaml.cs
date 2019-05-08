@@ -14,7 +14,7 @@ namespace GraphAlgorithmRenderer.UIControls
     {
         private readonly List<INodeUiProperty> _properties;
 
-        public NodeConditionalPropertyWindow(int priority)
+        public NodeConditionalPropertyWindow()
         {
             InitializeComponent();
             _properties = new List<INodeUiProperty>

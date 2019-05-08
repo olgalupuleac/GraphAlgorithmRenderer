@@ -208,7 +208,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         private List<Identifier> GetIdentifiersForCondition(List<Identifier> identifiers, string conditionTemplate)
         {
-            return conditionTemplate == null
+            return String.IsNullOrEmpty(conditionTemplate)
                 ? identifiers
                 : identifiers.Where(id => CheckConditionForIdentifier(conditionTemplate, id)).ToList();
         }
@@ -225,7 +225,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                     continue;
                 }
                 result = result.Replace($"__ARG{i}__", stackFrame.Arguments.Item(i).Value);
-            };
+            }
 
             return identifier.Substitute(result);
         }

@@ -7,23 +7,17 @@
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <DataGrid x:Name="identifiers" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=Ranges}" HorizontalAlignment="Left" Height="249" Margin="55,52,0,0" VerticalAlignment="Top" Width="252">
-            <DataGrid.Resources>
-                <collections:ArrayList x:Key="Ranges">
-                </collections:ArrayList>
-            </DataGrid.Resources>
-        </DataGrid>
-        <Button x:Name="AddId" Content="Add id" HorizontalAlignment="Left" Margin="81,338,0,0" VerticalAlignment="Top" Width="75" Click="AddId_Click"/>
-        <Button x:Name="RemoveId" Content="Remove id" HorizontalAlignment="Left" Margin="81,374,0,0" VerticalAlignment="Top" Width="75" Click="RemoveId_Click"/>
-        <TextBox x:Name="validationTemplateBox" HorizontalAlignment="Left" Height="23" Margin="394,57,0,0" TextWrapping="Wrap" Text="true" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="Validation template" HorizontalAlignment="Left" Margin="394,32,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="properties" HorizontalAlignment="Left" Height="162" Margin="346,139,0,0" VerticalAlignment="Top" Width="113"/>
-        <Label x:Name="label1" Content="Conditional properties" HorizontalAlignment="Left" Margin="336,110,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" Margin="681,379,0,0" VerticalAlignment="Top" Width="75" Click="Ok_Click"/>
-        <Button x:Name="AddProperty" Content="Add property" HorizontalAlignment="Left" Margin="349,338,0,0" VerticalAlignment="Top" Width="110" Click="AddProperty_Click"/>
-        <Button x:Name="RemoveProperty" Content="Remove property" HorizontalAlignment="Left" Margin="349,374,0,0" VerticalAlignment="Top" Width="110" Click="RemoveProperty_Click"/>
-
-
-    </Grid>
+    <StackPanel Orientation="Horizontal">
+        <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
+        <StackPanel Orientation="Vertical">
+            <Label Content="Name" Margin="15" />
+            <TextBox x:Name="familyName" Margin="10" TextWrapping="Wrap" />
+            <Separator></Separator>
+            <Label x:Name="label" Content="Validation template" Margin="15" />
+            <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />
+        </StackPanel>
+        <local:PropertiesControl x:Name="PropertiesControl"></local:PropertiesControl>
+        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
+                Click="Ok_Click" />
+    </StackPanel>
 </Window>

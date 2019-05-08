@@ -87,6 +87,9 @@
     <Compile Include="UIControls\IdentifierPartRangeControl.xaml.cs">
       <DependentUpon>IdentifierPartRangeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\MainControl.xaml.cs">
+      <DependentUpon>MainControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\NodeConditionalPropertyWindow.xaml.cs">
       <DependentUpon>NodeConditionalPropertyWindow.xaml</DependentUpon>
     </Compile>
@@ -116,9 +119,6 @@
     </Compile>
     <Compile Include="UIControls\Properties\StyleUiProperty.xaml.cs">
       <DependentUpon>StyleUiProperty.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIControls\UIMainControl.xaml.cs">
-      <DependentUpon>UIMainControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +291,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UIControls\MainControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIControls\NodeConditionalPropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -324,10 +328,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\Properties\StyleUiProperty.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIControls\UIMainControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
