@@ -82,10 +82,11 @@ namespace GraphAlgorithmRenderer.UIControls
                 return;
             }
 
-            var itemToSwap = properties.Items[index - 1];
-            properties.Items[index - 1] = item;
-            properties.Items[index] = itemToSwap;
+            properties.Items.Remove(item);
+            properties.Items.Insert(index - 1, item);
         }
+
+        
 
         public void SetNewWindows(List<Window> windows)
         {
@@ -107,9 +108,8 @@ namespace GraphAlgorithmRenderer.UIControls
                 return;
             }
 
-            var itemToSwap = properties.Items[index + 1];
-            properties.Items[index + 1] = item;
-            properties.Items[index] = itemToSwap;
+            properties.Items.Remove(item);
+            properties.Items.Insert(index + 1, item);
         }
     }
 }
