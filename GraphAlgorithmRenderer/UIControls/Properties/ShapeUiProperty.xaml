@@ -10,21 +10,21 @@
             <StackPanel Orientation="Horizontal">
                 <CheckBox x:Name="CheckBox">Shape</CheckBox>
                 <StackPanel x:Name="Panel1" Orientation="Vertical">
-                    <RadioButton GroupName="Shape">Box</RadioButton>
-                    <RadioButton GroupName="Shape">Circle</RadioButton>
-                    <RadioButton GroupName="Shape">Diamond</RadioButton>
-                    <RadioButton GroupName="Shape">Double Circle</RadioButton>
-                    <RadioButton GroupName="Shape">Ellipse</RadioButton>
-                    <RadioButton GroupName="Shape">House</RadioButton>
+                    <RadioButton>Box</RadioButton>
+                    <RadioButton>Circle</RadioButton>
+                    <RadioButton>Diamond</RadioButton>
+                    <RadioButton>Double Circle</RadioButton>
+                    <RadioButton>Ellipse</RadioButton>
+                    <RadioButton>House</RadioButton>
                 </StackPanel>
 
                 <StackPanel x:Name="Panel2" Orientation="Vertical">
-                    <RadioButton GroupName="Shape">Octagon</RadioButton>
-                    <RadioButton GroupName="Shape">Parallelogram</RadioButton>
-                    <RadioButton GroupName="Shape">Point</RadioButton>
-                    <RadioButton GroupName="Shape">Polygon</RadioButton>
-                    <RadioButton GroupName="Shape">Trapezium</RadioButton>
-                    <RadioButton GroupName="Shape">Triangle</RadioButton>
+                    <RadioButton>Octagon</RadioButton>
+                    <RadioButton>Parallelogram</RadioButton>
+                    <RadioButton>Point</RadioButton>
+                    <RadioButton>Polygon</RadioButton>
+                    <RadioButton>Trapezium</RadioButton>
+                    <RadioButton>Triangle</RadioButton>
                 </StackPanel>
             </StackPanel>
         </Border>    

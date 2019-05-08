@@ -29,7 +29,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                 {"Triangle", Shape.Triangle}
             };
 
-        private List<RadioButton> _shapeRadioButtons;
+        private readonly List<RadioButton> _shapeRadioButtons;
 
         public ShapeUiProperty()
         {
@@ -37,6 +37,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             _shapeRadioButtons = new List<RadioButton>();
             _shapeRadioButtons.AddRange(Panel1.Children.OfType<RadioButton>());
             _shapeRadioButtons.AddRange(Panel2.Children.OfType<RadioButton>());
+            _shapeRadioButtons.ForEach(r => r.GroupName = $"Shape{GetHashCode()}");
             Disable();
             CheckBox.Checked += (sender, args) => Enable();
             CheckBox.Unchecked += (sender, args) => Disable();

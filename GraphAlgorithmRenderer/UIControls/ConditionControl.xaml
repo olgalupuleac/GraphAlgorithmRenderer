@@ -7,15 +7,15 @@
              mc:Ignorable="d">
     <Grid>
         <StackPanel Orientation="Vertical">
+            <Label Content="Condition" />
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <TextBox x:Name="ConditionBox" HorizontalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="true"/>
             </ScrollViewer>
-            <Label Content="Condition" />
-            <TextBox x:Name="RegexBox" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Text=".*" VerticalAlignment="Top"/>
             <Label Content="Function regex"/>
+            <TextBox x:Name="RegexBox" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Text=".*"/>
             <StackPanel x:Name="ModePanel" >
-                <RadioButton x:Name="CurSf" GroupName="Mode" Content="Current stackframe" IsChecked="True"/>
-                <RadioButton x:Name="AllSf" GroupName="Mode" Content="All stackframes" />
+                <RadioButton x:Name="CurSf"  Content="Current stackframe"/>
+                <RadioButton x:Name="AllSf" Content="All stackframes" />
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -90,7 +90,7 @@
     <Compile Include="UIControls\NodeFamilyWindow.xaml.cs">
       <DependentUpon>NodeFamilyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIControls\Properties\EdgeUIProperty.cs" />
+    <Compile Include="UIControls\Properties\IEdgeUiProperty.cs" />
     <Compile Include="UIControls\Properties\FillColorUiProperty.xaml.cs">
       <DependentUpon>FillColorUiProperty.xaml</DependentUpon>
     </Compile>

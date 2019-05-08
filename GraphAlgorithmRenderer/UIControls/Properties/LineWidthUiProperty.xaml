@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              mc:Ignorable="d">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" Height="35" Margin="0,0,-0.333,0.333" VerticalAlignment="Bottom">
+        <Border BorderBrush="Black" BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="CheckBox">Line width</CheckBox>
                 <TextBox x:Name="TextBox" TextWrapping="Wrap"/>

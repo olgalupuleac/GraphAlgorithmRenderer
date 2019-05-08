@@ -206,6 +206,7 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var item = AddNewProperty();
                 _properties[item].FromConditionalProperty(i + 1, conditionalProperties[i]);
+
             }
         }
     }
