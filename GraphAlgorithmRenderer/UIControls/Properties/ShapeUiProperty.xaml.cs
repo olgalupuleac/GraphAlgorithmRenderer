@@ -63,7 +63,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                 return null;
             }
 
-            return ShapesToMsaglTypes[selected[0].ContentStringFormat];
+            return ShapesToMsaglTypes[(string)selected[0].Content];
         }
 
 

@@ -52,7 +52,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         private List<Style> GetStyles()
         {
-            return _styles.Where(x => x.IsChecked == true).Select(x => StylesToMsaglTypes[x.ContentStringFormat])
+            return _styles.Where(x => x.IsChecked == true).Select(x => StylesToMsaglTypes[(string)x.Content])
                 .ToList();
         }
 
