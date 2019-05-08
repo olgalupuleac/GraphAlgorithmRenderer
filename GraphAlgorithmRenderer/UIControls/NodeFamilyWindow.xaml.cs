@@ -56,7 +56,6 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var conditionalProperties = PropertiesControl.Windows.Cast<NodeConditionalPropertyWindow>()
                     .Select(w => w.ConditionalProperty).ToList();
-                conditionalProperties.Reverse();
                 //TODO check for null
                 return new NodeFamily(IdentifierPartRangeControl.Ranges.ToList())
                 {
@@ -72,10 +71,8 @@ namespace GraphAlgorithmRenderer.UIControls
             IdentifierPartRangeControl.FromRanges(nodeFamily.Ranges);
             validationTemplateBox.Text = nodeFamily.ValidationTemplate;
             familyName.Text = nodeFamily.Name;
-            var conditionalProperties = ((IEnumerable<ConditionalProperty<INodeProperty>>) nodeFamily.ConditionalProperties)
-                .Reverse().ToList();
             var windows = new List<Window>();
-            foreach (var conditionalProperty in conditionalProperties)
+            foreach (var conditionalProperty in nodeFamily.ConditionalProperties)
             {
                 var window = new NodeConditionalPropertyWindow();
                 window.FromConditionalProperty(conditionalProperty);

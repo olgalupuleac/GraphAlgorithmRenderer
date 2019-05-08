@@ -119,7 +119,7 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var conditionalProperties = PropertiesControl.Windows.Cast<EdgeConditionalPropertyWindow>()
                     .Select(w => w.ConditionalProperty).ToList();
-                conditionalProperties.Reverse();
+                
                 //TODO check for null
                 return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
                     directed.IsChecked == true)
@@ -167,10 +167,9 @@ namespace GraphAlgorithmRenderer.UIControls
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
             _sourceWindow = new EdgeEndControl(edgeFamily.Source);
             _targetWindow.EdgeEndIdParts.ForEach(x => Debug.WriteLine($"{x.IdPart}, {x.Template}"));
-            var conditionalProperties = ((IEnumerable<ConditionalProperty<IEdgeProperty>>)edgeFamily.ConditionalProperties)
-                .Reverse().ToList();
+           
             var windows = new List<Window>();
-            foreach (var conditionalProperty in conditionalProperties)
+            foreach (var conditionalProperty in edgeFamily.ConditionalProperties)
             {
                var window = new EdgeConditionalPropertyWindow();
                window.FromConditionalProperty(conditionalProperty);

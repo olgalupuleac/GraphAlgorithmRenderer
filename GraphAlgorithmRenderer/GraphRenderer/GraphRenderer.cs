@@ -104,7 +104,9 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             AddGraphElement<T> add, ApplyProperty<T> applyProperty)
         {
             var identifiers = Create(family, add);
-            foreach (var conditionalProperty in family.ConditionalProperties)
+            var conditionalProperties = family.ConditionalProperties.Select(x => x).ToList();
+            conditionalProperties.Reverse();
+            foreach (var conditionalProperty in conditionalProperties)
             {
                 switch (conditionalProperty.Condition.Mode)
                 {

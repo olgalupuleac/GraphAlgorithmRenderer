@@ -52,6 +52,8 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                     new LineColorEdgeProperty(Color.Red));
 
                 edges.ConditionalProperties.Add(dfsEdges);
+                nodes.ConditionalProperties.Reverse();
+                edges.ConditionalProperties.Reverse();
                 return new Config.GraphConfig
                 {
                     Edges = new List<EdgeFamily> { edges },
@@ -136,6 +138,9 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 edges.ConditionalProperties.Add(dfsEdge);
                 edges.ConditionalProperties.Add(flowEdge);
                 edges.ConditionalProperties.Add(fullEdge);
+
+                nodes.ConditionalProperties.Reverse();
+                edges.ConditionalProperties.Reverse();
                 return new Config.GraphConfig
                 {
                     Edges = new List<EdgeFamily> { edges },
@@ -197,6 +202,9 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 edges.ConditionalProperties.Add(dfsEdges);
                 edges.ConditionalProperties.Add(isBridge);
                 edges.ConditionalProperties.Add(isBridgeLine);
+
+                nodes.ConditionalProperties.Reverse();
+                edges.ConditionalProperties.Reverse();
                 return new Config.GraphConfig
                 {
                     Nodes = new List<NodeFamily> { nodes },
@@ -225,6 +233,9 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                         new IdentifierPartTemplate("i", "0", "n")
                     }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__i__" }),
                     new EdgeFamily.EdgeEnd(nodes, new List<string> { "p[__i__]" }), true);
+
+                nodes.ConditionalProperties.Reverse();
+                edges.ConditionalProperties.Reverse();
                 return new Config.GraphConfig()
                 {
                     Edges = new List<EdgeFamily> { edges },
@@ -365,7 +376,13 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                     )
                 { ValidationTemplate = "!nodes[__i__]->left", Name = "leftNullEdge" };
                 nullLeftEdges.ConditionalProperties.Add(leftLabel);
-
+                nodes.ConditionalProperties.Reverse();
+                rightNull.ConditionalProperties.Reverse();
+                leftNull.ConditionalProperties.Reverse();
+                rightEdges.ConditionalProperties.Reverse();
+                nullRightEdges.ConditionalProperties.Reverse();
+                leftEdges.ConditionalProperties.Reverse();
+                nullLeftEdges.ConditionalProperties.Reverse();
                 return new Config.GraphConfig
                 {
                     Nodes = new List<NodeFamily>
