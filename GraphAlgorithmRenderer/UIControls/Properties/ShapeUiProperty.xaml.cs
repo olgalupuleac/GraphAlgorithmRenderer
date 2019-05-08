@@ -34,9 +34,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         public ShapeUiProperty()
         {
             InitializeComponent();
-            _shapeRadioButtons = new List<RadioButton>();
-            _shapeRadioButtons.AddRange(Panel1.Children.OfType<RadioButton>());
-            _shapeRadioButtons.AddRange(Panel2.Children.OfType<RadioButton>());
+            _shapeRadioButtons = Panel.Children.OfType<RadioButton>().ToList();
             _shapeRadioButtons.ForEach(r => r.GroupName = $"Shape{GetHashCode()}");
             Disable();
             CheckBox.Checked += (sender, args) => Enable();

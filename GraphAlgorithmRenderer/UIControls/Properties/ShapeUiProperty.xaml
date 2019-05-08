@@ -5,28 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              mc:Ignorable="d">
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="1">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox x:Name="CheckBox">Shape</CheckBox>
-                <StackPanel x:Name="Panel1" Orientation="Vertical">
-                    <RadioButton>Box</RadioButton>
-                    <RadioButton>Circle</RadioButton>
-                    <RadioButton>Diamond</RadioButton>
-                    <RadioButton>Double Circle</RadioButton>
-                    <RadioButton>Ellipse</RadioButton>
-                    <RadioButton>House</RadioButton>
-                </StackPanel>
 
-                <StackPanel x:Name="Panel2" Orientation="Vertical">
-                    <RadioButton>Octagon</RadioButton>
-                    <RadioButton>Parallelogram</RadioButton>
-                    <RadioButton>Point</RadioButton>
-                    <RadioButton>Polygon</RadioButton>
-                    <RadioButton>Trapezium</RadioButton>
-                    <RadioButton>Triangle</RadioButton>
-                </StackPanel>
-            </StackPanel>
-        </Border>    
-    </Grid>
+    <StackPanel x:Name="Panel" Orientation="Vertical">
+        <CheckBox x:Name="CheckBox">Shape</CheckBox>
+        <Separator></Separator>
+        <RadioButton>Box</RadioButton>
+        <RadioButton>Circle</RadioButton>
+        <RadioButton>Diamond</RadioButton>
+        <RadioButton>Double Circle</RadioButton>
+        <RadioButton>Ellipse</RadioButton>
+        <RadioButton>House</RadioButton>
+        <RadioButton>Octagon</RadioButton>
+        <RadioButton>Parallelogram</RadioButton>
+        <RadioButton>Point</RadioButton>
+        <RadioButton>Polygon</RadioButton>
+        <RadioButton>Trapezium</RadioButton>
+        <RadioButton>Triangle</RadioButton>
+    </StackPanel>
 </UserControl>

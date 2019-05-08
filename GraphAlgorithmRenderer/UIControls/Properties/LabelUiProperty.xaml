@@ -5,12 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              mc:Ignorable="d">
-    <Grid>
-        <Border BorderThickness="1" BorderBrush="Black">
-            <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="CheckBox">Label</CheckBox>
                 <Separator />
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Vertical">
                         <Label>Label template</Label>
                         <TextBox x:Name="LabelTextBox" TextWrapping="Wrap"/>
@@ -21,6 +19,5 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </Border>
-    </Grid>
+        
 </UserControl>

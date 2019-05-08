@@ -5,12 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              mc:Ignorable="d">
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="1">
-            <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="CheckBox">Line width</CheckBox>
-                <TextBox x:Name="TextBox" TextWrapping="Wrap"/>
-            </StackPanel>
-        </Border>
-    </Grid>
+
+    <StackPanel Orientation="Vertical">
+        <CheckBox x:Name="CheckBox">Line width</CheckBox>
+        <TextBox x:Name="TextBox" TextWrapping="Wrap"/>
+    </StackPanel>
 </UserControl>

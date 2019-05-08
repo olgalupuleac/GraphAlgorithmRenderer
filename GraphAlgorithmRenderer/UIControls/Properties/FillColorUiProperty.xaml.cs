@@ -60,6 +60,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         public void FromINodeProperty(INodeProperty property)
         {
             if (!(property is FillColorNodeProperty fillColorNodeProperty)) return;
+            CheckBox.IsChecked = true;
             SetColor(fillColorNodeProperty.Color);
         }
 
@@ -67,7 +68,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         {
             get
             {
-                if (CheckBox.IsEnabled != true)
+                if (CheckBox.IsChecked != true)
                 {
                     return new List<INodeProperty>();
                 }

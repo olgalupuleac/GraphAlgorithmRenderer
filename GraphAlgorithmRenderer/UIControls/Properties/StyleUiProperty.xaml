@@ -1,26 +1,23 @@
 ﻿<UserControl x:Class="GraphAlgorithmRenderer.UIControls.Properties.StyleUiProperty"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              mc:Ignorable="d">
-    <Grid>
-        <Border BorderThickness="1" BorderBrush="Black">
-        <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="CheckBox">Styles</CheckBox>
-                <Separator/>
-                <StackPanel x:Name="Panel" Orientation="Vertical">
-                    <CheckBox x:Name="Bold">Bold</CheckBox>
-                    <CheckBox x:Name="Dashed">Dashed</CheckBox>
-                    <CheckBox x:Name="Diagonals">Diagonals</CheckBox>
-                    <CheckBox x:Name="Dotted">Dotted</CheckBox>
-                    <CheckBox x:Name="Filled">Filled</CheckBox>
-                    <CheckBox x:Name="Invis">Invis</CheckBox>
-                    <CheckBox x:Name="Rounded">Rounded</CheckBox>
-                    <CheckBox x:Name="Solid">Solid</CheckBox>
-            </StackPanel>
-            </StackPanel>
-        </Border>
-    </Grid>
+
+    <StackPanel Orientation="Vertical">
+        <CheckBox x:Name="CheckBox">Styles</CheckBox>
+        <Separator />
+        <StackPanel x:Name="Panel" Orientation="Vertical">
+            <CheckBox x:Name="Bold">Bold</CheckBox>
+            <CheckBox x:Name="Dashed">Dashed</CheckBox>
+            <CheckBox x:Name="Diagonals">Diagonals</CheckBox>
+            <CheckBox x:Name="Dotted">Dotted</CheckBox>
+            <CheckBox x:Name="Filled">Filled</CheckBox>
+            <CheckBox x:Name="Invis">Invis</CheckBox>
+            <CheckBox x:Name="Rounded">Rounded</CheckBox>
+            <CheckBox x:Name="Solid">Solid</CheckBox>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

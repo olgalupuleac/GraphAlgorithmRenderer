@@ -20,7 +20,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         public void Reset()
         {
-            CheckBox.IsChecked = true;
+            CheckBox.IsChecked = false;
         }
 
         public void Disable()
@@ -60,6 +60,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         public void FromINodeProperty(INodeProperty property)
         {
             if (!(property is LineColorNodeProperty lineColorNodeProperty)) return;
+            CheckBox.IsChecked = true;
             SetColor(lineColorNodeProperty.Color);
         }
 

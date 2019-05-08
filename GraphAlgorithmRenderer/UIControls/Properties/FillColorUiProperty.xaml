@@ -6,12 +6,9 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
              xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="1">
-            <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="CheckBox">Line color</CheckBox>
-                <toolkit:ColorPicker Name="ColorPicker" />
-            </StackPanel>
-        </Border>
-    </Grid>
+
+    <StackPanel Orientation="Vertical">
+        <CheckBox x:Name="CheckBox">Fill color</CheckBox>
+        <toolkit:ColorPicker Name="ColorPicker" />
+    </StackPanel>
 </UserControl>

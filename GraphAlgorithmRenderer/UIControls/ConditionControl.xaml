@@ -5,18 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              mc:Ignorable="d">
-    <Grid>
-        <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical">
             <Label Content="Condition" />
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBox x:Name="ConditionBox" HorizontalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="true"/>
-            </ScrollViewer>
-            <Label Content="Function regex"/>
+        <TextBox x:Name="ConditionBox" HorizontalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="true"/>
+        <Label Content="Function regex"/>
             <TextBox x:Name="RegexBox" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Text=".*"/>
-            <StackPanel x:Name="ModePanel" >
+            <StackPanel x:Name="ModePanel" Orientation="Vertical">
                 <RadioButton x:Name="CurSf"  Content="Current stackframe"/>
                 <RadioButton x:Name="AllSf" Content="All stackframes" />
             </StackPanel>
         </StackPanel>
-    </Grid>
+    
 </UserControl>
