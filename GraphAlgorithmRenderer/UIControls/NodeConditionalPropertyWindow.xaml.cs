@@ -1,25 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.UIControls.Properties;
-using Condition = System.Windows.Condition;
-using Shape = Microsoft.Msagl.Drawing.Shape;
-using Style = Microsoft.Msagl.Drawing.Style;
 
 namespace GraphAlgorithmRenderer.UIControls
 {
@@ -28,13 +12,10 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class NodeConditionalPropertyWindow : Window
     {
-        private List<INodeUiProperty> _properties;
-   
-        public int Priority { get; set; }
+        private readonly List<INodeUiProperty> _properties;
 
         public NodeConditionalPropertyWindow(int priority)
         {
-            Priority = priority;           
             InitializeComponent();
             _properties = new List<INodeUiProperty>
             {
@@ -47,7 +28,6 @@ namespace GraphAlgorithmRenderer.UIControls
             };
         }
 
-  
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -55,7 +35,6 @@ namespace GraphAlgorithmRenderer.UIControls
             Hide(); // Programmatically hides the window
         }
 
- 
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
@@ -71,10 +50,9 @@ namespace GraphAlgorithmRenderer.UIControls
             }
         }
 
-
-        public void FromConditionalProperty(int priority, ConditionalProperty<INodeProperty> conditionalProperty)
+    
+        public void FromConditionalProperty(ConditionalProperty<INodeProperty> conditionalProperty)
         {
-            Priority = priority;
             ConditionControl.FromCondition(conditionalProperty.Condition);
             _properties.ForEach(x => x.Reset());
             conditionalProperty.Properties.ForEach(x =>

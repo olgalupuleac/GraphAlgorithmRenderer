@@ -98,7 +98,6 @@ namespace GraphAlgorithmRenderer.UIControls
             for (var i = 0; i < properties.Items.Count; i++)
             {
                 ((ListBoxItem) properties.Items[i]).Content = $"Property#{i + 1}";
-                _properties[((ListBoxItem) properties.Items[i])].Priority = i;
             }
         }
 
@@ -106,8 +105,8 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             get
             {
-                var conditionalProperties = _properties.Values.OrderBy(w => w.Priority)
-                    .Select(w => w.ConditionalProperty).ToList();
+                var conditionalProperties = properties.Items.OfType<ListBoxItem>()
+                    .Select(i => _properties[i].ConditionalProperty).ToList();
                 conditionalProperties.Reverse();
                 //TODO check for null
                 return new NodeFamily(Ranges.ToList())
@@ -130,7 +129,7 @@ namespace GraphAlgorithmRenderer.UIControls
             for (int i = 0; i < conditionalProperties.Count; i++)
             {
                 var item = AddNewProperty();
-                _properties[item].FromConditionalProperty(i + 1, conditionalProperties[i]);
+                _properties[item].FromConditionalProperty(conditionalProperties[i]);
             }
 
 

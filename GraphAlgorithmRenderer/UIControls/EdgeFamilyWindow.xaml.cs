@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using GraphAlgorithmRenderer.Config;
 using static System.String;
 
@@ -29,23 +18,32 @@ namespace GraphAlgorithmRenderer.UIControls
         private readonly Dictionary<string, NodeFamilyWindow> _availableNodes;
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
-        public Dictionary<ListBoxItem, EdgeConditionalPropertyWindow> _properties;
+       
 
         public EdgeFamilyWindow(Dictionary<string, NodeFamilyWindow> availableNodes)
         {
             _availableNodes = availableNodes;
-            _properties = new Dictionary<ListBoxItem, EdgeConditionalPropertyWindow>();
+            
             InitializeComponent();
             Ranges = new ObservableCollection<IdentifierPartTemplate>();
             identifiers.ItemsSource = Ranges;
+       
+            PropertiesControl.WindowGenerator = () => new EdgeConditionalPropertyWindow();
+            PropertiesControl.Description = w => ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
+            PropertiesControl.UpdateDescription = (w, i) =>
+            {
+                ((EdgeConditionalPropertyWindow) w).ok.Click += (o, sender) =>
+                        i.Content = ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
+               
+            };
             foreach (var node in _availableNodes.Keys)
             {
 
-                var targetRadioButton = new RadioButton { Content = node, GroupName = "TargetNodes" };
+                var targetRadioButton = new RadioButton { Content = node, GroupName = $"TargetNodes{GetHashCode()}" };
                 targetRadioButton.Checked += (sender, args) =>
                     _targetWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 TargetPanel.Children.Add(targetRadioButton);
-                var sourceRadioButton = new RadioButton { Content = node, GroupName = "SourceNodes" };
+                var sourceRadioButton = new RadioButton { Content = node, GroupName = $"SourceNodes{GetHashCode()}" };
                 sourceRadioButton.Checked += (sender, args) =>
                     _sourceWindow = new EdgeEndControl(_availableNodes[node].Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 SourcePanel.Children.Add(sourceRadioButton);
@@ -67,8 +65,8 @@ namespace GraphAlgorithmRenderer.UIControls
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true; // cancels the window close    
-            Hide(); // Programmatically hides the window
+            e.Cancel = true;    
+            Hide(); 
         }
 
         private void TargetButton_Click(object sender, RoutedEventArgs e)
@@ -120,49 +118,18 @@ namespace GraphAlgorithmRenderer.UIControls
             Hide();
         }
 
-        private ListBoxItem AddNewProperty()
-        {
-            var priority = _properties.Count + 1;
-            var item = new ListBoxItem { Content = $"Property#{priority}" };
-
-            _properties[item] = new EdgeConditionalPropertyWindow(priority);
-            item.MouseDoubleClick += (o, args) => _properties[item].Show();
-            properties.Items.Add(item);
-            return item;
-        }
-
-        private void AddProperty_Click(object sender, RoutedEventArgs e)
-        {
-            var item = AddNewProperty();
-            _properties[item].Show();
-        }
-
-        private void RemoveProperty_Click(object sender, RoutedEventArgs e)
-        {
-            if (!(properties.SelectedItem is ListBoxItem item))
-            {
-                return;
-            }
-            _properties[item].Hide();
-            _properties.Remove(item);
-            properties.Items.Remove(item);
-            for (var i = 0; i < properties.Items.Count; i++)
-            {
-                ((ListBoxItem) properties.Items[i]).Content = $"Property#{i + 1}";
-                _properties[((ListBoxItem) properties.Items[i])].Priority = i;
-            }
-        }
+      
 
         public EdgeFamily EdgeFamily
         {
             get
             {
-                var conditionalProperties = _properties.Values.OrderBy(w => w.Priority)
+                var conditionalProperties = PropertiesControl.Windows.Cast<EdgeConditionalPropertyWindow>()
                     .Select(w => w.ConditionalProperty).ToList();
                 conditionalProperties.Reverse();
                 //TODO check for null
                 return new EdgeFamily(Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
-                    directed.IsChecked != null && (bool) directed.IsChecked)
+                    directed.IsChecked == true)
                 {
                     ValidationTemplate = validationTemplateBox.Text,
                     ConditionalProperties = conditionalProperties
@@ -200,14 +167,14 @@ namespace GraphAlgorithmRenderer.UIControls
             SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
             var conditionalProperties = ((IEnumerable<ConditionalProperty<IEdgeProperty>>)edgeFamily.ConditionalProperties)
                 .Reverse().ToList();
-            properties.Items.Clear();
-            _properties.Clear();
-            for (int i = 0; i < conditionalProperties.Count; i++)
+            var windows = new List<Window>();
+            foreach (var conditionalProperty in conditionalProperties)
             {
-                var item = AddNewProperty();
-                _properties[item].FromConditionalProperty(i + 1, conditionalProperties[i]);
-
+               var window = new EdgeConditionalPropertyWindow();
+               window.FromConditionalProperty(conditionalProperty);
+               windows.Add(window);
             }
+            PropertiesControl.SetNewWindows(windows);
         }
     }
 }

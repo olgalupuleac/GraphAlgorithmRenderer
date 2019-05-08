@@ -20,13 +20,10 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class EdgeConditionalPropertyWindow : Window
     {
-        public int Priority { get; set; }
-
         private readonly List<IEdgeUiProperty> _properties;
 
-        public EdgeConditionalPropertyWindow(int priority)
+        public EdgeConditionalPropertyWindow()
         {
-            Priority = priority;
             InitializeComponent();
             _properties = new List<IEdgeUiProperty>
             {
@@ -58,9 +55,8 @@ namespace GraphAlgorithmRenderer.UIControls
         }
 
 
-        public void FromConditionalProperty(int priority, ConditionalProperty<IEdgeProperty> conditionalProperty)
+        public void FromConditionalProperty(ConditionalProperty<IEdgeProperty> conditionalProperty)
         {
-            Priority = priority;
             ConditionControl.FromCondition(conditionalProperty.Condition);
             _properties.ForEach(x => x.Reset());
             conditionalProperty.Properties.ForEach(x => 
