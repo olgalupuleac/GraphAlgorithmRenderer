@@ -68,7 +68,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         {
             get
             {
-                if (CheckBox.IsEnabled != true)
+                if (CheckBox.IsChecked != true)
                 {
                     return new List<INodeProperty>();
                 }
@@ -90,7 +90,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         {
             get
             {
-                if (CheckBox.IsEnabled != true)
+                if (CheckBox.IsChecked != true)
                 {
                     return new List<IEdgeProperty>();
                 }
