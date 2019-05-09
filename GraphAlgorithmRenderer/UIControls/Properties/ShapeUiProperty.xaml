@@ -16,10 +16,6 @@
         <RadioButton>Ellipse</RadioButton>
         <RadioButton>House</RadioButton>
         <RadioButton>Octagon</RadioButton>
-        <RadioButton>Parallelogram</RadioButton>
         <RadioButton>Point</RadioButton>
-        <RadioButton>Polygon</RadioButton>
-        <RadioButton>Trapezium</RadioButton>
-        <RadioButton>Triangle</RadioButton>
     </StackPanel>
 </UserControl>
