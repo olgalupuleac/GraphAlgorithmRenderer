@@ -1,4 +1,5 @@
 ﻿//#define TEST
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -21,13 +22,13 @@ using Size = System.Drawing.Size;
 using StackFrame = EnvDTE.StackFrame;
 
 
-
 namespace GraphAlgorithmRenderer
 {
     using System;
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
     using GraphConfig = Config.GraphConfig;
+
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
     /// </summary>
@@ -48,7 +49,7 @@ namespace GraphAlgorithmRenderer
             NotChanged,
             Canceled
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class.
         /// </summary>
@@ -76,7 +77,7 @@ namespace GraphAlgorithmRenderer
             try
             {
                 _config = ConfigSerializer.FromJson(json);
-                
+
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -96,25 +97,26 @@ namespace GraphAlgorithmRenderer
                 exceptionViewer.ShowDialog();
             }
 
-
-            if (_drawingMode == DrawingMode.Canceled)
-            {
-                CreateForm();
-            }
+            CreateForm();
 
             _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
 
         private void CreateForm()
         {
-            _form = new Form { Size = new Size(800, 800) };
-            _form.FormClosed += (sender, args) => _drawingMode = DrawingMode.Canceled;
+            if (_drawingMode == DrawingMode.Canceled || _form == null)
+            {
+                _form = new Form {Size = new Size(800, 800)};
+                _form.FormClosed += (sender, args) => _drawingMode = DrawingMode.Canceled;
+            }
+
+            _form.TopMost = _control.MainControl.OnTop.IsChecked == true;
         }
 
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var applicationObject = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+            var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
             _debugEvents = applicationObject.Events.DebuggerEvents;
             _debugEvents.OnContextChanged +=
                 Update;
@@ -135,7 +137,6 @@ namespace GraphAlgorithmRenderer
                 _config = _control.MainControl.Config;
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                
             }
             catch (Exception exception)
             {
@@ -143,10 +144,7 @@ namespace GraphAlgorithmRenderer
                 exceptionViewer.ShowDialog();
             }
 
-            if (_drawingMode == DrawingMode.Canceled)
-            {
-                CreateForm();
-            }
+            CreateForm();
 
             _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
@@ -168,6 +166,7 @@ namespace GraphAlgorithmRenderer
             {
                 return;
             }
+
             if (newstackframe == null)
             {
                 _drawingMode = DrawingMode.NotChanged;
@@ -179,10 +178,7 @@ namespace GraphAlgorithmRenderer
         }
 
         private GraphConfig _config;
-
         private Form _form;
-
-        //private GraphRenderer.GraphRenderer _renderer;
         private DebuggerEvents _debugEvents;
         private DrawingMode _drawingMode = DrawingMode.NotChanged;
         private DispatcherTimer _dispatcherTimer;
@@ -197,6 +193,7 @@ namespace GraphAlgorithmRenderer
             {
                 return;
             }
+
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -211,11 +208,8 @@ namespace GraphAlgorithmRenderer
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             Debug.WriteLine($"total time {elapsedTime}");
-            GViewer viewer = new GViewer { Graph = graph, Dock = DockStyle.Fill };
-            if (_form == null)
-            {
-                CreateForm();
-            }
+            GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
+            CreateForm();
 
             _form.SuspendLayout();
             _form.Controls.Clear();
