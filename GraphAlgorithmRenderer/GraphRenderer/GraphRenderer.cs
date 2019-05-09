@@ -81,10 +81,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var target = NodeIdentifier(edgeFamily.Target, identifier).Id();
             var sourceNode = _graph.FindNode(source);
             var targetNode = _graph.FindNode(target);
-            if (targetNode == null || sourceNode == null)
+            if (targetNode == null)
             {
-                //TODO more specific exception
-                throw new SystemException("Target or source nodes do not exist");
+                
+                throw new GraphRenderException($"Target node {target} does not exist");
+            }
+
+            if (sourceNode == null)
+            {
+                throw new GraphRenderException($"Source node {source} does not exist");
             }
 
             var edge = _graph.AddEdge(source, target);
@@ -199,8 +204,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 }
                 else
                 {
-                    //TODO change return type to Option, or throw exception
-                    return null;
+                   throw new GraphRenderException($"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
                 }
             }
 

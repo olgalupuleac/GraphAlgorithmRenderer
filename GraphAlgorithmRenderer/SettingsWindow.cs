@@ -1,21 +1,16 @@
 ﻿//#define TEST
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
-using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.ConfigSamples;
 using GraphAlgorithmRenderer.Serializer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
-using Microsoft.VisualStudio.Shell;
 using WpfExceptionViewer;
-using Condition = GraphAlgorithmRenderer.Config.Condition;
 using Debugger = EnvDTE.Debugger;
-using GraphRenderer = GraphAlgorithmRenderer.GraphRenderer.GraphRenderer;
 using MessageBox = System.Windows.MessageBox;
 using Process = EnvDTE.Process;
 using Size = System.Drawing.Size;
@@ -156,7 +151,15 @@ namespace GraphAlgorithmRenderer
                 return;
             }
 
-            DrawGraph();
+            try
+            {
+                DrawGraph();
+            }
+            catch (Exception exception)
+            {
+                var exceptionViewer = new ExceptionViewer("Error while drawing graph", exception);
+                exceptionViewer.ShowDialog();
+            }
             _drawingMode = DrawingMode.NotChanged;
         }
 
@@ -194,7 +197,7 @@ namespace GraphAlgorithmRenderer
                 return;
             }
 
-            Stopwatch stopWatch = new Stopwatch();
+            var stopWatch = new Stopwatch();
             stopWatch.Start();
 
             if (_config == null || _debugger == null)
