@@ -63,7 +63,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
                 return null;
             }
 
-            return ShapesToMsaglTypes[(string)selected[0].Content];
+            return ShapesToMsaglTypes[(string) selected[0].Content];
         }
 
 
@@ -82,8 +82,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
             }
 
             CheckBox.IsChecked = true;
-            //Enable(); ??
-            _shapeRadioButtons.Where(r => r.ContentStringFormat == shapeName).ToList().ForEach(r => r.IsChecked = true);
+            _shapeRadioButtons.Where(r => (string) r.Content == shapeName).ToList().ForEach(r => r.IsChecked = true);
         }
 
         public List<INodeProperty> NodeProperty
