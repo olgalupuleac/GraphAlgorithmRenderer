@@ -83,6 +83,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         public void FromIEdgeProperty(IEdgeProperty property)
         {
             if (!(property is LineColorEdgeProperty lineColorEdgeProperty)) return;
+            CheckBox.IsChecked = true;
             SetColor(lineColorEdgeProperty.Color);
         }
 
