@@ -12,12 +12,8 @@
         <StackPanel x:Name="Panel" Orientation="Vertical">
             <CheckBox x:Name="Bold">Bold</CheckBox>
             <CheckBox x:Name="Dashed">Dashed</CheckBox>
-            <CheckBox x:Name="Diagonals">Diagonals</CheckBox>
             <CheckBox x:Name="Dotted">Dotted</CheckBox>
-            <CheckBox x:Name="Filled">Filled</CheckBox>
-            <CheckBox x:Name="Invis">Invis</CheckBox>
             <CheckBox x:Name="Rounded">Rounded</CheckBox>
-            <CheckBox x:Name="Solid">Solid</CheckBox>
         </StackPanel>
     </StackPanel>
 </UserControl>
