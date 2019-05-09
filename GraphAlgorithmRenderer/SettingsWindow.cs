@@ -28,7 +28,6 @@ namespace GraphAlgorithmRenderer
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
     using GraphConfig = Config.GraphConfig;
-
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
     /// </summary>
@@ -43,6 +42,13 @@ namespace GraphAlgorithmRenderer
     [Guid("52a96019-a6a1-4390-a42a-d6f3b1e160cc")]
     public class SettingsWindow : ToolWindowPane
     {
+        private enum DrawingMode
+        {
+            ShouldBeRedrawn,
+            NotChanged,
+            Canceled
+        }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class.
         /// </summary>
@@ -79,7 +85,30 @@ namespace GraphAlgorithmRenderer
                 var exceptionViewer = new ExceptionViewer("Json deserialization error", exception);
                 exceptionViewer.ShowDialog();
             }
-            _control.MainControl.FromConfig(_config);
+
+            try
+            {
+                _control.MainControl.FromConfig(_config);
+            }
+            catch (Exception exception)
+            {
+                var exceptionViewer = new ExceptionViewer("Oups! Something went wrong :(", exception);
+                exceptionViewer.ShowDialog();
+            }
+
+
+            if (_drawingMode == DrawingMode.Canceled)
+            {
+                CreateForm();
+            }
+
+            _drawingMode = DrawingMode.ShouldBeRedrawn;
+        }
+
+        private void CreateForm()
+        {
+            _form = new Form { Size = new Size(800, 800) };
+            _form.FormClosed += (sender, args) => _drawingMode = DrawingMode.Canceled;
         }
 
         protected override void Initialize()
@@ -106,28 +135,47 @@ namespace GraphAlgorithmRenderer
                 _config = _control.MainControl.Config;
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+                
             }
             catch (Exception exception)
             {
                 var exceptionViewer = new ExceptionViewer("Error while creating config", exception);
                 exceptionViewer.ShowDialog();
             }
+
+            if (_drawingMode == DrawingMode.Canceled)
+            {
+                CreateForm();
+            }
+
+            _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (!_shouldBeRedrawn)
+            if (_drawingMode != DrawingMode.ShouldBeRedrawn)
             {
                 return;
             }
 
             DrawGraph();
-            _shouldBeRedrawn = false;
+            _drawingMode = DrawingMode.NotChanged;
         }
 
         private void Update(Process newprocess, Program newprogram, Thread newthread, StackFrame newstackframe)
         {
-            _shouldBeRedrawn = true;
+            if (_drawingMode == DrawingMode.Canceled)
+            {
+                return;
+            }
+            if (newstackframe == null)
+            {
+                _drawingMode = DrawingMode.NotChanged;
+                _form.Hide();
+                return;
+            }
+
+            _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
 
         private GraphConfig _config;
@@ -136,7 +184,7 @@ namespace GraphAlgorithmRenderer
 
         //private GraphRenderer.GraphRenderer _renderer;
         private DebuggerEvents _debugEvents;
-        private bool _shouldBeRedrawn = false;
+        private DrawingMode _drawingMode = DrawingMode.NotChanged;
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
         private Debugger _debugger;
@@ -144,6 +192,11 @@ namespace GraphAlgorithmRenderer
 
         private void DrawGraph()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_debugger.CurrentStackFrame == null)
+            {
+                return;
+            }
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -161,7 +214,7 @@ namespace GraphAlgorithmRenderer
             GViewer viewer = new GViewer { Graph = graph, Dock = DockStyle.Fill };
             if (_form == null)
             {
-                _form = new Form { Size = new Size(800, 800) };
+                CreateForm();
             }
 
             _form.SuspendLayout();
