@@ -146,13 +146,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 _debugger, identifier);
         }
 
-
         private void ApplyConditionalProperty<T>(IEnumerable<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
             if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName,
-                conditionalProperty.Condition.FunctionNameRegex))
+                 conditionalProperty.Condition.WrappedRegex() ))
             {
                 return;
             }
@@ -172,7 +171,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             //Debug.WriteLine("\n\nStack frames section");
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.FunctionNameRegex))
+                if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.WrappedRegex()))
                 {
                     continue;
                 }

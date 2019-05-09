@@ -83,10 +83,10 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                     new LabelNodeProperty("t = {__v__}, d={d[__v__]}")
                 );
                 var dfsNodes = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == __v__", "^dfs$",
+                    new Condition("__ARG1__ == __v__", "dfs",
                         ConditionMode.AllStackFrames), new FillColorNodeProperty(Color.Gray));
                 var currentDfsNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == __v__", "^dfs$"),
+                    new Condition("__ARG1__ == __v__", "dfs"),
                     new FillColorNodeProperty(Color.Red));
                 nodes.ConditionalProperties.Add(nodeLabel);
                 nodes.ConditionalProperties.Add(sNodeLabel);
@@ -115,12 +115,12 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 );
 
                 var dfsEdge = new ConditionalProperty<IEdgeProperty>(
-                    new Condition("dfs_edges[__e__]", @"^dfs$"),
+                    new Condition("dfs_edges[__e__]", @"dfs"),
                     new LineColorEdgeProperty(Color.Red)
                 );
 
                 var flowEdge = new ConditionalProperty<IEdgeProperty>(
-                    new Condition("flow_edges[__e__]", @"^dfs$"),
+                    new Condition("flow_edges[__e__]", @"dfs"),
                     new List<IEdgeProperty>
                     {
                         new LineColorEdgeProperty(Color.BlueViolet),
@@ -162,16 +162,16 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                         "{__v__}, tin={tin[__v__]}, up={up[__v__]}"));
 
                 var dfsNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == __v__", @"^find_bridges$",
+                    new Condition("__ARG1__ == __v__", @"find_bridges",
                         ConditionMode.AllStackFrames),
                     new FillColorNodeProperty(Color.Gray)
                 );
                 var curDfsNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == __v__", @"^find_bridges$"),
+                    new Condition("__ARG1__ == __v__", @"find_bridges"),
                     new FillColorNodeProperty(Color.Red)
                 );
                 var lastComponent = new ConditionalProperty<INodeProperty>(
-                    new Condition("components.size() > 0 && components.back().count(__v__) > 0", @"^new_comp$"),
+                    new Condition("components.size() > 0 && components.back().count(__v__) > 0", @"new_comp"),
                     new FillColorNodeProperty(Color.Bisque)
                 );
                 nodes.ConditionalProperties.Add(nodeLabel);
@@ -189,7 +189,7 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 );
 
                 var dfsEdges = new ConditionalProperty<IEdgeProperty>(new Condition("dfs_edge[__e__]",
-                        @"^find_bridges$"),
+                        @"find_bridges"),
                     new LineColorEdgeProperty(Color.Red));
                 var isBridge = new ConditionalProperty<IEdgeProperty>(new Condition(
                         "bridges_edge[__e__]"
@@ -263,17 +263,17 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 nodes.ConditionalProperties.Add(label);
 
                 var tNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == nodes[__v__]", @"^(split)|(merge)$",
+                    new Condition("__ARG1__ == nodes[__v__]", @"(split)|(merge)",
                         ConditionMode.AllStackFrames), new FillColorNodeProperty(Color.Gray)
                 );
 
                 var curTNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG1__ == nodes[__v__]", @"^(split)|(merge)$"), new FillColorNodeProperty(Color.Aquamarine)
+                    new Condition("__ARG1__ == nodes[__v__]", @"(split)|(merge)"), new FillColorNodeProperty(Color.Aquamarine)
                 );
 
 
                 var curLeftNodeLine = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG2__ == nodes[__v__]", @"^(split)|(merge)$"),
+                    new Condition("__ARG2__ == nodes[__v__]", @"(split)|(merge)"),
                     new List<INodeProperty>
                     {
                         new LineWidthNodeProperty(6),
@@ -282,7 +282,7 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 );
 
                 var curRightNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("__ARG3__ == nodes[__v__]", @"^(split)|(merge)$"), new List<INodeProperty>
+                    new Condition("__ARG3__ == nodes[__v__]", @"(split)|(merge)"), new List<INodeProperty>
                     {
                         new LineColorNodeProperty(Color.Red),
                         new LineWidthNodeProperty(6)
@@ -290,7 +290,7 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 );
 
                 var curTNullNode = new ConditionalProperty<INodeProperty>(
-                    new Condition("!__ARG1__", @"^(split)|(merge)$"), new FillColorNodeProperty(Color.Aquamarine)
+                    new Condition("!__ARG1__", @"(split)|(merge)"), new FillColorNodeProperty(Color.Aquamarine)
                 );
 
 

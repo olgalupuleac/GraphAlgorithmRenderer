@@ -21,7 +21,14 @@ namespace GraphAlgorithmRenderer.Config
         }
         [JsonProperty] public string Template { get; }
         [JsonProperty] public ConditionMode Mode { get; }
-        [JsonProperty] public string FunctionNameRegex { get; }
+
+        public string WrappedRegex()
+        {
+            return "^" + FunctionNameRegex + "$";
+        }
+
+        [JsonProperty]
+        public string FunctionNameRegex { get; set; }
     }
 
     public class ConditionalProperty<T>
