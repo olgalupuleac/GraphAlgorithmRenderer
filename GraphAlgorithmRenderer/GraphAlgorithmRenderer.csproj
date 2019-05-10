@@ -127,6 +127,7 @@
     <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="packages.config" />
+    <None Include="Samples\Components\config.json" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -142,6 +143,9 @@
     <VSCTCompile Include="SettingsWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
+    <Content Include="Samples\Components\dfs.png" />
+    <Content Include="Samples\Components\new_comp.png" />
+    <Content Include="Samples\Components\Source.cpp" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
