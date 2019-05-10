@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRenderer.Serializer;
 using Microsoft.Msagl.Drawing;
 using GraphConfig = GraphAlgorithmRenderer.Config.GraphConfig;
 
@@ -54,11 +56,13 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 edges.ConditionalProperties.Add(dfsEdges);
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                return new Config.GraphConfig
+                var config =  new Config.GraphConfig
                 {
                     Edges = new List<EdgeFamily> { edges },
                     Nodes = new List<NodeFamily> { nodes }
                 };
+                
+                return config;
             }
         }
 
@@ -236,11 +240,14 @@ namespace GraphAlgorithmRenderer.ConfigSamples
 
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                return new Config.GraphConfig()
+                var config = new Config.GraphConfig()
                 {
                     Edges = new List<EdgeFamily> { edges },
                     Nodes = new List<NodeFamily> { nodes }
                 };
+                Debug.WriteLine("DSU");
+                Debug.WriteLine(ConfigSerializer.ToJson(config));
+                return config;
             }
         }
 
@@ -383,7 +390,8 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 nullRightEdges.ConditionalProperties.Reverse();
                 leftEdges.ConditionalProperties.Reverse();
                 nullLeftEdges.ConditionalProperties.Reverse();
-                return new Config.GraphConfig
+                
+                var config = new Config.GraphConfig
                 {
                     Nodes = new List<NodeFamily>
                     {
@@ -399,6 +407,9 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                         nullLeftEdges
                     }
                 };
+                Debug.WriteLine("\nTreap");
+                Debug.WriteLine(ConfigSerializer.ToJson(config));
+                return config;
             }
         }
     }

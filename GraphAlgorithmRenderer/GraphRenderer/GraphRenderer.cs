@@ -44,8 +44,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                     AddNode(family as NodeFamily, identifier);
 
                 ProcessGraphElementFamily(nodeFamily, NodeAddition, ApplyNodeProperty);
-                Debug.WriteLine("Finished with nodes");
-                WriteDebugOutput();
             }
 
             foreach (var edgeFamily in _config.Edges)
@@ -54,7 +52,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                     AddEdge(family as EdgeFamily, identifier);
 
                 ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);
-                Debug.WriteLine("Finished with edges");
                 WriteDebugOutput();
                 Reset();
             }
@@ -123,8 +120,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                         ApplyPropertyAllStackFrames(identifiers, conditionalProperty, applyProperty);
                         break;
                     case ConditionMode.CurrentStackFrame:
-                        Debug.WriteLine("Before conditional properties");
-                        WriteDebugOutput();
                         ApplyPropertyCurrentStackFrame(identifiers, conditionalProperty, applyProperty);
                         break;
                     case ConditionMode.AllStackFramesArgsOnly:

@@ -128,8 +128,8 @@ namespace GraphAlgorithmRenderer
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
-            var config = ConfigCreator.TreapConfig;
-            Debug.WriteLine(ConfigSerializer.ToJson(config));
+            var config = ConfigCreator.DsuConfig;
+            config = ConfigCreator.TreapConfig;    
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += DispatcherTimer_Tick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
