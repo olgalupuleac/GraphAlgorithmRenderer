@@ -60,6 +60,7 @@ namespace GraphAlgorithmRenderer
             base.Content = _control;
             _control.Load.Click += LoadOnClick;
             _control.Export.Click += ExportOnClick;
+           
         }
 
         private void ExportOnClick(object sender, RoutedEventArgs e)
@@ -118,6 +119,20 @@ namespace GraphAlgorithmRenderer
             var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
             DebuggerOperations.Log = outputWindowPane;
+            _control.MainControl.OnTop.Checked += (sender, args) =>
+            {
+                if (_form != null)
+                {
+                    _form.TopMost = true;
+                }
+            };
+            _control.MainControl.OnTop.Unchecked += (sender, args) =>
+            {
+                if (_form != null)
+                {
+                    _form.TopMost = false;
+                }
+            };
         }
 
         protected override void Initialize()

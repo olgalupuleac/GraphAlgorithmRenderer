@@ -163,11 +163,13 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public static void WriteDebugOutput()
         {
-            Debug.WriteLine($"Got {_numberOfGetExpressionCalls} expressions in {_timeSpanGetExpressions}");
-            Debug.WriteLine($"Set {_numberOfSetStackFrameCalls} stack frames in {_timeSpanSetStackFrame}");
-            Debug.WriteLine(
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Log.OutputString($"Got {_numberOfGetExpressionCalls} expressions in {_timeSpanGetExpressions}");
+            Log.OutputString($"Set {_numberOfSetStackFrameCalls} stack frames in {_timeSpanSetStackFrame}");
+            Log.OutputString(
                 $"Get {_numberOfCurrentStackFrameCalls} current stack frames in {_timeSpanCurrentStackFrame}");
-            Debug.WriteLine($"Get {_numberOfFunctionNameCalls} function names {_timeSpanFunctionName}");
+            Log.OutputString($"Get {_numberOfFunctionNameCalls} function names {_timeSpanFunctionName}");
+            
         }
 
         public static void Reset()

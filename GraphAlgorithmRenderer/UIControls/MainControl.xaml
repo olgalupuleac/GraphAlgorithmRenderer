@@ -6,12 +6,17 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
-        <local:PropertiesControl x:Name="Nodes"/>
-        <local:PropertiesControl x:Name="Edges"></local:PropertiesControl>
-        <StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+         <local:PropertiesControl x:Name="Nodes" Grid.Row="0" Grid.Column="0"/>
+        <local:PropertiesControl x:Name="Edges" Grid.Row="0" Grid.Column="1"></local:PropertiesControl>
+        <StackPanel Grid.Row="0" Grid.Column="2">
             <Button x:Name="GenerateConfig" Content="Generate config"  VerticalAlignment="Center" HorizontalAlignment="Center"></Button>
             <CheckBox x:Name="OnTop" Margin="10" IsChecked="True">Draw graph window on top</CheckBox>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </UserControl>

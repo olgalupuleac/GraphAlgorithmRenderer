@@ -21,22 +21,13 @@ namespace GraphAlgorithmRenderer.UIControls
     /// Interaction logic for MainControl.xaml
     /// </summary>
     public partial class MainControl : UserControl
-    {
-        private void Align()
-        {
-            Debug.WriteLine("Align");
-            var height = Math.Max(Edges.ActualHeight, Nodes.ActualHeight);
-            Edges.MinHeight = height;
-            Nodes.MinHeight = height;
-        }
+    { 
 
         public MainControl()
         {
             InitializeComponent();
             Nodes.Label.Content = "Node families";
             Edges.Label.Content = "Edge families";
-            Edges.properties.SizeChanged += (sender, args) => Align();
-            Nodes.properties.SizeChanged += (sender, args) => Align();
 
             Nodes.WindowGenerator = () => new NodeFamilyWindow();
             Nodes.Description = w => ((NodeFamilyWindow) w).familyName.Text;

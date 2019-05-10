@@ -145,6 +145,7 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="Samples\Components\dfs.png" />
+    <Content Include="Samples\Components\in.txt" />
     <Content Include="Samples\Components\new_comp.png" />
     <Content Include="Samples\Components\Source.cpp" />
     <Content Include="Samples\DSU\join.png" />
