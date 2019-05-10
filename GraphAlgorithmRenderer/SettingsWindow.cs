@@ -108,6 +108,16 @@ namespace GraphAlgorithmRenderer
             _form.TopMost = _control.MainControl.OnTop.IsChecked == true;
         }
 
+        private void InitializeLog(DTE dte)
+        {
+            Dispatcher.CurrentDispatcher.VerifyAccess();
+            EnvDTE.Window w = (EnvDTE.Window)dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+            w.Visible = true;
+            OutputWindow ow = (OutputWindow)w.Object;
+            _outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
+            _outputWindowPane.Activate();
+        }
+
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -123,6 +133,7 @@ namespace GraphAlgorithmRenderer
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             _dispatcherTimer.Start();
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
+            InitializeLog(applicationObject);
         }
 
         private void GenerateConfigOnClick(object sender, RoutedEventArgs e)
@@ -187,6 +198,7 @@ namespace GraphAlgorithmRenderer
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
         private Debugger _debugger;
+        private OutputWindowPane _outputWindowPane;
 
 
         private void DrawGraph()
@@ -205,7 +217,7 @@ namespace GraphAlgorithmRenderer
                 return;
             }
 
-            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
+            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger, _outputWindowPane);
             Graph graph = renderer.RenderGraph();
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;

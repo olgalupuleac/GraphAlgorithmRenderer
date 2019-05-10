@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
 using EnvDTE;
 using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.GraphElementIdentifier;
@@ -24,9 +25,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private TimeSpan _setCurrentStackFrameTimeSpan;
         private int _getExpressionCallsNumber;
         private int _setCurrentStackFrameNumber;
+        private OutputWindowPane _outputWindowPane;
 
-        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger)
+
+        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger, OutputWindowPane outputWindowPane)
         {
+            _outputWindowPane = outputWindowPane;
             _config = config;
             _debugger = debugger;
             _graph = new Graph();
@@ -76,23 +80,35 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private void AddEdge(EdgeFamily edgeFamily,
             Identifier identifier)
         {
-            //TODO check IsValidValue
-            var source = NodeIdentifier(edgeFamily.Source, identifier).Id();
-            var target = NodeIdentifier(edgeFamily.Target, identifier).Id();
-            var sourceNode = _graph.FindNode(source);
-            var targetNode = _graph.FindNode(target);
-            if (targetNode == null)
+            Dispatcher.CurrentDispatcher.VerifyAccess();
+            var source = NodeIdentifier(edgeFamily.Source, identifier);
+            var target = NodeIdentifier(edgeFamily.Target, identifier);
+            if (source == null)
             {
-                
-                throw new GraphRenderException($"Target node {target} does not exist");
+                _outputWindowPane.OutputString("Cannot identify source node");
+
+                return;
+            }
+
+            if (target == null)
+            {
+                _outputWindowPane.OutputString("Cannot identify target node");
+                return;
+            }
+            var sourceNode = _graph.FindNode(source.Id());
+            var targetNode = _graph.FindNode(target.Id());
+            if (targetNode == null)
+            {     
+                _outputWindowPane.OutputString($"Target node {target.Id()} does not exist");
+                return;
             }
 
             if (sourceNode == null)
             {
-                throw new GraphRenderException($"Source node {source} does not exist");
+                _outputWindowPane.OutputString($"Source node {source.Id()} does not exist");
             }
 
-            var edge = _graph.AddEdge(source, target);
+            var edge = _graph.AddEdge(source.Id(), target.Id());
             _edges[identifier] = edge;
             if (!edgeFamily.IsDirected)
             {
@@ -155,6 +171,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName,
                  conditionalProperty.Condition.WrappedRegex() ))
             {
@@ -197,14 +214,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             {
                 var beginString = GetExpression(partTemplate.BeginTemplate, null).Value;
                 var endString = GetExpression(partTemplate.EndTemplate, null).Value;
-                if (Int32.TryParse(beginString, out var begin) &&
-                    Int32.TryParse(endString, out var end))
+                var beginParseResult = Int32.TryParse(beginString, out var begin);
+                var endParseResult = Int32.TryParse(endString, out var end);
+                if (beginParseResult && endParseResult)
                 {
                     ranges.Add(new IdentifierPartRange(partTemplate.Name, begin, end));
                 }
                 else
                 {
-                   throw new GraphRenderException($"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
+                   _outputWindowPane.OutputString($"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
                 }
             }
 
@@ -258,6 +276,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         private bool CheckConditionForIdentifier(string conditionTemplate, Identifier identifier)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var conditionResult = GetExpression(conditionTemplate, identifier);
             return conditionResult.IsValidValue && conditionResult.Value.Equals("true");
         }
@@ -270,10 +289,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                //TODO safe
-                var debuggerRes = GetExpression(template.Value, identifier).Value;
-                //Debug.WriteLine($"should be int {debuggerRes}");
-                var value = Int32.Parse(debuggerRes);
+                
+                var debuggerResExpr = GetExpression(template.Value, identifier);
+
+                if (!debuggerResExpr.IsValidValue)
+                {
+                    _outputWindowPane.OutputString($"Template {template.Value} is not a valid value:\n {debuggerResExpr.Value}");
+                    return null;
+                }
+                var value = Int32.Parse(debuggerResExpr.Value);
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
