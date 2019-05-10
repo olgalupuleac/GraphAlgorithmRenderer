@@ -14,6 +14,9 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
         public LineWidthUiProperty()
         {
             InitializeComponent();
+            Disable();
+            CheckBox.Checked += (sender, args) => Enable();
+            CheckBox.Unchecked += (sender, args) => Disable();
         }
 
         public void Reset()
