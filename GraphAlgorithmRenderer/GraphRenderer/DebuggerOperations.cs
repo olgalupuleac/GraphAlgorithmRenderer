@@ -18,23 +18,43 @@ namespace GraphAlgorithmRenderer.GraphRenderer
     {
         public static OutputWindowPane Log { get; set; }
 
-        public static int NumberOfGetExpressionCalls { get; set; }
-        public static TimeSpan TimeSpanGetExpressions { get; set; }
+        static int _numberOfGetExpressionCalls;
+        static TimeSpan _timeSpanGetExpressions;
+
+        static int _numberOfCurrentStackFrameCalls;
+        static TimeSpan _timeSpanCurrentStackFrame;
+
+        static int _numberOfFunctionNameCalls;
+        static TimeSpan _timeSpanFunctionName;
+
+        static int _numberOfSetStackFrameCalls;
+        static TimeSpan _timeSpanSetStackFrame;
 
 
-        public static int NumberOfSetStackFrameCalls { get; set; }
-        public static TimeSpan TimeSpanSetStackFrame { get; set; }
+        private delegate T MakeAction<out T>();
+
+        private static T MeasureTime<T>(MakeAction<T> makeAction, ref TimeSpan totalTime, ref int numberOfCalls)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var res = makeAction();
+            var ts = stopwatch.Elapsed;
+            totalTime += ts;
+            numberOfCalls++;
+            return res;
+        }
 
         public static GetExpressionResult GetExpression(string expression, Debugger debugger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Stopwatch stopwatch = new Stopwatch();
-            var res = debugger.GetExpression(expression);
+
+            var res = MeasureTime(() =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                return debugger.GetExpression(expression);
+            }, ref _timeSpanGetExpressions, ref _numberOfGetExpressionCalls);
             var isValid = res.IsValidValue;
             var value = res.Value;
-            var ts = stopwatch.Elapsed;
-            NumberOfGetExpressionCalls++;
-            TimeSpanGetExpressions += ts;
             if (!isValid)
             {
                 Log.OutputString($"Expression {expression} is not a valid value:\n{value}");
@@ -43,10 +63,11 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             return new GetExpressionResult {IsValid = isValid, Value = value};
         }
 
-        public static GetExpressionResult GetExpressionForIdentifier(string template, Identifier identifier, Debugger debugger)
+        public static GetExpressionResult GetExpressionForIdentifier(string template, Identifier identifier,
+            Debugger debugger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return GetExpression(Substitute(template, identifier, debugger.CurrentStackFrame), debugger);
+            return GetExpression(Substitute(template, identifier, CurrentStackFrame(debugger)), debugger);
         }
 
         public static bool CheckExpression(string expression, Debugger debugger)
@@ -63,8 +84,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public static string FunctionName(StackFrame stackFrame)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return stackFrame.FunctionName;
+            return MeasureTime(() =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+
+                return stackFrame.FunctionName;
+            }, ref _timeSpanFunctionName, ref _numberOfFunctionNameCalls);
         }
 
         public static void AddToLog(string log)
@@ -75,8 +100,13 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public static StackFrame CurrentStackFrame(Debugger debugger)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return debugger.CurrentStackFrame;
+            var res = MeasureTime(() =>
+                {
+                    ThreadHelper.ThrowIfNotOnUIThread();
+                    return debugger.CurrentStackFrame;
+                }, ref _timeSpanCurrentStackFrame,
+                ref _numberOfCurrentStackFrameCalls);
+            return res;
         }
 
         public static string Substitute(string template, Identifier identifier, StackFrame stackFrame)
@@ -90,12 +120,13 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                     continue;
                 }
 
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                result = result.Replace($"__ARG{i}__", stackFrame.Arguments.Item(i).Value);
-                var ts = stopwatch.Elapsed;
-                NumberOfGetExpressionCalls++;
-                TimeSpanGetExpressions += ts;
+                var i1 = i;
+                var result1 = result;
+                result = MeasureTime(() =>
+                {
+                    ThreadHelper.ThrowIfNotOnUIThread();
+                    return result1.Replace($"__ARG{i1}__", stackFrame.Arguments.Item(i1).Value);
+                }, ref _timeSpanGetExpressions, ref _numberOfGetExpressionCalls);
             }
 
             return identifier.Substitute(result);
@@ -106,13 +137,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-                debugger.CurrentStackFrame = stackFrame;
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                TimeSpanSetStackFrame += ts;
-                NumberOfSetStackFrameCalls++;
+                MeasureTime(() =>
+                {
+                    ThreadHelper.ThrowIfNotOnUIThread();
+                    debugger.CurrentStackFrame = stackFrame;
+                    return 0;
+                }, ref _timeSpanSetStackFrame, ref _numberOfSetStackFrameCalls);
             }
             catch (Exception)
             {
@@ -128,21 +158,26 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public static void WriteDebugOutput()
         {
-            var getExpressionTime =
-                $"{TimeSpanGetExpressions.Hours:00}:{TimeSpanGetExpressions.Minutes:00}:{TimeSpanGetExpressions.Seconds:00}.{TimeSpanGetExpressions.Milliseconds / 10:00}";
-            Debug.WriteLine($"Got {NumberOfGetExpressionCalls} expressions in {getExpressionTime}");
-
-            var setStackFrameTime =
-                $"{TimeSpanSetStackFrame.Hours:00}:{TimeSpanSetStackFrame.Minutes:00}:{TimeSpanSetStackFrame.Seconds:00}.{TimeSpanSetStackFrame.Milliseconds / 10:00}";
-            Debug.WriteLine($"Set {NumberOfSetStackFrameCalls} stack frames in {setStackFrameTime}");
+            Debug.WriteLine($"Got {_numberOfGetExpressionCalls} expressions in {_timeSpanGetExpressions}");
+            Debug.WriteLine($"Set {_numberOfSetStackFrameCalls} stack frames in {_timeSpanSetStackFrame}");
+            Debug.WriteLine(
+                $"Get {_numberOfCurrentStackFrameCalls} current stack frames in {_timeSpanCurrentStackFrame}");
+            Debug.WriteLine($"Get {_numberOfFunctionNameCalls} function names {_timeSpanFunctionName}");
         }
 
         public static void Reset()
         {
-            NumberOfGetExpressionCalls = 0;
-            TimeSpanSetStackFrame = TimeSpan.Zero;
-            NumberOfSetStackFrameCalls = 0;
-            TimeSpanGetExpressions = TimeSpan.Zero;
+            _numberOfGetExpressionCalls = 0;
+            _timeSpanSetStackFrame = TimeSpan.Zero;
+
+            _numberOfSetStackFrameCalls = 0;
+            _timeSpanGetExpressions = TimeSpan.Zero;
+
+            _numberOfCurrentStackFrameCalls = 0;
+            _timeSpanCurrentStackFrame = TimeSpan.Zero;
+
+            _numberOfFunctionNameCalls = 0;
+            _timeSpanFunctionName = TimeSpan.Zero;
         }
     }
 }

@@ -11,7 +11,7 @@
         <local:PropertiesControl x:Name="Edges"></local:PropertiesControl>
         <StackPanel>
             <Button x:Name="GenerateConfig" Content="Generate config"  VerticalAlignment="Center" HorizontalAlignment="Center"></Button>
-            <CheckBox x:Name="OnTop" Margin="10">Draw graph window form on top</CheckBox>
+            <CheckBox x:Name="OnTop" Margin="10" IsChecked="True">Draw graph window on top</CheckBox>
         </StackPanel>
     </StackPanel>
 </UserControl>
