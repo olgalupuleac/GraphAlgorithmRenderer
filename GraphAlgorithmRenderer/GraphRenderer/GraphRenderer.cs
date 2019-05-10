@@ -134,7 +134,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private List<Identifier> Create<T>(GraphElementFamily<T> family, AddGraphElement<T> add)
         {
             var identifiers =
-                GetIdentifiersForCondition(GetIdentifiers(family), family.ValidationTemplate);
+                GetIdentifiersForCondition(Identifier.GetIdentifiers(family.Name, family.Ranges, _debugger), family.ValidationTemplate);
             identifiers.ForEach(x => add(family, x));
             return identifiers;
         }

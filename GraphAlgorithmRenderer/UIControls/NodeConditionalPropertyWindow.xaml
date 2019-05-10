@@ -7,7 +7,7 @@
              xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="850">
     <StackPanel Orientation="Horizontal">
             <local:ConditionControl Margin="8" x:Name="ConditionControl"></local:ConditionControl>
             <properties:LabelUiProperty Margin="8" x:Name="LabelUiProperty"></properties:LabelUiProperty>
@@ -16,22 +16,7 @@
             <properties:LineWidthUiProperty Margin="8" x:Name="LineWidthUiProperty"></properties:LineWidthUiProperty>
             <properties:StyleUiProperty Margin="8" x:Name="StyleUiProperty"></properties:StyleUiProperty>
             <properties:ShapeUiProperty Margin="8" x:Name="ShapeUiProperty"></properties:ShapeUiProperty>
-            <Grid Margin="8">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Button x:Name="ok" Grid.Row="5" Grid.Column="1" Click="Ok_Click">Ok</Button>
-            </Grid>
-        </StackPanel>
+        <Button x:Name="ok" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" Click="Ok_Click" Margin="10">Ok</Button>
+    </StackPanel>
    
 </Window>

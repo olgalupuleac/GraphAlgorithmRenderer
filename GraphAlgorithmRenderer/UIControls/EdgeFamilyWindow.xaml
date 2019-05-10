@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
         xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        d:DesignHeight="450" d:DesignWidth="1000">
     <StackPanel Orientation="Horizontal">
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
@@ -34,7 +35,7 @@
         <StackPanel Orientation="Vertical">
             <local:PropertiesControl x:Name="PropertiesControl"/>
         </StackPanel>
-        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
+        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" MinWidth="60" VerticalAlignment="Bottom" Margin="10"
                 Click="Ok_Click" />
     </StackPanel>
 </Window>

@@ -112,7 +112,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         public static string Substitute(string template, Identifier identifier, StackFrame stackFrame)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            
             var result = template;
+            if (result.IndexOf("__CURRENT_FUNCTION__", StringComparison.Ordinal) != -1)
+            {
+                result = result.Replace("__CURRENT_FUNCTION__", FunctionName(stackFrame));
+            }
             for (int i = 1; i <= stackFrame.Arguments.Count; i++)
             {
                 if (result.IndexOf($"__ARG{i}__", StringComparison.Ordinal) == -1)

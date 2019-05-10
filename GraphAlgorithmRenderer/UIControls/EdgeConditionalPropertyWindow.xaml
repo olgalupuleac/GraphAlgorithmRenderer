@@ -30,7 +30,7 @@
             <properties:LineColorUiProperty Margin="8" Grid.Column="0" Grid.Row="0" x:Name="LineColorUiProperty" />
             <properties:LineWidthUiProperty Margin="8" Grid.Column="0" Grid.Row="1" x:Name="LineWidthUiProperty" />
             <StackPanel Grid.Column="0" Grid.Row="2">
-                <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" MaxHeight="30"/>
             </StackPanel>
         </Grid>
     </Grid>

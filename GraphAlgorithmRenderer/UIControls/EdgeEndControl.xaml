@@ -14,7 +14,7 @@
                 </collections:ArrayList>
             </DataGrid.Resources>
         </DataGrid>
-        <Button x:Name="Ok" Content="Ok"  Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        <Button x:Name="Ok" Content="Ok" Margin="20" Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="60"/>
 
     </StackPanel>
 </Window>

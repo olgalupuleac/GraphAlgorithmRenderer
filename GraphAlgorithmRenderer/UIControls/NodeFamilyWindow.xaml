@@ -17,7 +17,7 @@
             <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />
         </StackPanel>
         <local:PropertiesControl x:Name="PropertiesControl"></local:PropertiesControl>
-        <Button x:Name="ok" Content="Ok" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
+        <Button x:Name="ok" Content="Ok" MinWidth="60" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
                 Click="Ok_Click" />
     </StackPanel>
 </Window>

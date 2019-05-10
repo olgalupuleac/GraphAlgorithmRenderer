@@ -25,9 +25,9 @@
                         <TextBox x:Name="Config" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="220"
                      Text="{Binding Path = JsonConfig, Mode=TwoWay}" TextChanged="Config_TextChanged" />
                     </ScrollViewer>
-                    <Button x:Name="Load" Content="Load" Margin="20"/>
+                    <Button x:Name="Load" Content="Load" Margin="20" MaxWidth="90"/>
 
-                    <Button x:Name="Export" Content="Export" Margin="20"/>
+                    <Button x:Name="Export" Content="Export" Margin="20" MaxWidth="90"/>
 
                 </StackPanel>
             </TabItem>
