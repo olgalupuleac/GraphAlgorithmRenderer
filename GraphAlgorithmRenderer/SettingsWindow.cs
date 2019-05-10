@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
 using GraphAlgorithmRenderer.ConfigSamples;
+using GraphAlgorithmRenderer.GraphRenderer;
 using GraphAlgorithmRenderer.Serializer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
@@ -116,6 +117,7 @@ namespace GraphAlgorithmRenderer
             OutputWindow ow = (OutputWindow)w.Object;
             _outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             _outputWindowPane.Activate();
+            DebuggerOperations.Log = _outputWindowPane;
         }
 
         protected override void Initialize()

@@ -12,8 +12,10 @@ namespace GraphAlgorithmRenderer.UIControls
         public ConditionControl()
         {
             InitializeComponent();
-            CurSf.GroupName = $"Mode{GetHashCode()}";
-            AllSf.GroupName = $"Mode{GetHashCode()}";
+            var groupName = $"Mode{GetHashCode()}";
+            CurSf.GroupName = groupName;
+            AllSf.GroupName = groupName;
+            AllSfArgs.GroupName = groupName;
             CurSf.IsChecked = true;
         }
 
@@ -28,9 +30,17 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public ConditionMode GetMode()
         {
-            return  AllSf.IsChecked == true
-                ? ConditionMode.AllStackFrames
-                : ConditionMode.CurrentStackFrame;
+            if (AllSf.IsChecked == true)
+            {
+                return ConditionMode.AllStackFrames;
+            }
+
+            if (AllSfArgs.IsChecked == true)
+            {
+                return ConditionMode.AllStackFramesArgsOnly;
+            }
+
+            return ConditionMode.CurrentStackFrame;
         }
 
 
@@ -43,13 +53,19 @@ namespace GraphAlgorithmRenderer.UIControls
             ConditionBox.Text = condition.Template;
             RegexBox.Text = condition.FunctionNameRegex;
             CurSf.IsChecked = true;
-            if (condition.Mode == ConditionMode.AllStackFrames)
+            switch (condition.Mode)
             {
-                AllSf.IsChecked = true;
-            }
-            else
-            {
-                CurSf.IsChecked = true;
+                case ConditionMode.AllStackFrames:
+                    AllSf.IsChecked = true;
+                    break;
+                case ConditionMode.AllStackFramesArgsOnly:
+                    AllSfArgs.IsChecked = true;
+                    break;
+                case ConditionMode.CurrentStackFrame:
+                    CurSf.IsChecked = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

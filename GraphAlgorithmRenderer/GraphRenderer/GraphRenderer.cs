@@ -295,26 +295,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 : identifiers.Where(id => CheckConditionForIdentifier(conditionTemplate, id)).ToList();
         }
 
-        public static string Substitute(string expression, Identifier identifier, StackFrame stackFrame)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var result = expression.Replace("__CURRENT_FUNCTION__", stackFrame.FunctionName);
-            for (int i = 1; i <= stackFrame.Arguments.Count; i++)
-            {
-                if (result.IndexOf($"__ARG{i}__", StringComparison.Ordinal) == -1)
-                {
-                    continue;
-                }
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                result = result.Replace($"__ARG{i}__", stackFrame.Arguments.Item(i).Value);
-                var ts = stopwatch.Elapsed;
-                _getExpressionCallsNumber++;
-                _getExpressionTimeSpan += ts;
-            }
-
-            return identifier.Substitute(result);
-        }
+        
 
 
         public static Expression GetExpression(string template, Identifier identifier, Debugger debugger)

@@ -13,7 +13,8 @@
             <StackPanel x:Name="ModePanel" Orientation="Vertical">
                 <RadioButton x:Name="CurSf"  Content="Current stackframe"/>
                 <RadioButton x:Name="AllSf" Content="All stackframes" />
-            </StackPanel>
+                <RadioButton x:Name="AllSfArgs" Content="All stackframes (args only)" />
+        </StackPanel>
         </StackPanel>
     
 </UserControl>
