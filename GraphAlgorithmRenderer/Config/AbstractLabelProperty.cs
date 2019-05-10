@@ -5,6 +5,7 @@ using GraphAlgorithmRenderer.GraphElementIdentifier;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
+using static GraphAlgorithmRenderer.GraphRenderer.DebuggerOperations;
 
 namespace GraphAlgorithmRenderer.Config
 {
@@ -22,15 +23,13 @@ namespace GraphAlgorithmRenderer.Config
 
         public void ApplyLabel(ILabeledObject graphElement, Debugger debugger, Identifier identifier)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            var expression = global::GraphAlgorithmRenderer.GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger.CurrentStackFrame);
-            var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
+            var expression = Substitute(LabelTextExpression, identifier, CurrentStackFrame(debugger));
+            var label = Regex.Replace(expression, @"{.*?}", delegate(Match match)
             {
                 Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
                 v = v.Substring(1, v.Length - 2);
-                return GraphRenderer.GraphRenderer.GetExpression(v, identifier, debugger).Value;
+                return GetExpressionForIdentifier(v, identifier, debugger).Value;
             });
 
             if (FontSize.HasValue)

@@ -115,9 +115,9 @@ namespace GraphAlgorithmRenderer
             EnvDTE.Window w = (EnvDTE.Window)dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
             OutputWindow ow = (OutputWindow)w.Object;
-            _outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
-            _outputWindowPane.Activate();
-            DebuggerOperations.Log = _outputWindowPane;
+            var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
+            outputWindowPane.Activate();
+            DebuggerOperations.Log = outputWindowPane;
         }
 
         protected override void Initialize()
@@ -131,7 +131,7 @@ namespace GraphAlgorithmRenderer
             var config = ConfigCreator.TreapConfig;
             Debug.WriteLine(ConfigSerializer.ToJson(config));
             _dispatcherTimer = new DispatcherTimer();
-            _dispatcherTimer.Tick += dispatcherTimer_Tick;
+            _dispatcherTimer.Tick += DispatcherTimer_Tick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             _dispatcherTimer.Start();
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
@@ -157,7 +157,7 @@ namespace GraphAlgorithmRenderer
             _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (_drawingMode != DrawingMode.ShouldBeRedrawn)
             {
@@ -200,7 +200,6 @@ namespace GraphAlgorithmRenderer
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
         private Debugger _debugger;
-        private OutputWindowPane _outputWindowPane;
 
 
         private void DrawGraph()
@@ -219,11 +218,12 @@ namespace GraphAlgorithmRenderer
                 return;
             }
 
-            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger, _outputWindowPane);
+            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
             Graph graph = renderer.RenderGraph();
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+           
             Debug.WriteLine($"total time {elapsedTime}");
             GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
             CreateForm();

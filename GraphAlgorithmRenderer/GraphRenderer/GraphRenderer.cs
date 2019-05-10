@@ -9,6 +9,7 @@ using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.GraphElementIdentifier;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
+using static GraphAlgorithmRenderer.GraphRenderer.DebuggerOperations;
 using Debugger = EnvDTE.Debugger;
 using StackFrame = EnvDTE.StackFrame;
 
@@ -21,17 +22,10 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private Graph _graph;
         private readonly Dictionary<Identifier, Edge> _edges;
         private readonly Dictionary<Identifier, Node> _nodes;
-        private static TimeSpan _getExpressionTimeSpan;
-        private static TimeSpan _setCurrentStackFrameTimeSpan;
-        private static int _getExpressionCallsNumber;
-        private static int _setCurrentStackFrameNumber;
-        private readonly OutputWindowPane _outputWindowPane;
 
 
-        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger,
-            OutputWindowPane outputWindowPane)
+        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger)
         {
-            _outputWindowPane = outputWindowPane;
             _config = config;
             _debugger = debugger;
             _graph = new Graph();
@@ -41,20 +35,17 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public Graph RenderGraph()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             _graph = new Graph();
             _edges.Clear();
             _nodes.Clear();
-            _getExpressionCallsNumber = 0;
-            _getExpressionTimeSpan = new TimeSpan();
-            _setCurrentStackFrameNumber = 0;
-            _setCurrentStackFrameTimeSpan = new TimeSpan();
             foreach (var nodeFamily in _config.Nodes)
             {
                 void NodeAddition(GraphElementFamily<INodeProperty> family, Identifier identifier) =>
                     AddNode(family as NodeFamily, identifier);
 
                 ProcessGraphElementFamily(nodeFamily, NodeAddition, ApplyNodeProperty);
+                Debug.WriteLine("Finished with nodes");
+                WriteDebugOutput();
             }
 
             foreach (var edgeFamily in _config.Edges)
@@ -63,15 +54,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                     AddEdge(family as EdgeFamily, identifier);
 
                 ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);
+                Debug.WriteLine("Finished with edges");
+                WriteDebugOutput();
+                Reset();
             }
 
-            var getExpressionTime =
-                $"{_getExpressionTimeSpan.Hours:00}:{_getExpressionTimeSpan.Minutes:00}:{_getExpressionTimeSpan.Seconds:00}.{_getExpressionTimeSpan.Milliseconds / 10:00}";
-            Debug.WriteLine($"got {_getExpressionCallsNumber} expressions in {getExpressionTime}");
-
-            var setStackFrameTime =
-                $"{_setCurrentStackFrameTimeSpan.Hours:00}:{_setCurrentStackFrameTimeSpan.Minutes:00}:{_setCurrentStackFrameTimeSpan.Seconds:00}.{_setCurrentStackFrameTimeSpan.Milliseconds / 10:00}";
-            Debug.WriteLine($"set {_setCurrentStackFrameNumber} stack frames in {setStackFrameTime}");
+           
             return _graph;
         }
 
@@ -81,33 +69,31 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private void AddEdge(EdgeFamily edgeFamily,
             Identifier identifier)
         {
-            Dispatcher.CurrentDispatcher.VerifyAccess();
             var source = NodeIdentifier(edgeFamily.Source, identifier);
             var target = NodeIdentifier(edgeFamily.Target, identifier);
             if (source == null)
             {
-                _outputWindowPane.OutputString("Cannot identify source node");
+                AddToLog("Cannot identify source node");
 
                 return;
             }
 
             if (target == null)
             {
-                _outputWindowPane.OutputString("Cannot identify target node");
+                AddToLog("Cannot identify target node");
                 return;
             }
-
             var sourceNode = _graph.FindNode(source.Id());
             var targetNode = _graph.FindNode(target.Id());
             if (targetNode == null)
             {
-                _outputWindowPane.OutputString($"Target node {target.Id()} does not exist");
+                AddToLog($"Target node {target.Id()} does not exist");
                 return;
             }
 
             if (sourceNode == null)
             {
-                _outputWindowPane.OutputString($"Source node {source.Id()} does not exist");
+                AddToLog($"Source node {source.Id()} does not exist");
             }
 
             var edge = _graph.AddEdge(source.Id(), target.Id());
@@ -137,7 +123,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                         ApplyPropertyAllStackFrames(identifiers, conditionalProperty, applyProperty);
                         break;
                     case ConditionMode.CurrentStackFrame:
+                        Debug.WriteLine("Before conditional properties");
+                        WriteDebugOutput();
                         ApplyPropertyCurrentStackFrame(identifiers, conditionalProperty, applyProperty);
+                        break;
+                    case ConditionMode.AllStackFramesArgsOnly:
+                        ApplyPropertyAllStackFramesArgsOnly(identifiers, conditionalProperty, applyProperty);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -169,50 +160,48 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 _debugger, identifier);
         }
 
-        private void ApplyPropertyStackFrame<T>(IEnumerable<Identifier> identifiers, string template,
-            List<T> properties,
+        private void ApplyPropertyStackFrame<T>(IEnumerable<Identifier> identifiers,
+            ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
-        {   
+        {
             identifiers.Where(id =>
-                    CheckConditionForIdentifier(template, id))
-                .ToList().ForEach(id => properties.ForEach(p => applyProperty(p, id)));
+                    CheckExpressionForIdentifier(conditionalProperty.Condition.Template, id, _debugger))
+                .ToList().ForEach(id => conditionalProperty.Properties.ForEach(p => applyProperty(p, id)));
         }
 
         private void ApplyPropertyCurrentStackFrame<T>(IEnumerable<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName,
+
+            if (!Regex.IsMatch(FunctionName(CurrentStackFrame(_debugger)),
                 conditionalProperty.Condition.WrappedRegex()))
             {
                 return;
             }
-            ApplyPropertyStackFrame(identifiers, conditionalProperty.Condition.Template,
-                conditionalProperty.Properties, applyProperty);
+
+            ApplyPropertyStackFrame(identifiers, conditionalProperty, applyProperty);
         }
 
         private void ApplyPropertyAllStackFrames<T>(IReadOnlyCollection<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var currentStackFrame = _debugger.CurrentStackFrame;
-            var stackFrames = _debugger.CurrentThread.StackFrames;
-            //Debug.WriteLine("\n\nStack frames section");
+            var currentStackFrame = CurrentStackFrame(_debugger);
+            var stackFrames = GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
                 {
                     continue;
                 }
 
-                SetStackFrame(stackFrame);
+                SetStackFrame(stackFrame, _debugger);
                 ApplyPropertyStackFrame(identifiers,
-                    conditionalProperty.Condition.Template, conditionalProperty.Properties, applyProperty);
+                    conditionalProperty, applyProperty);
             }
 
-            SetStackFrame(currentStackFrame);
+            SetStackFrame(currentStackFrame, _debugger);
         }
 
 
@@ -220,13 +209,10 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var currentStackFrame = _debugger.CurrentStackFrame;
-            var stackFrames = _debugger.CurrentThread.StackFrames;
-            //Debug.WriteLine("\n\nStack frames section");
+            var stackFrames = GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
                 {
                     continue;
                 }
@@ -234,43 +220,28 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 foreach (var id in identifiers)
                 {
                     var expressionString = Substitute(conditionalProperty.Condition.Template, id, stackFrame);
-                    var expression = GetExpression(expressionString, _debugger);
-                    if (CheckExpression(expression))
+                    if (CheckExpression(expressionString, _debugger))
                     {
                         conditionalProperty.Properties.ForEach(p => applyProperty(p, id));
                     }
                 }
-                
             }
-
-            SetStackFrame(currentStackFrame);
         }
 
 
         private List<Identifier> GetIdentifiers<T>(GraphElementFamily<T> family)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             var ranges = new List<IdentifierPartRange>();
             foreach (var partTemplate in family.Ranges)
             {
-                var beginExpr = GetExpression(partTemplate.BeginTemplate, null, _debugger);
-                if (!beginExpr.IsValidValue)
+                var beginExpr = GetExpression(partTemplate.BeginTemplate, _debugger);
+                var endExpr = GetExpression(partTemplate.EndTemplate, _debugger);
+                if (!endExpr.IsValid || !beginExpr.IsValid)
                 {
-                    _outputWindowPane.OutputString(
-                        $"Begin template for {partTemplate.Name} {partTemplate.BeginTemplate} is not a valid value: {beginExpr.Value}");
                     continue;
                 }
 
                 var beginString = beginExpr.Value;
-                var endExpr = GetExpression(partTemplate.EndTemplate, null, _debugger);
-
-                if (!endExpr.IsValidValue)
-                {
-                    _outputWindowPane.OutputString(
-                        $"End template for {partTemplate.Name} {partTemplate.EndTemplate} is not a valid value: {endExpr.Value}");
-                    continue;
-                }
-
                 var endString = endExpr.Value;
                 var beginParseResult = Int32.TryParse(beginString, out var begin);
                 var endParseResult = Int32.TryParse(endString, out var end);
@@ -280,7 +251,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 }
                 else
                 {
-                    _outputWindowPane.OutputString(
+                    AddToLog(
                         $"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
                 }
             }
@@ -292,70 +263,21 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         {
             return String.IsNullOrEmpty(conditionTemplate)
                 ? identifiers
-                : identifiers.Where(id => CheckConditionForIdentifier(conditionTemplate, id)).ToList();
+                : identifiers.Where(id =>
+                    CheckExpressionForIdentifier(conditionTemplate, id, _debugger)).ToList();
         }
 
-        
-
-
-        public static Expression GetExpression(string template, Identifier identifier, Debugger debugger)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-          
-            string expression = identifier == null
-                ? template
-                : Substitute(template,
-                    identifier, debugger.CurrentStackFrame);     
-            //Debug.WriteLine($"{expression}");
-            return GetExpression(expression, debugger);
-        }
-
-
-        private static Expression GetExpression(string expression, Debugger debugger)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            var result = debugger.GetExpression(expression);
-            TimeSpan ts = stopWatch.Elapsed;
-            _getExpressionCallsNumber++;
-            _getExpressionTimeSpan += ts;
-            string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-            // Debug.WriteLine($"get expression {_getExpressionCallsNumber} in {elapsedTime}");
-            return result;
-        }
-
-        private bool CheckConditionForIdentifier(string conditionTemplate, Identifier identifier)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var conditionResult = GetExpression(conditionTemplate, identifier, _debugger);
-            return CheckExpression(conditionResult);
-        }
-
-        private bool CheckExpression(Expression expression)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (expression.IsValidValue)
-            {
-                return expression.Value.Equals("true");
-            }
-            _outputWindowPane.OutputString($"Expression is invalid. Expected true or false, found {expression.Value}");
-            return false;
-        }
 
         private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             var templates = edgeEnd.NamesWithTemplates;
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                var debuggerResExpr = GetExpression(template.Value, identifier, _debugger);
+                var debuggerResExpr = GetExpressionForIdentifier(template.Value, identifier, _debugger);
 
-                if (!debuggerResExpr.IsValidValue)
+                if (!debuggerResExpr.IsValid)
                 {
-                    _outputWindowPane.OutputString(
-                        $"Template {template.Value} is not a valid value:\n {debuggerResExpr.Value}");
                     return null;
                 }
 
@@ -364,25 +286,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             }
 
             return new Identifier(edgeEnd.NodeFamilyName, res);
-        }
-
-        private void SetStackFrame(StackFrame stackFrame)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            try
-            {
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-                _debugger.CurrentStackFrame = stackFrame;
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                _setCurrentStackFrameTimeSpan += ts;
-                _setCurrentStackFrameNumber++;
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Caught exception");
-            }
         }
     }
 }
