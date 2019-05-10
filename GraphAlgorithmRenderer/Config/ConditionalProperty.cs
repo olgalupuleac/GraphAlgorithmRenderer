@@ -6,7 +6,8 @@ namespace GraphAlgorithmRenderer.Config
     public enum ConditionMode
     {
         CurrentStackFrame,
-        AllStackFrames
+        AllStackFrames,
+        AllStackFramesArgsOnly
     }
 
     public class Condition

@@ -21,14 +21,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private Graph _graph;
         private readonly Dictionary<Identifier, Edge> _edges;
         private readonly Dictionary<Identifier, Node> _nodes;
-        private TimeSpan _getExpressionTimeSpan;
-        private TimeSpan _setCurrentStackFrameTimeSpan;
-        private int _getExpressionCallsNumber;
-        private int _setCurrentStackFrameNumber;
-        private OutputWindowPane _outputWindowPane;
+        private static TimeSpan _getExpressionTimeSpan;
+        private static TimeSpan _setCurrentStackFrameTimeSpan;
+        private static int _getExpressionCallsNumber;
+        private static int _setCurrentStackFrameNumber;
+        private readonly OutputWindowPane _outputWindowPane;
 
 
-        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger, OutputWindowPane outputWindowPane)
+        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger,
+            OutputWindowPane outputWindowPane)
         {
             _outputWindowPane = outputWindowPane;
             _config = config;
@@ -95,10 +96,11 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 _outputWindowPane.OutputString("Cannot identify target node");
                 return;
             }
+
             var sourceNode = _graph.FindNode(source.Id());
             var targetNode = _graph.FindNode(target.Id());
             if (targetNode == null)
-            {     
+            {
                 _outputWindowPane.OutputString($"Target node {target.Id()} does not exist");
                 return;
             }
@@ -132,10 +134,10 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 switch (conditionalProperty.Condition.Mode)
                 {
                     case ConditionMode.AllStackFrames:
-                        ApplyPropertyForAllStackFrames(identifiers, conditionalProperty, applyProperty);
+                        ApplyPropertyAllStackFrames(identifiers, conditionalProperty, applyProperty);
                         break;
                     case ConditionMode.CurrentStackFrame:
-                        ApplyConditionalProperty(identifiers, conditionalProperty, applyProperty);
+                        ApplyPropertyCurrentStackFrame(identifiers, conditionalProperty, applyProperty);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -167,23 +169,30 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 _debugger, identifier);
         }
 
-        private void ApplyConditionalProperty<T>(IEnumerable<Identifier> identifiers,
+        private void ApplyPropertyStackFrame<T>(IEnumerable<Identifier> identifiers, string template,
+            List<T> properties,
+            ApplyProperty<T> applyProperty)
+        {   
+            identifiers.Where(id =>
+                    CheckConditionForIdentifier(template, id))
+                .ToList().ForEach(id => properties.ForEach(p => applyProperty(p, id)));
+        }
+
+        private void ApplyPropertyCurrentStackFrame<T>(IEnumerable<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!Regex.IsMatch(_debugger.CurrentStackFrame.FunctionName,
-                 conditionalProperty.Condition.WrappedRegex() ))
+                conditionalProperty.Condition.WrappedRegex()))
             {
                 return;
             }
-
-            identifiers.Where(id =>
-                    CheckConditionForIdentifier(conditionalProperty.Condition.Template, id))
-                .ToList().ForEach(id => conditionalProperty.Properties.ForEach(p => applyProperty(p, id)));
+            ApplyPropertyStackFrame(identifiers, conditionalProperty.Condition.Template,
+                conditionalProperty.Properties, applyProperty);
         }
 
-        private void ApplyPropertyForAllStackFrames<T>(IReadOnlyCollection<Identifier> identifiers,
+        private void ApplyPropertyAllStackFrames<T>(IReadOnlyCollection<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
@@ -199,12 +208,44 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 }
 
                 SetStackFrame(stackFrame);
-                ApplyConditionalProperty(identifiers,
-                    conditionalProperty, applyProperty);
+                ApplyPropertyStackFrame(identifiers,
+                    conditionalProperty.Condition.Template, conditionalProperty.Properties, applyProperty);
             }
 
             SetStackFrame(currentStackFrame);
         }
+
+
+        private void ApplyPropertyAllStackFramesArgsOnly<T>(IReadOnlyCollection<Identifier> identifiers,
+            ConditionalProperty<T> conditionalProperty,
+            ApplyProperty<T> applyProperty)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var currentStackFrame = _debugger.CurrentStackFrame;
+            var stackFrames = _debugger.CurrentThread.StackFrames;
+            //Debug.WriteLine("\n\nStack frames section");
+            foreach (StackFrame stackFrame in stackFrames)
+            {
+                if (!Regex.IsMatch(stackFrame.FunctionName, conditionalProperty.Condition.WrappedRegex()))
+                {
+                    continue;
+                }
+
+                foreach (var id in identifiers)
+                {
+                    var expressionString = Substitute(conditionalProperty.Condition.Template, id, stackFrame);
+                    var expression = GetExpression(expressionString, _debugger);
+                    if (CheckExpression(expression))
+                    {
+                        conditionalProperty.Properties.ForEach(p => applyProperty(p, id));
+                    }
+                }
+                
+            }
+
+            SetStackFrame(currentStackFrame);
+        }
+
 
         private List<Identifier> GetIdentifiers<T>(GraphElementFamily<T> family)
         {
@@ -212,8 +253,25 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var ranges = new List<IdentifierPartRange>();
             foreach (var partTemplate in family.Ranges)
             {
-                var beginString = GetExpression(partTemplate.BeginTemplate, null).Value;
-                var endString = GetExpression(partTemplate.EndTemplate, null).Value;
+                var beginExpr = GetExpression(partTemplate.BeginTemplate, null, _debugger);
+                if (!beginExpr.IsValidValue)
+                {
+                    _outputWindowPane.OutputString(
+                        $"Begin template for {partTemplate.Name} {partTemplate.BeginTemplate} is not a valid value: {beginExpr.Value}");
+                    continue;
+                }
+
+                var beginString = beginExpr.Value;
+                var endExpr = GetExpression(partTemplate.EndTemplate, null, _debugger);
+
+                if (!endExpr.IsValidValue)
+                {
+                    _outputWindowPane.OutputString(
+                        $"End template for {partTemplate.Name} {partTemplate.EndTemplate} is not a valid value: {endExpr.Value}");
+                    continue;
+                }
+
+                var endString = endExpr.Value;
                 var beginParseResult = Int32.TryParse(beginString, out var begin);
                 var endParseResult = Int32.TryParse(endString, out var end);
                 if (beginParseResult && endParseResult)
@@ -222,7 +280,8 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 }
                 else
                 {
-                   _outputWindowPane.OutputString($"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
+                    _outputWindowPane.OutputString(
+                        $"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
                 }
             }
 
@@ -236,10 +295,9 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 : identifiers.Where(id => CheckConditionForIdentifier(conditionTemplate, id)).ToList();
         }
 
-        public static string Substitute(string expression, Identifier identifier, Debugger debugger)
+        public static string Substitute(string expression, Identifier identifier, StackFrame stackFrame)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var stackFrame = debugger.CurrentStackFrame;
             var result = expression.Replace("__CURRENT_FUNCTION__", stackFrame.FunctionName);
             for (int i = 1; i <= stackFrame.Arguments.Count; i++)
             {
@@ -247,40 +305,62 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 {
                     continue;
                 }
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 result = result.Replace($"__ARG{i}__", stackFrame.Arguments.Item(i).Value);
+                var ts = stopwatch.Elapsed;
+                _getExpressionCallsNumber++;
+                _getExpressionTimeSpan += ts;
             }
 
             return identifier.Substitute(result);
         }
 
 
-        private Expression GetExpression(string template, Identifier identifier)
+        public static Expression GetExpression(string template, Identifier identifier, Debugger debugger)
         {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
+            ThreadHelper.ThrowIfNotOnUIThread();
+          
             string expression = identifier == null
                 ? template
                 : Substitute(template,
-                    identifier, _debugger);
+                    identifier, debugger.CurrentStackFrame);     
+            //Debug.WriteLine($"{expression}");
+            return GetExpression(expression, debugger);
+        }
+
+
+        private static Expression GetExpression(string expression, Debugger debugger)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var result = debugger.GetExpression(expression);
             TimeSpan ts = stopWatch.Elapsed;
             _getExpressionCallsNumber++;
             _getExpressionTimeSpan += ts;
-            //Debug.WriteLine($"{expression}");
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var result = _debugger.GetExpression(expression);
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             // Debug.WriteLine($"get expression {_getExpressionCallsNumber} in {elapsedTime}");
             return result;
         }
 
-
         private bool CheckConditionForIdentifier(string conditionTemplate, Identifier identifier)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var conditionResult = GetExpression(conditionTemplate, identifier);
-            return conditionResult.IsValidValue && conditionResult.Value.Equals("true");
+            var conditionResult = GetExpression(conditionTemplate, identifier, _debugger);
+            return CheckExpression(conditionResult);
         }
 
+        private bool CheckExpression(Expression expression)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (expression.IsValidValue)
+            {
+                return expression.Value.Equals("true");
+            }
+            _outputWindowPane.OutputString($"Expression is invalid. Expected true or false, found {expression.Value}");
+            return false;
+        }
 
         private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
         {
@@ -289,14 +369,15 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                
-                var debuggerResExpr = GetExpression(template.Value, identifier);
+                var debuggerResExpr = GetExpression(template.Value, identifier, _debugger);
 
                 if (!debuggerResExpr.IsValidValue)
                 {
-                    _outputWindowPane.OutputString($"Template {template.Value} is not a valid value:\n {debuggerResExpr.Value}");
+                    _outputWindowPane.OutputString(
+                        $"Template {template.Value} is not a valid value:\n {debuggerResExpr.Value}");
                     return null;
                 }
+
                 var value = Int32.Parse(debuggerResExpr.Value);
                 res.Add(new IdentifierPart(template.Key, value));
             }
@@ -314,9 +395,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 _debugger.CurrentStackFrame = stackFrame;
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
-                string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-                // Debug.WriteLine(
-                //    $"set stackframe {_setCurrentStackFrameNumber} {stackFrame.FunctionName} in {elapsedTime}");
                 _setCurrentStackFrameTimeSpan += ts;
                 _setCurrentStackFrameNumber++;
             }

@@ -24,13 +24,13 @@ namespace GraphAlgorithmRenderer.Config
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var expression = global::GraphAlgorithmRenderer.GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger);
+            var expression = global::GraphAlgorithmRenderer.GraphRenderer.GraphRenderer.Substitute(LabelTextExpression, identifier, debugger.CurrentStackFrame);
             var label = Regex.Replace(expression, @"{.*?}", delegate (Match match)
             {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
                 v = v.Substring(1, v.Length - 2);
-                //Debug.WriteLine(v);
-                return debugger.GetExpression(v).Value;
+                return GraphRenderer.GraphRenderer.GetExpression(v, identifier, debugger).Value;
             });
 
             if (FontSize.HasValue)
