@@ -7,7 +7,7 @@
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
+    <WrapPanel Orientation="Horizontal">
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
             <Label Content="Name" Margin="15" />
@@ -19,5 +19,5 @@
         <local:PropertiesControl x:Name="PropertiesControl"></local:PropertiesControl>
         <Button x:Name="ok" Content="Ok" MinWidth="60" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
                 Click="Ok_Click" />
-    </StackPanel>
+    </WrapPanel>
 </Window>

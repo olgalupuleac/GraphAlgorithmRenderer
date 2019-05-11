@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanResize"
         d:DesignHeight="450" d:DesignWidth="1000">
-    <StackPanel Orientation="Horizontal">
+    <WrapPanel Orientation="Horizontal">
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
             <Button x:Name="targetButton" Content="Target" Margin="15" Click="TargetButton_Click" />
@@ -37,5 +37,5 @@
         </StackPanel>
         <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" MinWidth="60" VerticalAlignment="Bottom" Margin="10"
                 Click="Ok_Click" />
-    </StackPanel>
+    </WrapPanel>
 </Window>

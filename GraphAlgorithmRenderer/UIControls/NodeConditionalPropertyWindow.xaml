@@ -8,7 +8,7 @@
 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="850">
-    <StackPanel Orientation="Horizontal">
+    <WrapPanel Orientation="Horizontal">
             <local:ConditionControl Margin="8" x:Name="ConditionControl"></local:ConditionControl>
             <properties:LabelUiProperty Margin="8" x:Name="LabelUiProperty"></properties:LabelUiProperty>
             <properties:LineColorUiProperty Margin="8" x:Name="LineColorUiProperty"></properties:LineColorUiProperty>
@@ -17,6 +17,6 @@
             <properties:StyleUiProperty Margin="8" x:Name="StyleUiProperty"></properties:StyleUiProperty>
             <properties:ShapeUiProperty Margin="8" x:Name="ShapeUiProperty"></properties:ShapeUiProperty>
         <Button x:Name="ok" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" Click="Ok_Click" Margin="10">Ok</Button>
-    </StackPanel>
+    </WrapPanel>
    
 </Window>
