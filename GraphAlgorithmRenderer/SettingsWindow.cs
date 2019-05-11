@@ -144,11 +144,8 @@ namespace GraphAlgorithmRenderer
                 Update;
             _debugger = applicationObject.Debugger;
             var config = ConfigCreator.DsuConfig;
-            config = ConfigCreator.TreapConfig;    
-            _dispatcherTimer = new DispatcherTimer();
-            _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
-            _dispatcherTimer.Start();
+            config = ConfigCreator.TreapConfig;
+           
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             InitializeLog(applicationObject);
         }
@@ -204,7 +201,10 @@ namespace GraphAlgorithmRenderer
                 _form.Hide();
                 return;
             }
-
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Tick += DispatcherTimer_Tick;
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            _dispatcherTimer.Start();
             _drawingMode = DrawingMode.ShouldBeRedrawn;
         }
 
@@ -248,6 +248,7 @@ namespace GraphAlgorithmRenderer
             _form.Controls.Add(viewer);
             _form.ResumeLayout();
             _form.Show();
+            _dispatcherTimer.Stop();
         }
     }
 }
