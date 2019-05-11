@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="GraphAlgorithmRenderer.a0ab8cac-8133-4931-9f5a-43a331af263b" Version="1.0" Language="en-US" Publisher="Ольга Лупуляк" />
+        <Identity Id="GraphAlgorithmRenderer.a0ab8cac-8133-4931-9f5a-43a331af263b" Version="1.0" Language="en-US" Publisher="Olga Lupuleac" />
         <DisplayName>GraphAlgorithmRenderer</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Description xml:space="preserve">Graph algorithm visualizationGra</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />
