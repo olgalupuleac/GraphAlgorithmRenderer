@@ -21,8 +21,7 @@ namespace GraphAlgorithmRenderer.UIControls
     /// Interaction logic for MainControl.xaml
     /// </summary>
     public partial class MainControl : UserControl
-    { 
-
+    {
         public MainControl()
         {
             InitializeComponent();
@@ -30,7 +29,11 @@ namespace GraphAlgorithmRenderer.UIControls
             Edges.Label.Content = "Edge families";
 
             Nodes.WindowGenerator = () => new NodeFamilyWindow();
-            Nodes.Description = w => ((NodeFamilyWindow) w).familyName.Text;
+            Nodes.Description = w =>
+            {
+                ((NodeFamilyWindow) w).familyName.Text = $"node#{Nodes.properties.Items.Count}";
+                return ((NodeFamilyWindow) w).familyName.Text;
+            };
             Nodes.UpdateDescription = (w, i) =>
             {
                 ((NodeFamilyWindow) w).ok.Click +=
@@ -39,11 +42,15 @@ namespace GraphAlgorithmRenderer.UIControls
             Edges.WindowGenerator = () =>
                 new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
                     kv => (NodeFamilyWindow) kv.Value));
-            Edges.Description = w => ((EdgeFamilyWindow)w).familyName.Text;
+            Edges.Description = w =>
+            {
+                ((EdgeFamilyWindow) w).familyName.Text = $"edge#{Edges.properties.Items.Count}";
+                return ((EdgeFamilyWindow) w).familyName.Text;
+            };
             Edges.UpdateDescription = (w, i) =>
             {
-                ((EdgeFamilyWindow)w).ok.Click +=
-                    (o, sender) => i.Content = ((EdgeFamilyWindow)w).familyName.Text;
+                ((EdgeFamilyWindow) w).ok.Click +=
+                    (o, sender) => i.Content = ((EdgeFamilyWindow) w).familyName.Text;
             };
         }
 
@@ -53,8 +60,8 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 return new GraphConfig
                 {
-                    Edges = Edges.Windows.Select(w => ((EdgeFamilyWindow)w).EdgeFamily).ToList(),
-                    Nodes = Nodes.Windows.Select(w => ((NodeFamilyWindow)w).NodeFamily).ToList()
+                    Edges = Edges.Windows.Select(w => ((EdgeFamilyWindow) w).EdgeFamily).ToList(),
+                    Nodes = Nodes.Windows.Select(w => ((NodeFamilyWindow) w).NodeFamily).ToList()
                 };
             }
         }
@@ -65,15 +72,15 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var w = new NodeFamilyWindow();
                 w.FromNodeFamily(n);
-                return (Window)w;
+                return (Window) w;
             }).ToList();
             Nodes.SetNewWindows(nodeWindows);
             var edgeWindows = config.Edges.Select(e =>
             {
                 var w = new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow)kv.Value));
+                    kv => (NodeFamilyWindow) kv.Value));
                 w.FromEdgeFamily(e);
-                return (Window)w;
+                return (Window) w;
             }).ToList();
             Edges.SetNewWindows(edgeWindows);
         }
