@@ -8,23 +8,23 @@
         mc:Ignorable="d"
         ResizeMode="CanResize"
         d:DesignHeight="450" d:DesignWidth="1000">
-    <WrapPanel Orientation="Horizontal">
+    <WrapPanel>
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="targetButton" Content="Target" Margin="15" Click="TargetButton_Click" />
-            <Expander x:Name="targetExpander" Header="Target Node Family" Margin="16">
+            <Expander x:Name="TargetExpander" Header="Target Node Family" Margin="16">
                 <StackPanel x:Name="TargetPanel" Orientation="Vertical" />
             </Expander>
+            <Button x:Name="TargetButton" Content="Set target indices" Margin="15" Click="TargetButton_Click" />
         </StackPanel>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="sourceButton" Content="Source" Margin="15" Click="SourceButton_Click" />
-            <Expander x:Name="sourceExpander" Header="Source Node Family" Margin="16">
+            <Expander x:Name="SourceExpander" Header="Source Node Family" Margin="16">
                 <StackPanel x:Name="SourcePanel" />
             </Expander>
+            <Button x:Name="SourceButton" Content="Set source indices" Margin="15" Click="SourceButton_Click" />
         </StackPanel>
         <StackPanel Orientation="Vertical">
             <Label Content="Name" Margin="15" />
-            <TextBox x:Name="familyName" Margin="10" TextWrapping="Wrap" />
+            <TextBox x:Name="FamilyName" Margin="10" TextWrapping="Wrap" />
             <Separator></Separator>
             <Label x:Name="label" Content="Validation template" Margin="15" />
             <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />

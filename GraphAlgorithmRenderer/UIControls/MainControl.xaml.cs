@@ -44,13 +44,13 @@ namespace GraphAlgorithmRenderer.UIControls
                     kv => (NodeFamilyWindow) kv.Value));
             Edges.Description = w =>
             {
-                ((EdgeFamilyWindow) w).familyName.Text = $"edge#{Edges.properties.Items.Count}";
-                return ((EdgeFamilyWindow) w).familyName.Text;
+                ((EdgeFamilyWindow) w).FamilyName.Text = $"edge#{Edges.properties.Items.Count}";
+                return ((EdgeFamilyWindow) w).FamilyName.Text;
             };
             Edges.UpdateDescription = (w, i) =>
             {
                 ((EdgeFamilyWindow) w).ok.Click +=
-                    (o, sender) => i.Content = ((EdgeFamilyWindow) w).familyName.Text;
+                    (o, sender) => i.Content = ((EdgeFamilyWindow) w).FamilyName.Text;
             };
         }
 

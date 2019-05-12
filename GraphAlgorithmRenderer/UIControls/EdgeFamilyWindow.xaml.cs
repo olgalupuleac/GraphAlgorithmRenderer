@@ -124,7 +124,7 @@ namespace GraphAlgorithmRenderer.UIControls
                 return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
                     directed.IsChecked == true)
                 {
-                    Name = familyName.Text,
+                    Name = FamilyName.Text,
                     ValidationTemplate = validationTemplateBox.Text,
                     ConditionalProperties = conditionalProperties
                 };
@@ -161,7 +161,7 @@ namespace GraphAlgorithmRenderer.UIControls
             IdentifierPartRangeControl.FromRanges(edgeFamily.Ranges);
             directed.IsChecked = edgeFamily.IsDirected;
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
-            familyName.Text = edgeFamily.Name;
+            FamilyName.Text = edgeFamily.Name;
            
             SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
