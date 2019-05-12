@@ -72,7 +72,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
         public static bool CheckExpression(string expression, Debugger debugger)
         {
-            var res = GetExpression(expression, debugger);
+            var res = GetExpression("(bool)" + "(" + expression + ")", debugger);
             return res.IsValid && res.Value.Equals("true");
         }
 
