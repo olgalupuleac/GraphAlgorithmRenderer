@@ -114,53 +114,53 @@ First we want to specify the vertexes (or nodes). We can have several families o
 
 The window with node family settings opens automatically. The default family names are *node#0, node#1* and so on, but you can change it if you want.
 
-![1557679733095](readme-images\1557679733095.png)
+![1557679733095](readme-images/1557679733095.png)
 
 Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers.  To add a set in the product, we 
 
-![1557679976713](readme-images\1557679976713.png)
+![1557679976713](readme-images/1557679976713.png)
 
-![1557680046296](readme-images\1557680046296.png)
+![1557680046296](readme-images/1557680046296.png)
 
-![1557680161230](readme-images\1557680161230.png)
+![1557680161230](readme-images/1557680161230.png)
 
-![1557680215878](readme-images\1557680215878.png)
+![1557680215878](readme-images/1557680215878.png)
 
-![1557680243829](readme-images\1557680243829.png)
+![1557680243829](readme-images/1557680243829.png)
 
-![1557680335440](readme-images\1557680335440.png)
+![1557680335440](readme-images/1557680335440.png)
 
-![1557687812407](readme-images\1557687812407.png)
+![1557687812407](readme-images/1557687812407.png)
 
-![1557682526216](readme-images\1557682526216.png)
+![1557682526216](readme-images/1557682526216.png)
 
-![1557682600580](readme-images\1557682600580.png)
+![1557682600580](readme-images/1557682600580.png)
 
-![1557687893842](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557687893842.png)
+![1557687893842](readme-images/1557687893842.png)
 
-![1557688016786](readme-images\1557688016786.png)
+![1557688016786](readme-images/1557688016786.png)
 
-![1557688121375](readme-images\1557688121375.png)
+![1557688121375](readme-images/1557688121375.png)
 
-![1557688233255](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557688233255.png)
+![1557688233255](readme-images/1557688233255.png)
 
-![1557690830418](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557690830418.png)
+![1557690830418](readme-images/1557690830418.png)
 
-![1557688517682](readme-images\1557688517682.png)
-
-
+![1557688517682](readme-images/1557688517682.png)
 
 
 
-![1557689769838](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557689769838.png)
 
-![1557688906805](readme-images\1557688906805.png)
 
-![1557689948447](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557689948447.png)
+![1557689769838](readme-images/1557689769838.png)
 
-![1557690110368](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557690110368.png)
+![1557688906805](readme-images/1557688906805.png)
 
-![1557691270424](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\1557691270424.png)
+![1557689948447](readme-images/1557689948447.png)
+
+![1557690110368](readme-images/1557690110368.png)
+
+![1557691270424](readme-images/1557691270424.png)
 
 ```json
 {
