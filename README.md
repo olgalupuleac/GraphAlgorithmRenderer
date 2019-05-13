@@ -117,7 +117,7 @@ Now, let's visualize this code. Assume we have the following input:
 5 6
 ~~~~
 
-First we want to specify the vertexes (or nodes). We can have several families of nodes and edges. For this particular problem we will need only one node family and only one edge family. To add a new node family. press *Add* under a list with nodes.
+First, we want to specify the vertexes (or nodes). We can have several families of nodes and edges. For this particular problem, we will need only one node family and only one edge family. To add a new node family. press *Add* under a list with nodes.
 
  ![1557679512147](readme-images/1557679512147.png)
 
@@ -125,7 +125,7 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557745092625](readme-images/1557745092625.png)
 
-Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (let's call it index) is described by name, begin template and end template. To refer to a certain index in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). Index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments, see reference) it should became an expression, which could be cast to bool. If validation template is empty, all identifiers are valid.
+Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (let's call it index) is described by name, begin template and end template. To refer to a certain index in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments, see reference) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
 
 ![1557745163853](readme-images/1557745163853.png)
 
@@ -137,7 +137,7 @@ So, our part templates will be `a` and `x`. Note that we use a previous index to
 
 ![1557745237084](readme-images/1557745237084.png)
 
-The main difference between node family and edge family is that the edge family should contain  a definition of its target and source nodes. As we can have several node families, we need to chose which families target and source belongs to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
+The main difference between node family and edge family is that the edge family should contain a definition of its target and source nodes. As we can have several node families, we need to choose which families target and source belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
 
 ![1557745271239](readme-images/1557745271239.png)
 
@@ -145,7 +145,7 @@ So, we can get the target using this expression.
 
 ![1557680215878](readme-images/1557680215878.png)
 
-And source is the first identifier index.
+And the source is the first identifier index.
 
 ![1557680243829](readme-images/1557680243829.png)
 
@@ -163,11 +163,11 @@ As we can see, the graph is rendered correctly, but the node labels may seem con
 
 ![1557687812407](readme-images/1557687812407.png)
 
-To add a conditional property, press *Add* under a list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to meet the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*. If mode is set to *Current stackframe* the condition is checked only in the current stackframe. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack. Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function arguments , function arguments and indices and evaluate expression in **current stack frame**.  
+To add a conditional property, press *Add* under a list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to meet the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*. If mode is set to *Current stackframe* the condition is checked only in the current stack frame. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack. Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function arguments, function arguments, and indices and evaluate the expression in **the current stack frame**.  
 
-To specify a label, we will use the same syntax as we used for all expressions, but these expression will be surrounded by the additional placeholders `{}`. 
+To specify a label, we will use the same syntax as we used for all expressions, but these expressions will be surrounded by the additional placeholders `{}`. 
 
-![1557682526216](readme-images/1557682526216.png)Each conditional property may have multiple properties inside, but they must have different kind (except styles). However,  different conditional properties may have properties with the same kind and there can be a graph elements which fulfills both conditions. In this case, the first property will be applied.
+![1557682526216](readme-images/1557682526216.png)Each conditional property may have multiple properties inside, but they must have a different kind (except styles). However,  different conditional properties may have properties with the same kind and there can be a graph element which fulfills both conditions. In this case, the first property will be applied.
 
 ![1557682600580](readme-images/1557682600580.png)
 
@@ -181,7 +181,7 @@ Now let's add other node properties.
 
 ![1557688121375](readme-images/1557688121375.png)
 
-An edge properties...
+Edge properties...
 
 ![1557688233255](readme-images/1557688233255.png)
 
