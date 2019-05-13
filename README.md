@@ -125,17 +125,27 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557679733095](readme-images/1557679733095.png)
 
-Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (identifier part) is described by Name, BeginTemplate and EndTemplate. To refer to identifier part in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expression, which will be evaluated to integer in the debugger.
+Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (identifier part) is described by name, begin template and end template. To refer to identifier part in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). Identifier part takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of identifier parts it should be an expression, which could be cast to bool. If it's empty, all identifiers are valid.
 
 ![1557679976713](readme-images/1557679976713.png)
 
+Now let's take a look at the edge family config. It's almost similar to node config. First, we will set part identifiers. As we can have several node families, we need to chose which families target and source belongs to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
+
 ![1557680046296](readme-images/1557680046296.png)
 
-![1557680161230](readme-images/1557680161230.png)
+So, we can get the target using this expression.
 
 ![1557680215878](readme-images/1557680215878.png)
 
+And source is the first identifier part template.
+
 ![1557680243829](readme-images/1557680243829.png)
+
+![1557680161230](readme-images/1557680161230.png)
+
+
+
+
 
 ![1557680335440](readme-images/1557680335440.png)
 
