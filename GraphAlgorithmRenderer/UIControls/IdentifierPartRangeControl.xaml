@@ -12,7 +12,7 @@
                 <collections:ArrayList x:Key="Ranges" />
             </DataGrid.Resources>
         </DataGrid>
-        <Button x:Name="AddId" Margin="15" Content="Add id" Click="AddId_Click"/>
-        <Button x:Name="RemoveId" Margin="15" Content="Remove id" Click="RemoveId_Click"/>
+        <Button x:Name="AddId" Margin="15" Content="Add id part" Click="AddId_Click"/>
+        <Button x:Name="RemoveId" Margin="15" Content="Remove id part" Click="RemoveId_Click"/>
     </StackPanel>
 </UserControl>

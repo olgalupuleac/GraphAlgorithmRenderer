@@ -30,7 +30,6 @@ const int N = int(1e5);
 struct edge
 {
 	int id;
-	int from;
 	int to;
 };
 
@@ -72,8 +71,18 @@ int main()
 	{
 		int a, b;
 		cin >> a >> b;
-		g[a - 1].push_back({ i,  a - 1, b - 1 });
-		g[b - 1].push_back({ i , b - 1, a - 1 });
+		g[a - 1].push_back({ i, b - 1 });
+        // Checking (a != b) to avoid duplication of edges in config.
+        // It could be also achieved through
+        // following validation expression
+        // "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
+        // && __x__ % 2 == 0"
+        // but it seems slightly easier to do it in this way and use 
+        // this validation expression: "__a__ <= g[__a__][__x__].to"
+		if (a != b) 
+		{
+			g[b - 1].push_back({ i , a - 1 });
+		}
 	}
 	fill(vertex_component, vertex_component + n, -1);
 	for (int i = 0; i < n; i++)
@@ -116,7 +125,7 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557679733095](readme-images/1557679733095.png)
 
-Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers.  To add a set in the product, we 
+Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (identifier part) is described by Name, BeginTemplate and EndTemplate. To refer to identifier part in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expression, which will be evaluated to integer in the debugger.
 
 ![1557679976713](readme-images/1557679976713.png)
 
