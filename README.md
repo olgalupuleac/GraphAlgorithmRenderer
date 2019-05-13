@@ -123,43 +123,65 @@ First we want to specify the vertexes (or nodes). We can have several families o
 
 The window with node family settings opens automatically. The default family names are *node#0, node#1* and so on, but you can change it if you want.
 
-![1557679733095](readme-images/1557679733095.png)
+![1557745092625](readme-images/1557745092625.png)
 
-Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (identifier part) is described by name, begin template and end template. To refer to identifier part in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). Identifier part takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of identifier parts it should be an expression, which could be cast to bool. If it's empty, all identifiers are valid.
+Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (let's call it index) is described by name, begin template and end template. To refer to a certain index in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). Index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments, see reference) it should became an expression, which could be cast to bool. If validation template is empty, all identifiers are valid.
 
-![1557679976713](readme-images/1557679976713.png)
+![1557745163853](readme-images/1557745163853.png)
 
-Now let's take a look at the edge family config. It's almost similar to node config. First, we will set part identifiers. As we can have several node families, we need to chose which families target and source belongs to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
+Now let's take a look at the edge family config. It's almost similar to node config. First, we will set part identifiers. There is an edge between `a` and `b` if 
+$$
+\exist \,  x: g[a][x].to == b
+$$
+So, our part templates will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
-![1557680046296](readme-images/1557680046296.png)
+![1557745237084](readme-images/1557745237084.png)
+
+The main difference between node family and edge family is that the edge family should contain  a definition of its target and source nodes. As we can have several node families, we need to chose which families target and source belongs to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
+
+![1557745271239](readme-images/1557745271239.png)
 
 So, we can get the target using this expression.
 
 ![1557680215878](readme-images/1557680215878.png)
 
-And source is the first identifier part template.
+And source is the first identifier index.
 
 ![1557680243829](readme-images/1557680243829.png)
 
-![1557680161230](readme-images/1557680161230.png)
+Finally, to avoid duplication of edges, we will specify the validation expression.
+
+![1557745337999](readme-images/1557745337999.png)
 
 
 
-
+Now, let's generate our config and see how it looks like.
 
 ![1557680335440](readme-images/1557680335440.png)
 
+As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add some *Conditional properties* to our config.
+
 ![1557687812407](readme-images/1557687812407.png)
 
-![1557682526216](readme-images/1557682526216.png)
+To add a conditional property, press *Add* under a list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to meet the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*. If mode is set to *Current stackframe* the condition is checked only in the current stackframe. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack. Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function arguments , function arguments and indices and evaluate expression in **current stack frame**.  
+
+To specify a label, we will use the same syntax as we used for all expressions, but these expression will be surrounded by the additional placeholders `{}`. 
+
+![1557682526216](readme-images/1557682526216.png)Each conditional property may have multiple properties inside, but they must have different kind (except styles). However,  different conditional properties may have properties with the same kind and there can be a graph elements which fulfills both conditions. In this case, the first property will be applied.
 
 ![1557682600580](readme-images/1557682600580.png)
 
+After adding a label to nodes, our picture improved. 
+
 ![1557687893842](readme-images/1557687893842.png)
+
+Now let's add other node properties. 
 
 ![1557688016786](readme-images/1557688016786.png)
 
 ![1557688121375](readme-images/1557688121375.png)
+
+An edge properties...
 
 ![1557688233255](readme-images/1557688233255.png)
 
@@ -179,7 +201,11 @@ And source is the first identifier part template.
 
 ![1557690110368](readme-images/1557690110368.png)
 
+Finally, after we can export generated config in JSON, save it somewhere, and load it next time to avoid creating this config from the beginning. 
+
 ![1557691270424](readme-images/1557691270424.png)
+
+This the config for this problem.
 
 ```json
 {
