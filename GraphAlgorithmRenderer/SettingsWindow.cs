@@ -42,8 +42,29 @@ namespace GraphAlgorithmRenderer
         private enum DrawingMode
         {
             ShouldBeRedrawn,
+            Redrawing,
             NotChanged,
             Canceled
+        }
+
+        public delegate void MakeAction();
+
+
+        private void HandleException(MakeAction makeAction, string headerMessage)
+        {
+            try
+            {
+                makeAction();
+            }
+            catch (Exception e)
+            {
+                if (_drawingMode != DrawingMode.Canceled)
+                {
+                    _drawingMode = DrawingMode.NotChanged;
+                }
+                var exceptionViewer = new ExceptionViewer(headerMessage, e);
+                exceptionViewer.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -71,32 +92,23 @@ namespace GraphAlgorithmRenderer
         private void LoadOnClick(object sender, RoutedEventArgs e)
         {
             var json = _control.Config.Text;
-            try
+            HandleException(() =>
             {
                 _config = ConfigSerializer.FromJson(json);
 
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception exception)
-            {
-                var exceptionViewer = new ExceptionViewer("Json deserialization error", exception);
-                exceptionViewer.ShowDialog();
-            }
+            }, "Json deserialization error");
 
-            try
-            {
-                _control.MainControl.FromConfig(_config);
-            }
-            catch (Exception exception)
-            {
-                var exceptionViewer = new ExceptionViewer("Oups! Something went wrong :(", exception);
-                exceptionViewer.ShowDialog();
-            }
+            HandleException(() => _control.MainControl.FromConfig(_config), "Oups! Something went wrong :(");
+       
 
             CreateForm();
-
-            _drawingMode = DrawingMode.ShouldBeRedrawn;
+            if (_drawingMode == DrawingMode.NotChanged)
+            {
+                _drawingMode = DrawingMode.ShouldBeRedrawn;
+                HandleException(DrawGraph, "Error while drawing graph");
+            }
         }
 
         private void CreateForm()
@@ -152,21 +164,17 @@ namespace GraphAlgorithmRenderer
 
         private void GenerateConfigOnClick(object sender, RoutedEventArgs e)
         {
-            try
+            HandleException(() =>
             {
                 _config = _control.MainControl.Config;
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception exception)
-            {
-                var exceptionViewer = new ExceptionViewer("Error while creating config", exception);
-                exceptionViewer.ShowDialog();
-            }
+            }, "Error while generating config");
 
             CreateForm();
-
+            if (_drawingMode != DrawingMode.NotChanged) return;
             _drawingMode = DrawingMode.ShouldBeRedrawn;
+            HandleException(DrawGraph, "Error while drawing graph");
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -175,22 +183,12 @@ namespace GraphAlgorithmRenderer
             {
                 return;
             }
-
-            try
-            {
-                DrawGraph();
-            }
-            catch (Exception exception)
-            {
-                var exceptionViewer = new ExceptionViewer("Error while drawing graph", exception);
-                exceptionViewer.ShowDialog();
-            }
-            _drawingMode = DrawingMode.NotChanged;
+            HandleException(DrawGraph, "Error while drawing graph");
         }
 
         private void Update(Process newprocess, Program newprogram, Thread newthread, StackFrame newstackframe)
         {
-            if (_drawingMode == DrawingMode.Canceled)
+            if (_drawingMode == DrawingMode.Canceled || _drawingMode == DrawingMode.Redrawing)
             {
                 return;
             }
@@ -198,7 +196,7 @@ namespace GraphAlgorithmRenderer
             if (newstackframe == null)
             {
                 _drawingMode = DrawingMode.NotChanged;
-                _form.Hide();
+                _form?.Hide();
                 return;
             }
             _dispatcherTimer = new DispatcherTimer();
@@ -219,20 +217,16 @@ namespace GraphAlgorithmRenderer
 
         private void DrawGraph()
         {
+            _drawingMode = DrawingMode.Redrawing;
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (_debugger.CurrentStackFrame == null)
+
+            if (_config == null || _debugger?.CurrentStackFrame == null)
             {
+                _drawingMode = DrawingMode.NotChanged;
                 return;
             }
-
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-
-            if (_config == null || _debugger == null)
-            {
-                return;
-            }
-
             var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
             Graph graph = renderer.RenderGraph();
             stopWatch.Stop();
@@ -249,6 +243,7 @@ namespace GraphAlgorithmRenderer
             _form.ResumeLayout();
             _form.Show();
             _dispatcherTimer.Stop();
+            _drawingMode = DrawingMode.NotChanged;
         }
     }
 }
