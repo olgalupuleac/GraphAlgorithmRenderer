@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using GraphAlgorithmRenderer.Config;
 
 namespace GraphAlgorithmRenderer.UIControls
@@ -28,7 +16,7 @@ namespace GraphAlgorithmRenderer.UIControls
             Nodes.Label.Content = "Node families";
             Edges.Label.Content = "Edge families";
 
-            Nodes.WindowGenerator = () => new NodeFamilyWindow();
+            Nodes.WindowGenerator = () => new NodeFamilyWindow{ NameIsSet = false };
             Nodes.Description = w =>
             {
                 var textBox = ((NodeFamilyWindow)w).FamilyName;
@@ -45,7 +33,7 @@ namespace GraphAlgorithmRenderer.UIControls
             };
             Edges.WindowGenerator = () =>
                 new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow) kv.Value));
+                    kv => (NodeFamilyWindow) kv.Value)){ NameIsSet = false };
             Edges.Description = w =>
             {
                 var textBox = ((EdgeFamilyWindow) w).FamilyName;

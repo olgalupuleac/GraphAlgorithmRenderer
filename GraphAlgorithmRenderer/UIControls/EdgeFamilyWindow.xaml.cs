@@ -19,7 +19,7 @@ namespace GraphAlgorithmRenderer.UIControls
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
 
-        public bool NameIsSet { get; set; }
+        public bool NameIsSet { get; set; } = true;
 
         public EdgeFamilyWindow(Dictionary<string, NodeFamilyWindow> availableNodes)
         {

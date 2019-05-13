@@ -28,7 +28,7 @@ namespace GraphAlgorithmRenderer.UIControls
             FamilyName.TextChanged += (sender, args) => NameIsSet = true;
         }
 
-        public bool NameIsSet { get; set; }
+        public bool NameIsSet { get; set; } = true;
 
 
         protected override void OnClosing(CancelEventArgs e)

@@ -155,8 +155,8 @@ namespace GraphAlgorithmRenderer
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
-            var config = ConfigCreator.DsuConfig;
-            config = ConfigCreator.TreapConfig;
+            var config = ConfigCreator.FlowConfig;
+            Debug.WriteLine(ConfigSerializer.ToJson(config));
            
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             InitializeLog(applicationObject);
