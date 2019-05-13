@@ -23,13 +23,13 @@ namespace GraphAlgorithmRenderer.Config
 
         public void ApplyLabel(ILabeledObject graphElement, Debugger debugger, Identifier identifier)
         {
-            var expression = Substitute(LabelTextExpression, identifier, CurrentStackFrame(debugger));
-            var label = Regex.Replace(expression, @"{.*?}", delegate(Match match)
+           
+            var label = Regex.Replace(LabelTextExpression, @"{.*?}", delegate(Match match)
             {
-                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+                ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
-                v = v.Substring(1, v.Length - 2);
-                return GetExpressionForIdentifier(v, identifier, debugger).Value;
+                var expression = Substitute(v.Substring(1, v.Length - 2), identifier, CurrentStackFrame(debugger));
+                return GetExpressionForIdentifier(expression, identifier, debugger).Value;
             });
 
             if (FontSize.HasValue)
