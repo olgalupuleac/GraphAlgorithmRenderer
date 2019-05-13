@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConfigSamples\ConfigCreator.cs" />
+    <Compile Include="Samples\NetConfigs.cs" />
     <Compile Include="Config\AbstractLabelProperty.cs" />
     <Compile Include="Config\ConditionalProperty.cs" />
     <Compile Include="Config\GraphConfig.cs" />
