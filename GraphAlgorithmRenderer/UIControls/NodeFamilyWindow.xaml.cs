@@ -25,7 +25,10 @@ namespace GraphAlgorithmRenderer.UIControls
                     i.Content = ((NodeConditionalPropertyWindow)w).ConditionControl.Description;
 
             };
+            FamilyName.TextChanged += (sender, args) => NameIsSet = true;
         }
+
+        public bool NameIsSet { get; set; }
 
 
         protected override void OnClosing(CancelEventArgs e)
@@ -59,7 +62,7 @@ namespace GraphAlgorithmRenderer.UIControls
                 //TODO check for null
                 return new NodeFamily(IdentifierPartRangeControl.Ranges.ToList())
                 {
-                    Name = familyName.Text,
+                    Name = FamilyName.Text,
                     ValidationTemplate = validationTemplateBox.Text,
                     ConditionalProperties = conditionalProperties
                 };
@@ -70,7 +73,7 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             IdentifierPartRangeControl.FromRanges(nodeFamily.Ranges);
             validationTemplateBox.Text = nodeFamily.ValidationTemplate;
-            familyName.Text = nodeFamily.Name;
+            FamilyName.Text = nodeFamily.Name;
             var windows = new List<Window>();
             foreach (var conditionalProperty in nodeFamily.ConditionalProperties)
             {

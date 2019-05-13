@@ -31,21 +31,30 @@ namespace GraphAlgorithmRenderer.UIControls
             Nodes.WindowGenerator = () => new NodeFamilyWindow();
             Nodes.Description = w =>
             {
-                ((NodeFamilyWindow) w).familyName.Text = $"node#{Nodes.properties.Items.Count}";
-                return ((NodeFamilyWindow) w).familyName.Text;
+                var textBox = ((NodeFamilyWindow)w).FamilyName;
+                if (!((NodeFamilyWindow)w).NameIsSet)
+                {
+                    textBox.Text = $"node#{Nodes.properties.Items.Count}";
+                }     
+                return textBox.Text;
             };
             Nodes.UpdateDescription = (w, i) =>
             {
                 ((NodeFamilyWindow) w).ok.Click +=
-                    (o, sender) => i.Content = ((NodeFamilyWindow) w).familyName.Text;
+                    (o, sender) => i.Content = ((NodeFamilyWindow) w).FamilyName.Text;
             };
             Edges.WindowGenerator = () =>
                 new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
                     kv => (NodeFamilyWindow) kv.Value));
             Edges.Description = w =>
             {
-                ((EdgeFamilyWindow) w).FamilyName.Text = $"edge#{Edges.properties.Items.Count}";
-                return ((EdgeFamilyWindow) w).FamilyName.Text;
+                var textBox = ((EdgeFamilyWindow) w).FamilyName;
+                if (!((EdgeFamilyWindow)w).NameIsSet)
+                {
+                    textBox.Text = $"edge#{Edges.properties.Items.Count}";
+                }
+                return textBox.Text;
+                
             };
             Edges.UpdateDescription = (w, i) =>
             {

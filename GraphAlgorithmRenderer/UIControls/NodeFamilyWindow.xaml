@@ -11,7 +11,7 @@
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
             <Label Content="Name" Margin="15" />
-            <TextBox x:Name="familyName" Margin="10" TextWrapping="Wrap" />
+            <TextBox x:Name="FamilyName" Margin="10" TextWrapping="Wrap" />
             <Separator></Separator>
             <Label x:Name="label" Content="Validation template" Margin="15" />
             <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />

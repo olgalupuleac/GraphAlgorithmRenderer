@@ -18,7 +18,8 @@ namespace GraphAlgorithmRenderer.UIControls
         private readonly Dictionary<string, NodeFamilyWindow> _availableNodes;
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
-       
+
+        public bool NameIsSet { get; set; }
 
         public EdgeFamilyWindow(Dictionary<string, NodeFamilyWindow> availableNodes)
         {
@@ -53,6 +54,8 @@ namespace GraphAlgorithmRenderer.UIControls
                     _sourceWindow = new EdgeEndControl(_availableNodes[node].IdentifierPartRangeControl.Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), node);
                 SourcePanel.Children.Add(sourceRadioButton);
             }
+
+            FamilyName.TextChanged += (sender, args) => NameIsSet = true;
         }
       
 
