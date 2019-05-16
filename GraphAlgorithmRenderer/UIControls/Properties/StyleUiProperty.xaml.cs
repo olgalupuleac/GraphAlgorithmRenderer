@@ -47,7 +47,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
             CheckBox.IsChecked = true;
             //Enable(); ??
-            _styles.Where(r => r.ContentStringFormat == styleName).ToList().ForEach(r => r.IsChecked = true);
+            _styles.Where(r => (string)r.Content == styleName).ToList().ForEach(r => r.IsChecked = true);
         }
 
         private List<Style> GetStyles()
