@@ -124,8 +124,7 @@ namespace GraphAlgorithmRenderer.UIControls
                     .Select(w => w.ConditionalProperty).ToList();
                 
                 //TODO check for null
-                return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd,
-                    directed.IsChecked == true)
+                return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd)
                 {
                     Name = FamilyName.Text,
                     ValidationTemplate = validationTemplateBox.Text,
@@ -162,7 +161,6 @@ namespace GraphAlgorithmRenderer.UIControls
         public void FromEdgeFamily(EdgeFamily edgeFamily)
         {
             IdentifierPartRangeControl.FromRanges(edgeFamily.Ranges);
-            directed.IsChecked = edgeFamily.IsDirected;
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
             FamilyName.Text = edgeFamily.Name;
            
