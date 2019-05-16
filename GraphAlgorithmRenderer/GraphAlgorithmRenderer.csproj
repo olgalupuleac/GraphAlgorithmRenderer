@@ -154,9 +154,9 @@
     <Content Include="Samples\Bridges\in.txt" />
     <Content Include="Samples\Bridges\new_comp.png" />
     <Content Include="Samples\Bridges\Source.cpp" />
+    <Content Include="Samples\Dinic\in.txt" />
     <Content Include="Samples\Dinic\flow_found.png" />
     <Content Include="Samples\Dinic\dfs.png" />
-    <Content Include="Samples\Dinic\in.txt" />
     <Content Include="Samples\Dinic\Source.cpp" />
     <Content Include="Samples\DSU\join.png" />
     <Content Include="Samples\DSU\get.png" />
