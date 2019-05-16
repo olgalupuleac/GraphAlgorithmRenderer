@@ -8,30 +8,17 @@
         xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <WrapPanel Orientation="Horizontal">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+    
 
         <local:ConditionControl Margin="8" Grid.Column="0" Grid.Row="0" x:Name="ConditionControl" />
-        <properties:LabelUiProperty Margin="8" Grid.Column="1" Grid.Row="0" x:Name="LabelUiProperty" />
-        <properties:StyleUiProperty Margin="8" Grid.Column="2" Grid.Row="0" x:Name="StyleUiProperty" />
-        <Grid Margin="8" Grid.Column="3" Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <properties:LineColorUiProperty Margin="8" Grid.Column="0" Grid.Row="0" x:Name="LineColorUiProperty" />
-            <properties:LineWidthUiProperty Margin="8" Grid.Column="0" Grid.Row="1" x:Name="LineWidthUiProperty" />
-            <StackPanel Grid.Column="0" Grid.Row="2">
-                <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" MaxHeight="30"/>
-            </StackPanel>
-        </Grid>
-    </Grid>
+        <properties:LabelUiProperty Margin="8"  x:Name="LabelUiProperty" />
+        <properties:StyleUiProperty Margin="8" x:Name="StyleUiProperty" />
+        <properties:LineColorUiProperty Margin="8"  x:Name="LineColorUiProperty" />
+        <properties:LineWidthUiProperty Margin="8" x:Name="LineWidthUiProperty" />
+        <properties:ArrowUiProperty Margin="8" x:Name="ArrowUiProperty" />
+        <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Left" MinWidth="60" MaxHeight="30"/>
+        
+    </WrapPanel>
 </Window>

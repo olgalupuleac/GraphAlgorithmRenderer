@@ -102,6 +102,9 @@
     <Compile Include="UIControls\PropertiesControl.xaml.cs">
       <DependentUpon>PropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\Properties\ArrowUiProperty.xaml.cs">
+      <DependentUpon>ArrowUiProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIControls\Properties\IEdgeUiProperty.cs" />
     <Compile Include="UIControls\Properties\FillColorUiProperty.xaml.cs">
       <DependentUpon>FillColorUiProperty.xaml</DependentUpon>
@@ -327,6 +330,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\PropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\Properties\ArrowUiProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

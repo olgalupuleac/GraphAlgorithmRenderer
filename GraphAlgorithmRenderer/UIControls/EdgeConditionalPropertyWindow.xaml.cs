@@ -30,7 +30,8 @@ namespace GraphAlgorithmRenderer.UIControls
                 LabelUiProperty,
                 LineColorUiProperty,
                 LineWidthUiProperty,
-                StyleUiProperty
+                StyleUiProperty,
+                ArrowUiProperty
             };
         }
 

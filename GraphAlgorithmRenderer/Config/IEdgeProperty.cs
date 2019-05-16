@@ -79,4 +79,22 @@ namespace GraphAlgorithmRenderer.Config
             edge.Attr.AddStyle(Style);
         }
     }
+
+    public class ArrowProperty : IEdgeProperty
+    {
+        public bool ArrowAtTarget { get; set; }
+        public bool ArrowAtSource { get; set; }
+        [JsonConstructor]
+        public ArrowProperty(bool arrowAtTarget, bool arrowAtSource)
+        {
+            ArrowAtSource = arrowAtSource;
+            ArrowAtTarget = arrowAtTarget;
+        }
+
+        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        {
+            edge.Attr.ArrowheadAtTarget = ArrowAtTarget ? ArrowStyle.Normal : ArrowStyle.None;
+            edge.Attr.ArrowheadAtSource = ArrowAtSource ? ArrowStyle.Normal : ArrowStyle.None;
+        }
+    }
 }
