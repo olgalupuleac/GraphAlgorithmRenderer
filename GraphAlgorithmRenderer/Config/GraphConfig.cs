@@ -68,16 +68,12 @@ namespace GraphAlgorithmRenderer.Config
         }
 
         [JsonConstructor]
-        public EdgeFamily(List<IdentifierPartTemplate> ranges, EdgeEnd source, EdgeEnd target,
-            bool isDirected = false) :
+        public EdgeFamily(List<IdentifierPartTemplate> ranges, EdgeEnd source, EdgeEnd target) :
             base(ranges)
         {
             Source = source;
             Target = target;
-            IsDirected = isDirected;
         }
-
-        [JsonProperty] public bool IsDirected { get; }
 
         [JsonProperty] public EdgeEnd Source { get; }
         [JsonProperty] public EdgeEnd Target { get; }

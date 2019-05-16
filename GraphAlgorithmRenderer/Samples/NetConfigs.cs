@@ -45,14 +45,16 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                             new IdentifierPartTemplate("a", "0", "n"),
                             new IdentifierPartTemplate("x", "0", "n")
                         }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__a__" }),
-                        new EdgeFamily.EdgeEnd(nodes, new List<string> { "g[__a__][__x__]" }), true
+                        new EdgeFamily.EdgeEnd(nodes, new List<string> { "g[__a__][__x__]" })
                     )
                 { ValidationTemplate = "__x__ < g[__a__].size()" };
-
+                var directed = new ConditionalProperty<IEdgeProperty>(
+                    new Condition("true"), 
+                    new ArrowProperty(true, false));
                 var dfsEdges = new ConditionalProperty<IEdgeProperty>(
                     new Condition("p[g[__a__][__x__]].first == __a__ && p[g[__a__][__x__]].second == __x__"),
                     new LineColorEdgeProperty(Color.Red));
-
+                edges.ConditionalProperties.Add(directed);
                 edges.ConditionalProperties.Add(dfsEdges);
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
@@ -232,11 +234,15 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                     new LabelNodeProperty("{__v__}, rank={r[__v__]}")
                 );
                 nodes.ConditionalProperties.Add(label);
+                var directed = new ConditionalProperty<IEdgeProperty>(
+                    new Condition("true"),
+                    new ArrowProperty(true, false));
                 var edges = new EdgeFamily(new List<IdentifierPartTemplate>
                     {
                         new IdentifierPartTemplate("i", "0", "n")
                     }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__i__" }),
-                    new EdgeFamily.EdgeEnd(nodes, new List<string> { "p[__i__]" }), true);
+                    new EdgeFamily.EdgeEnd(nodes, new List<string> { "p[__i__]" }));
+                edges.ConditionalProperties.Add(directed);
 
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
@@ -340,15 +346,19 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 rightNull.ConditionalProperties.Add(rightNullLabel);
                 leftNull.ConditionalProperties.Add(curTNullNode);
                 rightNull.ConditionalProperties.Add(curTNullNode);
+                var directed = new ConditionalProperty<IEdgeProperty>(
+                    new Condition("true"),
+                    new ArrowProperty(true, false));
                 var rightEdges = new EdgeFamily(
                         new List<IdentifierPartTemplate>
                         {
                             new IdentifierPartTemplate("a", "0", "nodes.size()"),
                             new IdentifierPartTemplate("b", "0", "nodes.size()")
                         }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__a__" }),
-                        new EdgeFamily.EdgeEnd(nodes, new List<string> { "__b__" }), true
+                        new EdgeFamily.EdgeEnd(nodes, new List<string> { "__b__" })
                     )
                 { ValidationTemplate = "nodes[__a__]->right == nodes[__b__]", Name = "rightEdge" };
+                rightEdges.ConditionalProperties.Add(directed);
                 var rightLabel = new ConditionalProperty<IEdgeProperty>(new Condition("true"), new LabelEdgeProperty("right")
                     );
                 var leftEdges = new EdgeFamily(
@@ -357,9 +367,10 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                         new IdentifierPartTemplate("a", "0", "nodes.size()"),
                         new IdentifierPartTemplate("b", "0", "nodes.size()")
                     }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__a__" }),
-                    new EdgeFamily.EdgeEnd(nodes, new List<string> { "__b__" }), true
+                    new EdgeFamily.EdgeEnd(nodes, new List<string> { "__b__" })
                     )
                 { ValidationTemplate = "nodes[__a__]->left == nodes[__b__]", Name = "leftEdge" };
+                leftEdges.ConditionalProperties.Add(directed);
                 var leftLabel = new ConditionalProperty<IEdgeProperty>(new Condition("true"), new LabelEdgeProperty("left")
                 );
                 leftEdges.ConditionalProperties.Add(leftLabel);
@@ -368,20 +379,22 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 var nullRightEdges = new EdgeFamily(new List<IdentifierPartTemplate>
                     {
                         new IdentifierPartTemplate("i", "0", "nodes.size()")
-                    }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__i__" }), new EdgeFamily.EdgeEnd(rightNull, new List<string> { "0" }), true
+                    }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__i__" }), new EdgeFamily.EdgeEnd(rightNull, new List<string> { "0" })
 
                     )
                 { ValidationTemplate = "!nodes[__i__]->right", Name = "rightNullEdge" };
+                nullRightEdges.ConditionalProperties.Add(directed);
                 nullRightEdges.ConditionalProperties.Add(rightLabel);
 
                 var nullLeftEdges = new EdgeFamily(new List<IdentifierPartTemplate>
                         {
                             new IdentifierPartTemplate("i", "0", "nodes.size()")
                         }, new EdgeFamily.EdgeEnd(nodes, new List<string> { "__i__" }),
-                        new EdgeFamily.EdgeEnd(leftNull, new List<string> { "0" }), true
+                        new EdgeFamily.EdgeEnd(leftNull, new List<string> { "0" })
 
                     )
                 { ValidationTemplate = "!nodes[__i__]->left", Name = "leftNullEdge" };
+                nullLeftEdges.ConditionalProperties.Add(directed);
                 nullLeftEdges.ConditionalProperties.Add(leftLabel);
                 nodes.ConditionalProperties.Reverse();
                 rightNull.ConditionalProperties.Reverse();

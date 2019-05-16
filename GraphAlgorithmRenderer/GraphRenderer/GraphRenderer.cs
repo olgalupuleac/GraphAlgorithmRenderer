@@ -95,10 +95,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
             var edge = _graph.AddEdge(source.Id(), target.Id());
             _edges[identifier] = edge;
-            if (!edgeFamily.IsDirected)
-            {
-                edge.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            }
+            edge.Attr.ArrowheadAtTarget = ArrowStyle.None;
         }
 
         private void AddNode(NodeFamily nodeFamily, Identifier identifier)

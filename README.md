@@ -137,7 +137,7 @@ $$
 $$
 So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
-![1557745237084](readme-images/1557745237084.png)
+![1558037267617](readme-images/1558037267617.png)
 
 The main difference between node family and edge family is that the edge family should contain a definition of its target and source nodes. As we can have several node families, we need to choose which families target and source belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
 
@@ -153,7 +153,7 @@ And the source is the first identifier index.
 
 Finally, to avoid duplication of edges, we will specify the validation expression.
 
-![1557745337999](readme-images/1557745337999.png)
+![1558037359964](readme-images/1558037359964.png)
 
 
 
@@ -185,9 +185,9 @@ Now let's add other node properties.
 
 Edge properties...
 
-![1557688233255](readme-images/1557688233255.png)
+![1558037517412](readme-images/1558037517412.png)
 
-![1557690830418](readme-images/1557690830418.png)
+![1558037618605](readme-images/1558037618605.png)
 
 ![1557688517682](readme-images/1557688517682.png)
 
@@ -203,7 +203,7 @@ Edge properties...
 
 ![1557690110368](readme-images/1557690110368.png)
 
-Finally, after we can export generated config in JSON, save it somewhere, and load it next time to avoid creating this config from the beginning. 
+Finally, we can export the generated config in JSON, save it somewhere, and load it next time to avoid creating this config from the beginning. 
 
 ![1557691270424](readme-images/1557691270424.png)
 
@@ -217,7 +217,6 @@ This the config for this problem.
     "$values": [
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": false,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "node#0",
