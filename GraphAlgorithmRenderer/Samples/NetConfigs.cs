@@ -313,7 +313,7 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 nodes.ConditionalProperties.Add(curRightNode);
                 nodes.ConditionalProperties.Add(curLeftNodeLine);
                 var leftNull = new NodeFamily(
-                        new List<IdentifierPartTemplate> { new IdentifierPartTemplate("v", "0", "0") }
+                        new List<IdentifierPartTemplate> { new IdentifierPartTemplate("v", "0", "1") }
                     )
                 { Name = "leftNull" };
                 var nullLeftNodeLine = new ConditionalProperty<INodeProperty>(
@@ -330,7 +330,7 @@ namespace GraphAlgorithmRenderer.ConfigSamples
                 var leftNullLabel = new ConditionalProperty<INodeProperty>(
                     new Condition("true"), new LabelNodeProperty("left null"));
                 var rightNull = new NodeFamily(new List<IdentifierPartTemplate>
-                    {new IdentifierPartTemplate("v", "0", "0")})
+                    {new IdentifierPartTemplate("v", "0", "1")})
                 { Name = "rightNull" };
 
                 var nullRightNode = new ConditionalProperty<INodeProperty>(

@@ -5,7 +5,6 @@
     "$values": [
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": true,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "nodes",
@@ -61,6 +60,11 @@
                     "ColorToHighLight": null,
                     "LabelTextExpression": "right",
                     "FontSize": 6.0
+                  },
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
+                    "ArrowAtTarget": true,
+                    "ArrowAtSource": false
                   }
                 ]
               }
@@ -70,7 +74,6 @@
       },
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": true,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "nodes",
@@ -120,6 +123,11 @@
                     "ColorToHighLight": null,
                     "LabelTextExpression": "right",
                     "FontSize": 6.0
+                  },
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
+                    "ArrowAtTarget": true,
+                    "ArrowAtSource": false
                   }
                 ]
               }
@@ -129,7 +137,6 @@
       },
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": true,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "nodes",
@@ -185,6 +192,11 @@
                     "ColorToHighLight": null,
                     "LabelTextExpression": "left",
                     "FontSize": 6.0
+                  },
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
+                    "ArrowAtTarget": true,
+                    "ArrowAtSource": false
                   }
                 ]
               }
@@ -194,7 +206,6 @@
       },
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": true,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "nodes",
@@ -244,6 +255,11 @@
                     "ColorToHighLight": null,
                     "LabelTextExpression": "left",
                     "FontSize": 6.0
+                  },
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
+                    "ArrowAtTarget": true,
+                    "ArrowAtSource": false
                   }
                 ]
               }
@@ -270,7 +286,7 @@
             }
           ]
         },
-        "ValidationTemplate": null,
+        "ValidationTemplate": "",
         "ConditionalProperties": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
           "$values": [
@@ -286,10 +302,6 @@
                 "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
                 "$values": [
                   {
-                    "$type": "GraphAlgorithmRenderer.Config.LineWidthNodeProperty, GraphAlgorithmRenderer",
-                    "LineWidth": 6.0
-                  },
-                  {
                     "$type": "GraphAlgorithmRenderer.Config.LineColorNodeProperty, GraphAlgorithmRenderer",
                     "Color": {
                       "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
@@ -298,6 +310,10 @@
                       "G": 128,
                       "B": 0
                     }
+                  },
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.LineWidthNodeProperty, GraphAlgorithmRenderer",
+                    "LineWidth": 6.0
                   }
                 ]
               }
@@ -416,7 +432,7 @@
             }
           ]
         },
-        "ValidationTemplate": null,
+        "ValidationTemplate": "",
         "ConditionalProperties": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
           "$values": [
@@ -524,7 +540,7 @@
             }
           ]
         },
-        "ValidationTemplate": null,
+        "ValidationTemplate": "",
         "ConditionalProperties": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
           "$values": [

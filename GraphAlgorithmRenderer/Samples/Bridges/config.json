@@ -5,7 +5,6 @@
     "$values": [
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": false,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "",

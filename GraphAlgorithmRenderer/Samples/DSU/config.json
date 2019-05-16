@@ -5,7 +5,6 @@
     "$values": [
       {
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "IsDirected": true,
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
           "NodeFamilyName": "",
@@ -37,7 +36,27 @@
         "ValidationTemplate": "",
         "ConditionalProperties": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
-          "$values": []
+          "$values": [
+            {
+              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
+              "Condition": {
+                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
+                "Template": "true",
+                "Mode": 0,
+                "FunctionNameRegex": ".*"
+              },
+              "Properties": {
+                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
+                "$values": [
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
+                    "ArrowAtTarget": true,
+                    "ArrowAtSource": false
+                  }
+                ]
+              }
+            }
+          ]
         }
       }
     ]
