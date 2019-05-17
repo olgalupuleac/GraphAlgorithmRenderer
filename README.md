@@ -127,7 +127,7 @@ The window with node family settings opens automatically. The default family nam
 
 Now, let's describe the node family. First, every graph element (node or edge) should be identified by family name and a named tuple of integers. Each element in the tuple (let's call it index) has a range described by begin template and end template. To refer to a certain index in any expression, use \_\_*index_name*\_\_ (e.g. `__v__`).  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous indices (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
 
-So, in our example, `n` equals 9 and the nodes will be `0, 1, ..., 8`.
+So, in our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`.  `n` equals 9 and the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
 
 ![1557745163853](readme-images/1557745163853.png)
 
