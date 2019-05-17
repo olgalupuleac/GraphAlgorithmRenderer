@@ -6,7 +6,7 @@ This Visual Studio extension was developed as an additional debugging tool for g
 
 ### Prerequisites
 
-You will need Visual Studio 2017 (Visual Studio Community 2017 15.9.5 is recommended) and Visual C++ installed (the extension should work on .NET projects as well, but it was designed for and tested on C++ projects).
+You will need Visual Studio 2017 (the tool was tested on Visual Studio Community 2017 15.9.5) and Visual C++ installed (the extension should work on .NET projects as well, but it was designed for and tested on C++ projects).
 
 ### Installation
 
@@ -407,4 +407,3 @@ This the config for this problem.
   }
 }
 ```
-
