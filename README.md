@@ -12,7 +12,7 @@ You will need Visual Studio 2017 (Visual Studio Community 2017 15.9.5 is recomme
 
 To install the extension download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window press *View > Other windows > Graph visualization.*
 
-### Basic sample
+## Basic sample
 
 Let's consider a simple problem <https://www.hackerearth.com/ru/practice/algorithms/graphs/depth-first-search/practice-problems/algorithm/monk-and-graph-problem/>
 
@@ -151,7 +151,7 @@ And the source is the first identifier index.
 
 ![1557680243829](readme-images/1557680243829.png)
 
-Finally, to avoid duplication of edges, we will specify the validation expression.
+Finally, to avoid duplication of edges, we will specify the validation expression. Any expression in our setting is a valid C++ expression with placeholders for indices, such as `__a__` and `__x__`. However, the C++ Standard Library functions such as `std::find` are not allowed. You can implement your own function which calls `std::find`, but it will significantly increase execution time. Methods of `std` classes are also not allowed (that means storing graph as an array of unordered_sets would not work).
 
 ![1558037359964](readme-images/1558037359964.png)
 
@@ -165,7 +165,7 @@ As we can see, the graph is rendered correctly, but the node labels may seem con
 
 ![1557687812407](readme-images/1557687812407.png)
 
-To add a conditional property, press *Add* under the list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to fulfill the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*). If mode is set to *Current stackframe* the condition is checked only in the current stack frame. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack. Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function name, function arguments, and indices and evaluate the expression in **the current stack frame**.  
+To add a conditional property, press *Add* under the list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to fulfill the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*). If mode is set to *Current stackframe* the condition is checked only in the current stack frame. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack (note this option works rather slowly). Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function name, function arguments, and indices and evaluate the expression in **the current stack frame**.  
 
 To specify a label, we will use the same syntax as we used for all expressions, but these expressions will be surrounded by the additional placeholders `{}`. 
 
@@ -407,3 +407,4 @@ This the config for this problem.
   }
 }
 ```
+
