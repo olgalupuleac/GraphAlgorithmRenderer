@@ -1,4 +1,4 @@
-# Graph algorithm visualization to debug competitive programming tasks.
+# Graph algorithm visualization for debugging competitive programming tasks
 
 This Visual Studio extension was developed as an additional debugging tool for graph algorithms in competitive programming problems. It takes a description of a graph config from the user and renders a graph. The graph is redrawn every time when the debugger's context is changed. 
 
@@ -10,7 +10,7 @@ You will need Visual Studio 2017 (the tool was tested on Visual Studio Community
 
 ### Installation
 
-To install the extension download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window press *View > Other windows > Graph visualization.*
+To install the extension download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window select *View > Other windows > Graph visualization.*
 
 ## Basic sample
 
@@ -117,7 +117,7 @@ Now, let's visualize this code. Assume we have the following input:
 5 6
 ~~~~
 
-First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will need only one node family and only one edge family. To add a new node family press *Add* under the list with nodes.
+First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.
 
  ![1557679512147](readme-images/1557679512147.png)
 
@@ -125,16 +125,13 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557745092625](readme-images/1557745092625.png)
 
-Now, let's describe the node family. First, every graph element should be identified as a subset of the Cartesian product of several sets of integers (let's call it identifier).  Each set in the product (let's call it index) is described by name, begin template and end template. To refer to a certain index in any expression, use \_\_*Name*\_\_.  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous identifier parts (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments, see reference) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
+Now, let's describe the node family. First, every graph element (node or edge) should be identified by family name and a named tuple of integers. Each element in the tuple (let's call it index) has a range described by begin template and end template. To refer to a certain index in any expression, use \_\_*index_name*\_\_ (e.g. `__v__`).  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous indices (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
 
 So, in our example, `n` equals 9 and the nodes will be `0, 1, ..., 8`.
 
 ![1557745163853](readme-images/1557745163853.png)
 
-Now let's take a look at the edge family config. It's almost similar to the node config. First, we will set part identifiers. There is an edge between `a` and `b` if 
-$$
-\exist \,  x: g[a][x].to == b
-$$
+Now let's take a look at the edge family config. It's almost identical to the node config. First, we will set part identifiers. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
 So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
 ![1558037267617](readme-images/1558037267617.png)
