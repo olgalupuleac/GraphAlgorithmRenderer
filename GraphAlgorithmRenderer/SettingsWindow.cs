@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
-using GraphAlgorithmRenderer.ConfigSamples;
+using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.GraphRenderer;
 using GraphAlgorithmRenderer.Serializer;
 using Microsoft.Msagl.Drawing;

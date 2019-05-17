@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Forms;
-using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.Serializer;
 using Microsoft.Msagl.Drawing;
-using GraphConfig = GraphAlgorithmRenderer.Config.GraphConfig;
 
-namespace GraphAlgorithmRenderer.ConfigSamples
+namespace GraphAlgorithmRenderer.Config
 {
     public class ConfigCreator
     {
