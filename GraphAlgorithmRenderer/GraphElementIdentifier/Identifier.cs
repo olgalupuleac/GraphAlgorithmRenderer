@@ -78,7 +78,7 @@ namespace GraphAlgorithmRenderer.GraphElementIdentifier
 
         public string Id()
         {
-            return Name + "@" + String.Join("#", IdentifierParts.Select(i => i.Name + " " + i.Value.ToString()));
+            return Name + " " + String.Join(", ", IdentifierParts.Select(i => i.Name + " " + i.Value.ToString()));
         }
 
         public Identifier AddIdentifierPart(IdentifierPart part)

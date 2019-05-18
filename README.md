@@ -127,16 +127,16 @@ The window with node family settings opens automatically. The default family nam
 
 Now, let's describe the node family. First, every graph element (node or edge) should be identified by family name and a named tuple of integers. Each element in the tuple (let's call it index) has a range described by begin template and end template. To refer to a certain index in any expression, use \_\_*index_name*\_\_ (e.g. `__v__`).  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous indices (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
 
-So, in our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`.  `n` equals 9 and the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
+So, in our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 9, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
 
 ![1557745163853](readme-images/1557745163853.png)
 
-Now let's take a look at the edge family config. It's almost identical to the node config. First, we will set part identifiers. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
+Now let's take a look at the edge family config. It's almost identical to the node config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
 So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
 ![1558037267617](readme-images/1558037267617.png)
 
-The main difference between node family and edge family is that the edge family should contain a definition of its target and source nodes. As we can have several node families, we need to choose which families target and source belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the corresponding node.
+The difference between node family and edge family is that the edge family should contain a definition of its target and source nodes. As we can have several node families, we need to choose which families target and source belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the indices of the corresponding node.
 
 ![1557745271239](readme-images/1557745271239.png)
 
@@ -160,7 +160,7 @@ Now, let's generate our config and see how it looks like.
 
 As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add some *Conditional properties* to our config.
 
-![1557687812407](readme-images/1557687812407.png)
+![1558184525010](readme-images/1558184525010.png)
 
 To add a conditional property, press *Add* under the list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to fulfill the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*). If mode is set to *Current stackframe* the condition is checked only in the current stack frame. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack (note this option works rather slowly). Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function name, function arguments, and indices and evaluate the expression in **the current stack frame**.  
 
@@ -404,3 +404,4 @@ This the config for this problem.
   }
 }
 ```
+
