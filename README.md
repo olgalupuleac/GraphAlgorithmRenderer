@@ -35,7 +35,7 @@ To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgo
 
 ## Glossary
 
-![](readme-images/GraphAlgorithmRenderer_ families.jpg)
+![](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/readme-images/GraphAlgorithmRenderer_%20families.jpg)
 
 Here is the list of the project's concepts:
 
