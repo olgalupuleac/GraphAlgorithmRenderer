@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d"
-             Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
+             Height="Auto" Width="Auto" SizeToContent="WidthAndHeight"
+             MinWidth="200" MinHeight="60">
     <StackPanel Orientation="Vertical">
         <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=EdgeEndIdParts}" >
             <DataGrid.Resources>

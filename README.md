@@ -195,11 +195,11 @@ After choosing the family (we have only one option here), we need to set the tar
 
 So, we can get the target using this expression.
 
-![1558285360417](readme-images/1558285360417.png)
+![1558286616846](readme-images/1558286616846.png)
 
 And the source is the first identifier index.
 
-![1558285309805](readme-images/1558285309805.png)
+![1558286650083](readme-images/1558286650083.png)
 
 Finally, to avoid duplication of edges, we will specify the validation expression.
 
@@ -234,6 +234,8 @@ Now let's add other node properties.
 ![1558284298986](readme-images/1558284298986.png)
 
 ![1558284365990](readme-images/1558284365990.png)
+
+![1558286706767](readme-images/1558286706767.png)
 
 Edge properties...
 
