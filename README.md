@@ -12,7 +12,7 @@ You will need Visual Studio 2017 (the tool was tested on Visual Studio Community
 
 ### Installation
 
-To install the extension download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window select *View > Other windows > Graph visualization.*
+To install the extension, download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window select *View > Other windows > Graph visualization.*
 
 ### Rendering DFS
 
