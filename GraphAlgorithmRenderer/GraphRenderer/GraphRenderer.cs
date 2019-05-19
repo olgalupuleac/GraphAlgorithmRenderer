@@ -65,31 +65,19 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         private void AddEdge(EdgeFamily edgeFamily,
             Identifier identifier)
         {
-            var source = NodeIdentifier(edgeFamily.Source, identifier);
-            var target = NodeIdentifier(edgeFamily.Target, identifier);
-            if (source == null)
-            {
-                AddToLog("Cannot identify source node");
-
-                return;
-            }
-
-            if (target == null)
-            {
-                AddToLog("Cannot identify target node");
-                return;
-            }
+            var source = NodeIdentifier(edgeFamily.Source, identifier, $"Cannot identify source node for edge family {edgeFamily.Name}");
+            var target = NodeIdentifier(edgeFamily.Target, identifier, $"Cannot identify target node for edge family {edgeFamily.Name}");
+           
             var sourceNode = _graph.FindNode(source.Id());
             var targetNode = _graph.FindNode(target.Id());
             if (targetNode == null)
             {
-                AddToLog($"Target node {target.Id()} does not exist");
-                return;
+                throw new GraphRenderException($"Target node {source.Id()} does not exist");
             }
 
             if (sourceNode == null)
             {
-                AddToLog($"Source node {source.Id()} does not exist");
+                throw new GraphRenderException($"Source node {source.Id()} does not exist");
             }
 
             var edge = _graph.AddEdge(source.Id(), target.Id());
@@ -219,37 +207,6 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             }
         }
 
-
-        private List<Identifier> GetIdentifiers<T>(GraphElementFamily<T> family)
-        {
-            var ranges = new List<IdentifierPartRange>();
-            foreach (var partTemplate in family.Ranges)
-            {
-                var beginExpr = GetExpression(partTemplate.BeginTemplate, _debugger);
-                var endExpr = GetExpression(partTemplate.EndTemplate, _debugger);
-                if (!endExpr.IsValid || !beginExpr.IsValid)
-                {
-                    continue;
-                }
-
-                var beginString = beginExpr.Value;
-                var endString = endExpr.Value;
-                var beginParseResult = Int32.TryParse(beginString, out var begin);
-                var endParseResult = Int32.TryParse(endString, out var end);
-                if (beginParseResult && endParseResult)
-                {
-                    ranges.Add(new IdentifierPartRange(partTemplate.Name, begin, end));
-                }
-                else
-                {
-                    AddToLog(
-                        $"Cannot parse {partTemplate.Name} ranges: {partTemplate.BeginTemplate} = {beginString}, {partTemplate.EndTemplate} = {endString}");
-                }
-            }
-
-            return Identifier.GetAllIdentifiersInRange(family.Name, ranges);
-        }
-
         private List<Identifier> GetIdentifiersForCondition(List<Identifier> identifiers, string conditionTemplate)
         {
             return String.IsNullOrEmpty(conditionTemplate)
@@ -259,20 +216,13 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         }
 
 
-        private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier)
+        private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier, string message)
         {
             var templates = edgeEnd.NamesWithTemplates;
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                var debuggerResExpr = GetExpressionForIdentifier(template.Value, identifier, _debugger);
-
-                if (!debuggerResExpr.IsValid)
-                {
-                    return null;
-                }
-
-                var value = Int32.Parse(debuggerResExpr.Value);
+                var value = Identifier.GetNumber(template.Value, identifier, _debugger, message);
                 res.Add(new IdentifierPart(template.Key, value));
             }
 

@@ -157,7 +157,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             return res;
         }
 
-        private static int GetNumber(string template, Identifier id, Debugger debugger, string message)
+        public static int GetNumber(string template, Identifier id, Debugger debugger, string message)
         {
             var expressionResult = DebuggerOperations.GetExpressionForIdentifier(template, id, debugger);
             if (!expressionResult.IsValid || !Int32.TryParse(expressionResult.Value, out var res))

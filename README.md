@@ -188,7 +188,7 @@ Now, let's visualize this code. Assume we have the following input:
 ~~~~
 
 1. Now we will create a config. We will have one node family with the index `v`  with values from `0` to `n`. After that, we will create an edge family with two indices corresponding to `g[][]`: 
-   `a` from `0` to `n` and `x` from `0` to `g[a].size()`.  Then, we will define the edge source as `a` and edge target as `g[a][x]`.
+   `a` from `0` to `n` and `x` from `0` to `g[a].size()`.  Then, we will define the edge source as `a` and edge target as `g[a][x].to`.
 2. First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.
 
  ![1557679512147](readme-images/1557679512147.png)
@@ -201,7 +201,7 @@ Now, let's visualize this code. Assume we have the following input:
 
 ![1558285655171](readme-images/1558285655171.png)
 
-4. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
+4. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x].to == b`.
    So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
 ![1558285556838](readme-images/1558285556838.png)
@@ -212,7 +212,7 @@ Now, let's visualize this code. Assume we have the following input:
 
 6. So, we can get the target using this expression.
 
-![1558286616846](readme-images/1558286616846.png)
+![1558294076802](readme-images/1558294076802.png)
 
 And the source is the first identifier index.
 
@@ -224,7 +224,7 @@ And the source is the first identifier index.
 
 
 
-8. Now, let's generate our config and see how it looks like.
+8. Now, let's generate our config and see how it looks like. Click *Generate config*.
 
 ![1557680335440](readme-images/1557680335440.png)
 
@@ -236,11 +236,9 @@ As we can see, the graph is rendered correctly, but the node labels may seem con
 
 ![1558284026226](readme-images/1558284026226.png)
 
-The short description of the condition appears in the list.
+The short description of the condition appears in the list. 
 
-![1558285130507](readme-images/1558285130507.png)
-
-After adding a label to nodes, our picture improved. 
+![1558285130507](readme-images/1558285130507.png)After adding a label to nodes, our picture improved. 
 
 ![1557687893842](readme-images/1557687893842.png)
 
@@ -270,9 +268,15 @@ After adding a label to nodes, our picture improved.
 
 ![1558284759186](readme-images/1558284759186.png)
 
-12. Finally, we can export the generated config in JSON, save it somewhere, and load it next time to avoid creating this config from the beginning. 
+12. Finally, we can serialize the generated config in JSON, save it somewhere, and deserialize it next time to avoid creating this config from the beginning. 
 
 ![1558284854490](readme-images/1558284854490.png)
 
 [Here](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/config.json>)  is the generated config for this problem.
 
+## Tips & tricks
+
+1. Serialize the config and save it somewhere. Config is discarded after exiting the Visual Studio.
+2. Do not forget to click *Generate config* after changing the config settings.
+3. Remember that mode *AllStackframes* significantly increase the execution time. It seems more efficient to have a bool array which indicates if the property should be applied.
+4. Keep in mind that it takes a second to process 100-200 expressions.
