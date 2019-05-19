@@ -132,6 +132,7 @@
     <None Include="Key.snk" />
     <None Include="packages.config" />
     <None Include="Samples\Bridges\config.json" />
+    <None Include="Samples\Components\config.json" />
     <None Include="Samples\Dinic\config.json" />
     <None Include="Samples\DSU\config.json" />
     <None Include="Samples\Treap\config.json" />
@@ -154,6 +155,9 @@
     <Content Include="Samples\Bridges\in.txt" />
     <Content Include="Samples\Bridges\new_comp.png" />
     <Content Include="Samples\Bridges\Source.cpp" />
+    <Content Include="Samples\Components\dfs.png" />
+    <Content Include="Samples\Components\in.txt" />
+    <Content Include="Samples\Components\Source.cpp" />
     <Content Include="Samples\Dinic\in.txt" />
     <Content Include="Samples\Dinic\flow_found.png" />
     <Content Include="Samples\Dinic\dfs.png" />

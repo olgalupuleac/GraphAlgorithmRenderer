@@ -16,7 +16,9 @@ To install the extension, download the VSIX file from the latest release here <h
 
 ### Rendering DFS
 
+### Other samples
 
+To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgorithmRenderer/tree/master/GraphAlgorithmRenderer/Samples>. Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
 
 ## Basic sample
 
@@ -210,5 +212,5 @@ Finally, we can export the generated config in JSON, save it somewhere, and load
 
 ![1557691270424](readme-images/1557691270424.png)
 
-[Here](CONFIG_SAMPLE.md)  is the config for this problem.
+[Here](CONFIG_SAMPLE.md)  is the generated config for this problem.
 
