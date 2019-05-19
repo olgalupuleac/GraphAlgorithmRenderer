@@ -20,7 +20,52 @@ To install the extension, download the VSIX file from the latest release here <h
 
 To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgorithmRenderer/tree/master/GraphAlgorithmRenderer/Samples>. Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
 
-## Basic sample
+## Tutorial
+
+### Overview
+
+Here is the list of the project's concepts:
+#### Graph config 
+
+Defines how to transform your C++ code into a graph. Contains lists of *node families* and *edge families*.
+#### Node family
+
+A set of nodes with the same properties. Usually, we have only one node family and edge family in our config. But we will need two node families if in the problem with the bipartite graph the first and the second sets of nodes are stored separately. Each family has a name. Contains *identifier*, *validation template* and *conditional properties*.
+#### Identifier
+
+Each node and edge in the graph belong to a *node/edge family*. Each element in the family can be identified by a named tuple of integers or *identifier*. Each index in the tuple has a range of possible values described by *begin template* and *end template*.  Begin template and end template are *expressions* and might contain previous indices. To refer to a certain index in any expression, use `__index_name__` (e.g. `__v__`). For node family, we usually need an identifier with one index. For edge family, we often need to indices, for example, if the graph is stored as an adjacency list `vector<int> g[N]`, the first index defines the vertex `v` and the second defines an index in `g[v]`.
+#### Expression
+
+A valid C++ expression with special placeholders for identifier indices (`__index_name__`). There can be also a placeholder for a name of the current function (`__CURRENT_FUNCTION__`) and placeholders for the function arguments (`__ARG1__`, `__ARG2__` and so on). After substitution, the expression will be evaluated using the debugger. Note that functions and class methods are not supported from Standard Template Library. If the expression is not valid, the error is written to log and the result is ignored, except for *begin template* and *end template*.
+Example: `p[g[__v__][__i__]] == __v__ || __ARG1__ == 0`
+
+#### Validation template
+
+*Expression* which can be cast to bool. Filters the identifiers, if we don't need all of them. For example, if there is one index named `v` and we want to keep only even values, the validation expression would be `__v__ % 2 == 0`.
+
+#### Edge family 
+
+A set of edges. Almost identical to *node family*. The difference is that the edge should contain a definition of target and source nodes. As we can have several node families, we need to choose which families target and source nodes belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the identifier of the corresponding node, so we specify the *expression* for every index in the node *identifier*. The expression may contain indices of the edge family.
+#### Condition
+
+Contains *condition expression* (an *expression* which can be cast to bool), *function regex* (a regular expression which should much a function name in a stack frame), and a mode.
+* *CurrentStackfame* means that the condition is fulfilled if the *condition expression* is true and function regex matches current function name.
+* *AllStackframes* means that the condition is fulfilled if there is a stack frame in the call stack there *condition expression* is true and function regex matches current function name. (Note that this option works rather slowly).
+* *AllStackframes (args only)* means that the condition is fulfilled if there is a stack frame in the call stack there function regex matches current function name and the *condition expression*, after substitution of function arguments in **that** stack frame is true in the **current** stack frame. For example, we can use this mode if we want to highlight all DFS nodes in the call stack. This option works faster than the previous ones, as it doesn't require changing the stack frame to evaluate the expression.
+#### Properties
+
+* *Label property* defines the edge or node label. A label is a text with additional placeholders `{}` for *expressions*. For example, `cap={edges[__e__].cap}, flow={edges[__e__].flow}`. We can also set the font size.
+* *Style property* defines a line style, e. g. dashed. For nodes, it is applied to its border.
+* *Line width property* defines a line width. For nodes, it is applied to its border.
+* *Line color property* defines a line color. For nodes, it is applied to its border.
+* *Fill color property* (nodes only) defines the node fill color.
+* *Shape property* (nodes only) defines a shape of the node.
+* *Orientation property* (edges only) defines if an arrow at target node and an arrow at source node should be rendered.
+#### Conditional properties
+
+List of *conditions* with *properties*. Each condition may have multiple properties, but all of them should not suppress each over. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
+
+### Step-by-step DFS
 
 Let's consider a simple problem <https://www.hackerearth.com/ru/practice/algorithms/graphs/depth-first-search/practice-problems/algorithm/monk-and-graph-problem/>
 
@@ -133,18 +178,16 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557745092625](readme-images/1557745092625.png)
 
-Now, let's describe the node family. First, every graph element (node or edge) should be identified by family name and a named tuple of integers. Each element in the tuple (let's call it index) has a range described by begin template and end template. To refer to a certain index in any expression, use \_\_*index_name*\_\_ (e.g. `__v__`).  Begin template and end templates must be expressions, which could be evaluated to integers using the debugger. Begin template and end template may contain a reference to previous indices (see edge family config). The index takes on all values in range `[begin; end)`. Validation template is used to filter identifiers. After substitution of indices (and function name and arguments) it should become an expression, which could be cast to bool. If the validation template is empty, all identifiers are valid.
-
-So, in our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 9, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
+In our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 9, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
 
 ![1557745163853](readme-images/1557745163853.png)
 
-Now let's take a look at the edge family config. It's almost identical to the node config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
+Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
 So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
 ![1558037267617](readme-images/1558037267617.png)
 
-The difference between node family and edge family is that the edge family should contain a definition of its target and source nodes. As we can have several node families, we need to choose which families target and source belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the indices of the corresponding node.
+After choosing the family (we have only one option here), we need to set the target and source indices.
 
 ![1557745271239](readme-images/1557745271239.png)
 
@@ -156,7 +199,7 @@ And the source is the first identifier index.
 
 ![1557680243829](readme-images/1557680243829.png)
 
-Finally, to avoid duplication of edges, we will specify the validation expression. Any expression in our setting is a valid C++ expression with placeholders for indices, such as `__a__` and `__x__`. However, the C++ Standard Library functions such as `std::find` are not allowed. You can implement your own function which calls `std::find`, but it will significantly increase execution time. Methods of `std` classes are also not allowed (that means storing graph as an array of unordered_sets would not work).
+Finally, to avoid duplication of edges, we will specify the validation expression.
 
 ![1558037359964](readme-images/1558037359964.png)
 
@@ -166,15 +209,15 @@ Now, let's generate our config and see how it looks like.
 
 ![1557680335440](readme-images/1557680335440.png)
 
-As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add some *Conditional properties* to our config.
+As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add conditional properties to our config.
 
 ![1558184525010](readme-images/1558184525010.png)
 
-To add a conditional property, press *Add* under the list with conditional properties. Each conditional property has *Condition* (an expression with placeholders for indices, function name and function arguments), *Function regex* (to fulfill the condition, a function name should match this regular expression) and *Mode* (*Current stackframe*, *All stackframes*, *All stackframes (args only)*). If mode is set to *Current stackframe* the condition is checked only in the current stack frame. If set to *All stackframes*, the condition is fulfilled if it's fulfilled on one of the stack frames in the call stack (note this option works rather slowly). Finally, if mode set to *All stackframes (args only)*, we iterate other stack frames, check if function name in the stack frame matches the regex, substitute function name, function arguments, and indices and evaluate the expression in **the current stack frame**.  
+To add a conditional property, click *Add* under the list with conditional properties. 
 
-To specify a label, we will use the same syntax as we used for all expressions, but these expressions will be surrounded by the additional placeholders `{}`. 
+![1557682526216](readme-images/1557682526216.png)
 
-![1557682526216](readme-images/1557682526216.png)Each conditional property may have multiple properties inside, but they must have a different kind (except styles). However,  different conditional properties may have properties with the same kind and there can be a graph element which fulfills both conditions. In this case, the first property will be applied.
+The short description of the condition appears in the list.
 
 ![1557682600580](readme-images/1557682600580.png)
 
