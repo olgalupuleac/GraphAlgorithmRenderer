@@ -16,7 +16,7 @@
             <properties:LineWidthUiProperty Margin="8" x:Name="LineWidthUiProperty"></properties:LineWidthUiProperty>
             <properties:StyleUiProperty Margin="8" x:Name="StyleUiProperty"></properties:StyleUiProperty>
             <properties:ShapeUiProperty Margin="8" x:Name="ShapeUiProperty"></properties:ShapeUiProperty>
-        <Button x:Name="ok" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" Click="Ok_Click" Margin="10">Ok</Button>
+        <Button x:Name="ok" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="60" Click="Ok_Click" Margin="10" IsDefault="True">Ok</Button>
     </WrapPanel>
    
 </Window>

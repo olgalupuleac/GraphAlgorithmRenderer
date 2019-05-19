@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="GraphAlgorithmRenderer.a0ab8cac-8133-4931-9f5a-43a331af263b" Version="1.0" Language="en-US" Publisher="Olga Lupuleac" />
         <DisplayName>GraphAlgorithmRenderer</DisplayName>
-        <Description xml:space="preserve">Graph algorithm visualizationGra</Description>
+        <Description xml:space="preserve">Graph algorithm visualization</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />

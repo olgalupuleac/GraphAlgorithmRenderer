@@ -4,8 +4,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.UIControls.Properties;
@@ -33,6 +36,15 @@ namespace GraphAlgorithmRenderer.UIControls
                 StyleUiProperty,
                 ArrowUiProperty
             };
+            this.PreviewKeyDown += CloseOnEscape;
+        }
+
+        private void CloseOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Hide();
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)

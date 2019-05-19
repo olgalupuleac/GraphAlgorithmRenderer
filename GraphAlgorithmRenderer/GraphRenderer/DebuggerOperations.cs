@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using EnvDTE;
-using GraphAlgorithmRenderer.GraphElementIdentifier;
 using Microsoft.VisualStudio.Shell;
 using Debugger = EnvDTE.Debugger;
 using StackFrame = EnvDTE.StackFrame;
@@ -57,7 +56,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var value = res.Value;
             if (!isValid)
             {
-                Log.OutputString($"Expression {expression} is not a valid value:\n{value}");
+                Log.OutputString($"Expression {expression} is not a valid value:\n{value}\n");
             }
 
             return new GetExpressionResult {IsValid = isValid, Value = value};

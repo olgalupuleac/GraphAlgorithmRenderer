@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using GraphAlgorithmRenderer.Config;
 using static System.String;
 
@@ -26,6 +28,15 @@ namespace GraphAlgorithmRenderer.UIControls
 
             };
             FamilyName.TextChanged += (sender, args) => NameIsSet = true;
+            this.PreviewKeyDown += CloseOnEscape;
+        }
+
+        private void CloseOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Hide();
+            }
         }
 
         public bool NameIsSet { get; set; } = true;

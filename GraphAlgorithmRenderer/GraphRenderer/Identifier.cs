@@ -4,10 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using GraphAlgorithmRenderer.Config;
-using GraphAlgorithmRenderer.GraphRenderer;
 using Debugger = EnvDTE.Debugger;
 
-namespace GraphAlgorithmRenderer.GraphElementIdentifier
+namespace GraphAlgorithmRenderer.GraphRenderer
 {
     public class IdentifierPartRange
     {
@@ -130,7 +129,7 @@ namespace GraphAlgorithmRenderer.GraphElementIdentifier
         public static List<Identifier> GetIdentifiers(string name, List<IdentifierPartTemplate> templates,
             Debugger debugger)
         {
-            Identifier start = new Identifier(name:name, parts : new List<IdentifierPart>());
+            Identifier start = new Identifier(name: name, parts: new List<IdentifierPart>());
             return GetIdentifiers(start, templates, debugger);
         }
 
@@ -144,8 +143,9 @@ namespace GraphAlgorithmRenderer.GraphElementIdentifier
 
             var head = templates.FirstOrDefault();
             Debug.Assert(head != null, nameof(head) + " != null");
-            int begin = GetNumber(head.BeginTemplate, cur, debugger, $"Begin of {head.Name}");
-            int end = GetNumber(head.EndTemplate, cur, debugger, $"End of {head.Name}");
+           
+            int begin = GetNumber(head.BeginTemplate, cur, debugger, $"Begin range of index {head.Name} in {cur.Name}");
+            int end = GetNumber(head.EndTemplate, cur, debugger, $"End range of {head.Name} index in {cur.Name}");
             var res = new List<Identifier>();
             for (int i = begin; i < end; i++)
             {
@@ -157,17 +157,15 @@ namespace GraphAlgorithmRenderer.GraphElementIdentifier
             return res;
         }
 
-        private static int GetNumber(string template, Identifier id, Debugger debugger,string message)
+        private static int GetNumber(string template, Identifier id, Debugger debugger, string message)
         {
             var expressionResult = DebuggerOperations.GetExpressionForIdentifier(template, id, debugger);
             if (!expressionResult.IsValid || !Int32.TryParse(expressionResult.Value, out var res))
             {
-                throw new GraphRenderException($"{message} {template} is not valid\n{expressionResult.Value}");
+                throw new GraphRenderException($"{message} \'{template}\' is not valid:\n{expressionResult.Value}");
             }
 
             return res;
         }
     }
-
-   
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -31,6 +32,15 @@ namespace GraphAlgorithmRenderer.UIControls
             EdgeEndIdParts = new List<EdgeEndIdPart>();
             nodeIds.ForEach(id => EdgeEndIdParts.Add(new EdgeEndIdPart{IdPart = id}));
             dataGrid.ItemsSource = EdgeEndIdParts;
+            this.PreviewKeyDown += CloseOnEscape;
+        }
+
+        private void CloseOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Hide();
+            }
         }
 
         public EdgeEndControl(EdgeFamily.EdgeEnd edgeEnd)

@@ -34,6 +34,6 @@
             <local:PropertiesControl x:Name="PropertiesControl"/>
         </StackPanel>
         <Button x:Name="ok" Content="Ok" HorizontalAlignment="Left" MinWidth="60" VerticalAlignment="Bottom" Margin="10"
-                Click="Ok_Click" />
+                Click="Ok_Click" IsDefault="True"/>
     </WrapPanel>
 </Window>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using GraphAlgorithmRenderer.GraphElementIdentifier;
+using GraphAlgorithmRenderer.GraphRenderer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;

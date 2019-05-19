@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using GraphAlgorithmRenderer.Config;
 using static System.String;
 
@@ -56,8 +58,16 @@ namespace GraphAlgorithmRenderer.UIControls
             }
 
             FamilyName.TextChanged += (sender, args) => NameIsSet = true;
+            this.PreviewKeyDown += CloseOnEscape;
         }
-      
+
+        private void CloseOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Hide();
+            }
+        }
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -178,5 +188,6 @@ namespace GraphAlgorithmRenderer.UIControls
             }
             PropertiesControl.SetNewWindows(windows);
         }
+     
     }
 }

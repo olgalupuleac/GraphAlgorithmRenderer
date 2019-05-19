@@ -18,7 +18,7 @@
         <properties:LineColorUiProperty Margin="8"  x:Name="LineColorUiProperty" />
         <properties:LineWidthUiProperty Margin="8" x:Name="LineWidthUiProperty" />
         <properties:ArrowUiProperty Margin="8" x:Name="ArrowUiProperty" />
-        <Button x:Name="ok" Content="Ok" Click="Ok_Click" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Left" MinWidth="60" MaxHeight="30"/>
+        <Button x:Name="ok" Content="Ok" IsDefault="True" Click="Ok_Click" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Left" MinWidth="60" MaxHeight="30"/>
         
     </WrapPanel>
 </Window>

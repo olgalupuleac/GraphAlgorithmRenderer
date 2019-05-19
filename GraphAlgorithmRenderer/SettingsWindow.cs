@@ -62,8 +62,16 @@ namespace GraphAlgorithmRenderer
                 {
                     _drawingMode = DrawingMode.NotChanged;
                 }
-                var exceptionViewer = new ExceptionViewer(headerMessage, e);
-                exceptionViewer.ShowDialog();
+
+                if (e is GraphRenderException)
+                {
+                    MessageBox.Show(e.Message, headerMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    var exceptionViewer = new ExceptionViewer(headerMessage, e);
+                    exceptionViewer.ShowDialog();
+                }
             }
         }
 
@@ -81,7 +89,6 @@ namespace GraphAlgorithmRenderer
             base.Content = _control;
             _control.Load.Click += LoadOnClick;
             _control.Export.Click += ExportOnClick;
-           
         }
 
         private void ExportOnClick(object sender, RoutedEventArgs e)
@@ -92,6 +99,12 @@ namespace GraphAlgorithmRenderer
         private void LoadOnClick(object sender, RoutedEventArgs e)
         {
             var json = _control.Config.Text;
+            if (String.IsNullOrWhiteSpace(json))
+            {
+                var res = MessageBox.Show("Deserializing an empty JSON will produce NullReferenceException!",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             HandleException(() =>
             {
                 _config = ConfigSerializer.FromJson(json);
@@ -99,9 +112,9 @@ namespace GraphAlgorithmRenderer
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Json deserialization error");
-
+           
             HandleException(() => _control.MainControl.FromConfig(_config), "Oups! Something went wrong :(");
-       
+
 
             CreateForm();
             if (_drawingMode == DrawingMode.NotChanged)
@@ -125,9 +138,9 @@ namespace GraphAlgorithmRenderer
         private void InitializeLog(DTE dte)
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            EnvDTE.Window w = (EnvDTE.Window)dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+            EnvDTE.Window w = (EnvDTE.Window) dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
-            OutputWindow ow = (OutputWindow)w.Object;
+            OutputWindow ow = (OutputWindow) w.Object;
             var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
             DebuggerOperations.Log = outputWindowPane;
@@ -160,7 +173,7 @@ namespace GraphAlgorithmRenderer
 
             Debug.WriteLine("Treap");
             Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.TreapConfig));
- 
+
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             InitializeLog(applicationObject);
         }
@@ -175,7 +188,7 @@ namespace GraphAlgorithmRenderer
             }, "Error while generating config");
 
             CreateForm();
-            if (_drawingMode != DrawingMode.NotChanged) return;
+           // if (_drawingMode == DrawingMode.Redrawing) return;
             _drawingMode = DrawingMode.ShouldBeRedrawn;
             HandleException(DrawGraph, "Error while drawing graph");
         }
@@ -186,6 +199,7 @@ namespace GraphAlgorithmRenderer
             {
                 return;
             }
+
             HandleException(DrawGraph, "Error while drawing graph");
         }
 
@@ -202,6 +216,7 @@ namespace GraphAlgorithmRenderer
                 _form?.Hide();
                 return;
             }
+
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += DispatcherTimer_Tick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
@@ -228,6 +243,7 @@ namespace GraphAlgorithmRenderer
                 _drawingMode = DrawingMode.NotChanged;
                 return;
             }
+
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
@@ -235,8 +251,12 @@ namespace GraphAlgorithmRenderer
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-           
+
             Debug.WriteLine($"total time {elapsedTime}");
+            if (graph == null)
+            {
+                return;
+            }
             GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
             CreateForm();
 
@@ -244,7 +264,12 @@ namespace GraphAlgorithmRenderer
             _form.Controls.Clear();
             _form.Controls.Add(viewer);
             _form.ResumeLayout();
-            _form.Show();
+            if (!_form.Visible)
+            {
+                _form.Show();
+            }
+
+            //_form.Focused = false;
             _dispatcherTimer.Stop();
             _drawingMode = DrawingMode.NotChanged;
         }
