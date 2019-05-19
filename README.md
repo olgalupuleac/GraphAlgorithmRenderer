@@ -63,7 +63,7 @@ A set of edges. Almost identical to *node family*. The difference is that the ed
 
 #### Conditional properties
 
-List of *conditions* with *properties*. Each condition may have multiple properties, but all of them should not suppress each over. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
+List of *conditions* with *properties*. Each condition may have multiple properties of different types. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
 
 #### Condition
 
@@ -72,6 +72,8 @@ Contains *condition expression* (an *expression* which can be cast to bool), *fu
 * *AllStackframes* means that the condition is fulfilled if there is a stack frame in the call stack there *condition expression* is true and function regex matches current function name. (Note that this option works rather slowly).
 * *AllStackframes (args only)* means that the condition is fulfilled if there is a stack frame in the call stack there function regex matches current function name and the *condition expression*, after substitution of function arguments (i.e. `__ARG1__`, `__ARG2__` placeholders, not named arguments) in **that** stack frame is true in the **current** stack frame. For example, we can use this mode if we want to highlight all DFS nodes in the call stack. This option works faster than the previous ones, as it doesn't require changing the stack frame to evaluate the expression.
 #### Properties
+
+We have the following types of properties:
 
 * *Label property* defines the edge or node label. A label is a text with additional placeholders `{}` for *expressions*. For example, `cap={edges[__e__].cap}, flow={edges[__e__].flow}`. We can also set the font size.
 * *Style property* defines a line style, e. g. dashed. For nodes, it is applied to its border.
@@ -280,3 +282,6 @@ The short description of the condition appears in the list.
 2. Do not forget to click *Generate config* after changing the config settings.
 3. Remember that mode *AllStackframes* significantly increase the execution time. It seems more efficient to have a bool array which indicates if the property should be applied.
 4. Keep in mind that it takes a second to process 100-200 expressions.
+5. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead.
+6. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
+   ![1558294468910](readme-images/1558294468910.png)
