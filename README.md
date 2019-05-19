@@ -75,6 +75,7 @@ The code of the possible solution is provided below. We will use a depth-first s
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS, to use freopen
 
 using namespace std;
 
@@ -101,7 +102,7 @@ void dfs(int v)
 	vertex_component[v] = cur_component;
 	for (int i = 0; i < g[v].size(); i++)
 	{
-		if (used_edges[g[v][i].id]) 
+		if (used_edges[g[v][i].id])
 		{
 			continue;
 		}
@@ -118,32 +119,32 @@ void dfs(int v)
 
 int main()
 {
-	cout.sync_with_stdio(0);
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
 	cin >> n >> m;
 	for (int i = 0; i < m; i++)
 	{
 		int a, b;
 		cin >> a >> b;
 		g[a - 1].push_back({ i, b - 1 });
-        // Checking (a != b) to avoid duplication of edges in config.
-        // It could be also achieved through
-        // following validation expression
-        // "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
-        // && __x__ % 2 == 0"
-        // but it seems slightly easier to do it in this way and use 
-        // this validation expression: "__a__ <= g[__a__][__x__].to"
-		if (a != b) 
+		// Checking (a != b) to avoid duplication of edges in config.
+		// It could be also achieved through
+		// following validation expression
+		// "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
+		// && __x__ % 2 == 0"
+		// but it seems slightly easier to do it in this way and use 
+		// this validation expression: "__a__ <= g[__a__][__x__].to"
+		if (a != b)
 		{
 			g[b - 1].push_back({ i , a - 1 });
 		}
 	}
-	fill(vertex_component, vertex_component + n, -1);
 	for (int i = 0; i < n; i++)
 	{
-		if(!used_vertexes[i])
+		if (!used_vertexes[i])
 		{
-			dfs(i);
 			cur_component++;
+			dfs(i);	
 		}
 	}
 	cout << *max_element(components_size, components_size + cur_component) << endl;
@@ -155,7 +156,8 @@ int main()
 Now, let's visualize this code. Assume we have the following input:
 
 ~~~~
-9 12
+10 13
+1 10
 1 2
 4 2
 3 4
@@ -178,30 +180,30 @@ The window with node family settings opens automatically. The default family nam
 
 ![1557745092625](readme-images/1557745092625.png)
 
-In our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 9, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 8`.
+In our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 10, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 9`.
 
-![1557745163853](readme-images/1557745163853.png)
+![1558285655171](readme-images/1558285655171.png)
 
 Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x] == b`.
 So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
 
-![1558037267617](readme-images/1558037267617.png)
+![1558285556838](readme-images/1558285556838.png)
 
 After choosing the family (we have only one option here), we need to set the target and source indices.
 
-![1557745271239](readme-images/1557745271239.png)
+![1558285516783](readme-images/1558285516783.png)
 
 So, we can get the target using this expression.
 
-![1557680215878](readme-images/1557680215878.png)
+![1558285360417](readme-images/1558285360417.png)
 
 And the source is the first identifier index.
 
-![1557680243829](readme-images/1557680243829.png)
+![1558285309805](readme-images/1558285309805.png)
 
 Finally, to avoid duplication of edges, we will specify the validation expression.
 
-![1558037359964](readme-images/1558037359964.png)
+![1558285463758](readme-images/1558285463758.png)
 
 
 
@@ -211,15 +213,15 @@ Now, let's generate our config and see how it looks like.
 
 As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add conditional properties to our config.
 
-![1558184525010](readme-images/1558184525010.png)
+![1558285779613](readme-images/1558285779613.png)
 
-To add a conditional property, click *Add* under the list with conditional properties. 
+To add a conditional property, click *Add* under the list with conditional properties. The label will contain node id, the component id and the number of edges in the component (size).
 
-![1557682526216](readme-images/1557682526216.png)
+![1558284026226](readme-images/1558284026226.png)
 
 The short description of the condition appears in the list.
 
-![1557682600580](readme-images/1557682600580.png)
+![1558285130507](readme-images/1558285130507.png)
 
 After adding a label to nodes, our picture improved. 
 
@@ -227,33 +229,31 @@ After adding a label to nodes, our picture improved.
 
 Now let's add other node properties. 
 
-![1557688016786](readme-images/1557688016786.png)
+![1558285025190](readme-images/1558285025190.png)
 
-![1557688121375](readme-images/1557688121375.png)
+![1558284298986](readme-images/1558284298986.png)
+
+![1558284365990](readme-images/1558284365990.png)
 
 Edge properties...
 
-![1558037517412](readme-images/1558037517412.png)
+![1558284915478](readme-images/1558284915478.png)
 
-![1558037618605](readme-images/1558037618605.png)
+![1558284941427](readme-images/1558284941427.png)
 
-![1557688517682](readme-images/1557688517682.png)
-
-
+![1558284555106](readme-images/1558284555106.png)
 
 
 
-![1557689769838](readme-images/1557689769838.png)
+![1558284673055](readme-images/1558284673055.png)
 
-![1557688906805](readme-images/1557688906805.png)
 
-![1557689948447](readme-images/1557689948447.png)
 
-![1557690110368](readme-images/1557690110368.png)
+![1558284759186](readme-images/1558284759186.png)
 
 Finally, we can export the generated config in JSON, save it somewhere, and load it next time to avoid creating this config from the beginning. 
 
-![1557691270424](readme-images/1557691270424.png)
+![1558284854490](readme-images/1558284854490.png)
 
 [Here](CONFIG_SAMPLE.md)  is the generated config for this problem.
 

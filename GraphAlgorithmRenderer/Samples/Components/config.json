@@ -168,8 +168,8 @@
               "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
               "Condition": {
                 "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "used_vertexes[__v__]",
-                "Mode": 0,
+                "Template": "__v__ == __ARG1__",
+                "Mode": 2,
                 "FunctionNameRegex": "dfs"
               },
               "Properties": {
@@ -183,6 +183,30 @@
                       "R": 169,
                       "G": 169,
                       "B": 169
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
+              "Condition": {
+                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
+                "Template": "used_vertexes[__v__]",
+                "Mode": 0,
+                "FunctionNameRegex": "dfs"
+              },
+              "Properties": {
+                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
+                "$values": [
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.FillColorNodeProperty, GraphAlgorithmRenderer",
+                    "Color": {
+                      "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
+                      "A": 255,
+                      "R": 34,
+                      "G": 139,
+                      "B": 34
                     }
                   }
                 ]

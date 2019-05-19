@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS, to use freopen
 
 using namespace std;
 
@@ -9,7 +10,6 @@ const int N = int(1e5);
 struct edge
 {
 	int id;
-	int from;
 	int to;
 };
 
@@ -20,7 +20,7 @@ bool used_vertexes[N];
 bool used_edges[N];
 
 int n, m;
-int cur_component; 
+int cur_component;
 
 void dfs(int v)
 {
@@ -28,7 +28,7 @@ void dfs(int v)
 	vertex_component[v] = cur_component;
 	for (int i = 0; i < g[v].size(); i++)
 	{
-		if (used_edges[g[v][i].id]) 
+		if (used_edges[g[v][i].id])
 		{
 			continue;
 		}
@@ -45,27 +45,32 @@ void dfs(int v)
 
 int main()
 {
-	cout.sync_with_stdio(0);
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
 	cin >> n >> m;
 	for (int i = 0; i < m; i++)
 	{
 		int a, b;
 		cin >> a >> b;
-		g[a - 1].push_back({ i,  a - 1, b - 1 });
-		if (a != b) 
+		g[a - 1].push_back({ i, b - 1 });
+		// Checking (a != b) to avoid duplication of edges in config.
+		// It could be also achieved through
+		// following validation expression
+		// "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
+		// && __x__ % 2 == 0"
+		// but it seems slightly easier to do it in this way and use 
+		// this validation expression: "__a__ <= g[__a__][__x__].to"
+		if (a != b)
 		{
-			g[b - 1].push_back({ i , b - 1, a - 1 });
+			g[b - 1].push_back({ i , a - 1 });
 		}
 	}
-	
-	
-	fill(vertex_component, vertex_component + n, -1);
 	for (int i = 0; i < n; i++)
 	{
-		if(!used_vertexes[i])
+		if (!used_vertexes[i])
 		{
-			dfs(i);
 			cur_component++;
+			dfs(i);
 		}
 	}
 	cout << *max_element(components_size, components_size + cur_component) << endl;
