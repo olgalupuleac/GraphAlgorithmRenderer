@@ -33,11 +33,12 @@ To install the extension, download the VSIX file from the latest release here <h
 
 To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgorithmRenderer/tree/master/GraphAlgorithmRenderer/Samples>. Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
 
-## Tutorial
+## Glossary
 
-### Overview
+![](<https://docs.google.com/drawings/d/14V6qlx7ZAgCT7cONd9qrKbya3voI56t1QMl4f7h2thU/edit>)
 
 Here is the list of the project's concepts:
+
 #### Graph config 
 
 Defines how to transform your C++ code into a graph. Contains lists of *node families* and *edge families*.
@@ -59,6 +60,11 @@ Example: `p[g[__v__][__i__]] == __v__ || __ARG1__ == 0`
 #### Edge family 
 
 A set of edges. Almost identical to *node family*. The difference is that the edge should contain a definition of target and source nodes. As we can have several node families, we need to choose which families target and source nodes belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the identifier of the corresponding node, so we specify the *expression* for every index in the node *identifier*. The expression may contain indices of the edge family.
+
+#### Conditional properties
+
+List of *conditions* with *properties*. Each condition may have multiple properties, but all of them should not suppress each over. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
+
 #### Condition
 
 Contains *condition expression* (an *expression* which can be cast to bool), *function regex* (a regular expression which should much a function name in a stack frame), and a mode.
@@ -74,11 +80,7 @@ Contains *condition expression* (an *expression* which can be cast to bool), *fu
 * *Fill color property* (nodes only) defines the node fill color.
 * *Shape property* (nodes only) defines a shape of the node.
 * *Orientation property* (edges only) defines if an arrow at target node and an arrow at source node should be rendered.
-#### Conditional properties
-
-List of *conditions* with *properties*. Each condition may have multiple properties, but all of them should not suppress each over. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
-
-### Step-by-step DFS
+## Step-by-step DFS
 
 Let's consider a simple problem <https://www.hackerearth.com/ru/practice/algorithms/graphs/depth-first-search/practice-problems/algorithm/monk-and-graph-problem/>
 
