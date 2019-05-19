@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
         xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        ResizeMode="CanResize"
-        d:DesignHeight="450" d:DesignWidth="1000">
+        Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
     <WrapPanel>
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">

@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
-             mc:Ignorable="d" Height="424.667" Width="497.333">
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
     <StackPanel Orientation="Vertical">
         <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=EdgeEndIdParts}" >
             <DataGrid.Resources>

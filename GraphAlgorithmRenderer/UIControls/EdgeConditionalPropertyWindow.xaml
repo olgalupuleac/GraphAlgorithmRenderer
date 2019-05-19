@@ -7,7 +7,7 @@
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
     <WrapPanel Orientation="Horizontal">
 
     

@@ -7,7 +7,7 @@
              xmlns:properties="clr-namespace:GraphAlgorithmRenderer.UIControls.Properties"
 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="850">
+             Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
     <WrapPanel Orientation="Horizontal">
             <local:ConditionControl Margin="8" x:Name="ConditionControl"></local:ConditionControl>
             <properties:LabelUiProperty Margin="8" x:Name="LabelUiProperty"></properties:LabelUiProperty>
