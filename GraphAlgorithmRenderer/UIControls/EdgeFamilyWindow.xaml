@@ -10,17 +10,18 @@
     <WrapPanel>
         <local:IdentifierPartRangeControl x:Name="IdentifierPartRangeControl"></local:IdentifierPartRangeControl>
         <StackPanel Orientation="Vertical">
-            <Expander x:Name="TargetExpander" Header="Target Node Family" Margin="16">
-                <StackPanel x:Name="TargetPanel" Orientation="Vertical" />
-            </Expander>
-            <Button x:Name="TargetButton" Content="Set target indices" Margin="15" Click="TargetButton_Click" />
-        </StackPanel>
-        <StackPanel Orientation="Vertical">
             <Expander x:Name="SourceExpander" Header="Source Node Family" Margin="16">
                 <StackPanel x:Name="SourcePanel" />
             </Expander>
             <Button x:Name="SourceButton" Content="Set source indices" Margin="15" Click="SourceButton_Click" />
         </StackPanel>
+        <StackPanel Orientation="Vertical">
+            <Expander x:Name="TargetExpander" Header="Target Node Family" Margin="16">
+                <StackPanel x:Name="TargetPanel" Orientation="Vertical" />
+            </Expander>
+            <Button x:Name="TargetButton" Content="Set target indices" Margin="15" Click="TargetButton_Click" />
+        </StackPanel>
+       
         <StackPanel Orientation="Vertical">
             <Label Content="Name" Margin="15" />
             <TextBox x:Name="FamilyName" Margin="10" TextWrapping="Wrap" />
