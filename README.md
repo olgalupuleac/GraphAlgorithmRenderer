@@ -189,9 +189,10 @@ Now, let's visualize this code. Assume we have the following input:
 5 6
 ~~~~
 
-1. Now we will create a config. We will have one node family with the index `v`  with values from `0` to `n`. After that, we will create an edge family with two indices corresponding to `g[][]`: 
-   `a` from `0` to `n` and `x` from `0` to `g[a].size()`.  Then, we will define the edge source as `a` and edge target as `g[a][x].to`.
-2. First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.
+Now we will create a config. We will have one node family with the index `v`  with values from `0` to `n`. After that, we will create an edge family with two indices corresponding to `g[][]`: 
+`a` from `0` to `n` and `x` from `0` to `g[a].size()`.  Then, we will define the edge source as `a` and edge target as `g[a][x].to`.
+
+1. First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.
 
  ![1557679512147](readme-images/1557679512147.png)
 
@@ -281,7 +282,8 @@ The short description of the condition appears in the list.
 1. Serialize the config and save it somewhere. Config is discarded after exiting the Visual Studio.
 2. Do not forget to click *Generate config* after changing the config settings.
 3. Remember that mode *AllStackframes* significantly increase the execution time. It seems more efficient to have a bool array which indicates if the property should be applied.
-4. Keep in mind that it takes a second to process 100-200 expressions.
-5. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead.
-6. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
+4. You can use custom functions in the expressions. Note that it works slower than accessing `std::vector` elements.
+5. Keep in mind that it takes a second to process 100-200 expressions.
+6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but 
+7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
    ![1558294468910](readme-images/1558294468910.png)
