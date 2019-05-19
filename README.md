@@ -16,6 +16,19 @@ To install the extension, download the VSIX file from the latest release here <h
 
 ### Rendering DFS
 
+1. Install the extension.
+2. Open Visual Studio and create empty C++ project.
+3. Add *Source.cpp* file. Copy-paste [the code](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
+4. Add *in.txt* file. Copy-paste [the input](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/in.txt>)
+5. Select *View > Other windows > Graph Visualization* 
+6. Open tab with JSON.
+7. Copy-paste the the [JSON config](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/config.json>) in the text box, click *Deserialize*.
+8. Set a breakpoint at [line 68](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/Source.cpp#L68>).
+9. Start debugging.
+10. The window with the graph appears.
+11. Step into dfs.
+12. The window with the graph updates automatically.
+
 ### Other samples
 
 To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgorithmRenderer/tree/master/GraphAlgorithmRenderer/Samples>. Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
