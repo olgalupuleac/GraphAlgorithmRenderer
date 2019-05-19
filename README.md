@@ -14,6 +14,10 @@ You will need Visual Studio 2017 (the tool was tested on Visual Studio Community
 
 To install the extension, download the VSIX file from the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases> . Click on the downloaded file and follow the instructions. To open a graph visualization setting window select *View > Other windows > Graph visualization.*
 
+To remove the extension, select *Tools > Extensions and updates > Graph Visualization* and click uninstall.
+
+To update the extension, uninstall it first and install a new version.
+
 ### Rendering DFS
 
 1. Install the extension.
