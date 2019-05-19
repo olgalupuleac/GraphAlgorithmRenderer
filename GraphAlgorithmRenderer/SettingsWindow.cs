@@ -126,12 +126,12 @@ namespace GraphAlgorithmRenderer
 
         private void CreateForm()
         {
-            if (_drawingMode == DrawingMode.Canceled || _form == null)
+            if (_drawingMode != DrawingMode.Canceled && _form != null)
             {
-                _form = new Form {Size = new Size(800, 800)};
-                _form.FormClosed += (sender, args) => _drawingMode = DrawingMode.Canceled;
+                return;
             }
-
+            _form = new Form { Size = new Size(800, 800) };
+            _form.FormClosed += (sender, args) => _drawingMode = DrawingMode.Canceled;
             _form.TopMost = _control.MainControl.OnTop.IsChecked == true;
         }
 
@@ -260,7 +260,7 @@ namespace GraphAlgorithmRenderer
             GViewer viewer = new GViewer {Graph = graph, Dock = DockStyle.Fill};
             CreateForm();
 
-            _form.SuspendLayout();
+             _form.SuspendLayout();
             _form.Controls.Clear();
             _form.Controls.Add(viewer);
             _form.ResumeLayout();
