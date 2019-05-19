@@ -39,6 +39,7 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             if (e.Key == Key.Escape)
             {
+                e.Handled = true;
                 Hide();
             }
         }
