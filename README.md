@@ -42,11 +42,11 @@ To update the extension, uninstall it first and then install a new version.
 1. Install the extension.
 2. Open Visual Studio and create empty C++ project.
 3. Add *Source.cpp* file. Copy-paste [the code](<GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
-4. Add *in.txt* file. Copy-paste [the input](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/in.txt>)
+4. Add *in.txt* file. Copy-paste [the input](<GraphAlgorithmRenderer/Samples/Components/in.txt>)
 5. Select *View > Other windows > Graph Visualization* 
 6. Open tab with JSON.
-7. Copy-paste the the [JSON config](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/config.json>) in the text box, click *Deserialize*.
-8. Set a breakpoint at [line 68](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/Source.cpp#L68>).
+7. Copy-paste the the [JSON config](<GraphAlgorithmRenderer/Samples/Components/config.json>) in the text box, click *Deserialize*.
+8. Set a breakpoint at [line 69](<GraphAlgorithmRenderer/Samples/Components/Source.cpp#L69>).
 9. Start debugging.
 10. The window with the graph appears.
 11. Step into dfs.
@@ -58,7 +58,7 @@ To explore other samples, look at the <https://github.com/olgalupuleac/GraphAlgo
 
 ## Glossary
 
-![](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/readme-images/GraphAlgorithmRenderer_%20families.jpg)
+![](readme-images/GraphAlgorithmRenderer_%20families.jpg)
 
 Here is the list of the project's concepts:
 
@@ -271,7 +271,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 
 ![1558284854490](readme-images/1558284854490.png)
 
-[Here](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/config.json>)  is the generated config for this problem.
+[Here](<GraphAlgorithmRenderer/Samples/Components/config.json>)  is the generated config for this problem.
 
 ## Tips & tricks
 
