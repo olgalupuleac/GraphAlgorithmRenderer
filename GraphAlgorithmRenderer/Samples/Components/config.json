@@ -215,7 +215,7 @@
                 "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
                 "Template": "used_vertexes[__v__]",
                 "Mode": 0,
-                "FunctionNameRegex": "dfs"
+                "FunctionNameRegex": ".*"
               },
               "Properties": {
                 "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",

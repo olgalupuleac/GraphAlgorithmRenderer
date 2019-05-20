@@ -51,6 +51,7 @@ To update the extension, uninstall it first and then install a new version.
 10. The window with the graph appears.
 11. Step into DFS.
 12. The window with the graph updates automatically.
+13. Play around with the configuration (clicking "Generate config" every time you change something) and do not forget to save the resulting JSON somewhere as __it will be erased__ when you exit Visual Studio.
 
 ### Other samples
 
@@ -73,7 +74,7 @@ A set of nodes with the same properties. Usually, we have only one node family a
 Each node and edge in the graph belong to a *node/edge family*. Each element in the family can be identified by a named tuple of integers or *identifier*. Each index in the tuple has a range of possible values described by *begin template* and *end template*.  Begin template and end template are *expressions* and might contain previous indices. To refer to a certain index in any expression, use `__index_name__` (e.g. `__v__`). For node family, we usually need an identifier with one index. For edge family, we often need two indices, for example, if the graph is stored as an adjacency list `vector<int> g[N]`, the first index defines the vertex `v` and the second defines an index in `g[v]`.
 #### Expression
 
-A valid C++ expression with special placeholders for identifier indices (`__index_name__`). There can be also a placeholder for a name of the current function (`__CURRENT_FUNCTION__`) and placeholders for the function arguments (`__ARG1__`, `__ARG2__` and so on). After substitution, the expression will be evaluated using the debugger. Note that functions and class methods from Standard Template Library are not supported (unless it's `operator[]`). If the expression is not valid, the error is written to log and the result is ignored, except for *begin template* and *end template*.
+A valid C++ expression with special placeholders for identifier indices (`__index_name__`). There can be also a placeholder for a name of the current function (`__CURRENT_FUNCTION__`) and placeholders for the function arguments (`__ARG1__`, `__ARG2__` and so on). After substitution, the expression will be evaluated using the debugger. A limited subset of functions is supported, [same as in 'Watch' window](<https://docs.microsoft.com/en-us/visualstudio/debugger/watch-and-quickwatch-windows?view=vs-2017>). Note that functions and class methods from Standard Template Library are not supported (unless it's `operator[]`). If the expression is not valid, the error is written to log and the result is ignored, except for *begin template* and *end template*.
 Example: `p[g[__v__][__i__]] == __v__ || __ARG1__ == 0`
 
 #### Validation template
@@ -262,7 +263,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 13. In the main window, click *Generate config*. After adding a label to nodes, our picture has changed. ![1558363398476](readme-images/default_label_graph.png)
 14. Now let's add other node properties. First, we want to see which component a node belongs to a current number of edges in this component. ![1558363747957](readme-images/label.png)
 15. This property should have a higher priority than the default label. Select a new property and click *Move up*. ![1558363908070](readme-images/move_up.png)
-16. Let's highlight the current DFS node... ![1558285025190](readme-images/1558285025190.png)....DFS nodes in the stack...![1558364238009](readme-images/stack_node.png)...and all visited nodes.![1558364398056](readme-images/visited_nodes.png)
+16. Let's highlight the current DFS node... ![1558285025190](readme-images/1558285025190.png)....DFS nodes in the stack...![1558364238009](readme-images/stack_node.png)...and all visited nodes.![1558379420923](readme-images/visited_nodes.png)
 17. Now we have the following node properties.![1558364631346](readme-images/node_properties.png)
 18. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
 19. Current edge... ![1558284941427](readme-images/1558284941427.png)
