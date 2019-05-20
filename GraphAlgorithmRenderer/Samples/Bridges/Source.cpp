@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <unordered_set>
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS, to use freopen
 
 using namespace std;
 const int N = 50000;
