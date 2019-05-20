@@ -144,8 +144,8 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var head = templates.FirstOrDefault();
             Debug.Assert(head != null, nameof(head) + " != null");
            
-            int begin = GetNumber(head.BeginTemplate, cur, debugger, $"Begin range of index {head.Name} in {cur.Name}");
-            int end = GetNumber(head.EndTemplate, cur, debugger, $"End range of {head.Name} index in {cur.Name}");
+            int begin = GetNumber(head.BeginTemplate ?? "", cur, debugger, $"Begin range of index {head.Name} in {cur.Name}");
+            int end = GetNumber(head.EndTemplate ?? "", cur, debugger, $"End range of {head.Name} index in {cur.Name}");
             var res = new List<Identifier>();
             for (int i = begin; i < end; i++)
             {

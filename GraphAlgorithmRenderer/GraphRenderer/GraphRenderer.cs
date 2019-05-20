@@ -222,7 +222,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                var value = Identifier.GetNumber(template.Value, identifier, _debugger, message);
+                var value = Identifier.GetNumber(template.Value ?? "", identifier, _debugger, message);
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
