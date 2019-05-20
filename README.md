@@ -70,10 +70,10 @@ Defines how to transform your C++ code into a graph. Contains lists of *node fam
 A set of nodes with the same properties. Usually, we have only one node family and edge family in our config. But we will need two node families if in the problem with the bipartite graph the first and the second sets of nodes are stored separately. Each family has a name. Contains *identifier*, *validation template* and *conditional properties*.
 #### Identifier
 
-Each node and edge in the graph belong to a *node/edge family*. Each element in the family can be identified by a named tuple of integers or *identifier*. Each index in the tuple has a range of possible values described by *begin template* and *end template*.  Begin template and end template are *expressions* and might contain previous indices. To refer to a certain index in any expression, use `__index_name__` (e.g. `__v__`). For node family, we usually need an identifier with one index. For edge family, we often need to indices, for example, if the graph is stored as an adjacency list `vector<int> g[N]`, the first index defines the vertex `v` and the second defines an index in `g[v]`.
+Each node and edge in the graph belong to a *node/edge family*. Each element in the family can be identified by a named tuple of integers or *identifier*. Each index in the tuple has a range of possible values described by *begin template* and *end template*.  Begin template and end template are *expressions* and might contain previous indices. To refer to a certain index in any expression, use `__index_name__` (e.g. `__v__`). For node family, we usually need an identifier with one index. For edge family, we often need two indices, for example, if the graph is stored as an adjacency list `vector<int> g[N]`, the first index defines the vertex `v` and the second defines an index in `g[v]`.
 #### Expression
 
-A valid C++ expression with special placeholders for identifier indices (`__index_name__`). There can be also a placeholder for a name of the current function (`__CURRENT_FUNCTION__`) and placeholders for the function arguments (`__ARG1__`, `__ARG2__` and so on). After substitution, the expression will be evaluated using the debugger. Note that functions and class methods are not supported from Standard Template Library. If the expression is not valid, the error is written to log and the result is ignored, except for *begin template* and *end template*.
+A valid C++ expression with special placeholders for identifier indices (`__index_name__`). There can be also a placeholder for a name of the current function (`__CURRENT_FUNCTION__`) and placeholders for the function arguments (`__ARG1__`, `__ARG2__` and so on). After substitution, the expression will be evaluated using the debugger. Note that functions and class methods from Standard Template Library are not supported (unless it's `operator[]`). If the expression is not valid, the error is written to log and the result is ignored, except for *begin template* and *end template*.
 Example: `p[g[__v__][__i__]] == __v__ || __ARG1__ == 0`
 
 #### Validation template
@@ -82,15 +82,15 @@ Example: `p[g[__v__][__i__]] == __v__ || __ARG1__ == 0`
 
 #### Edge family 
 
-A set of edges. Almost identical to *node family*. The difference is that the edge should contain a definition of target and source nodes. As we can have several node families, we need to choose which families target and source nodes belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the identifier of the corresponding node, so we specify the *expression* for every index in the node *identifier*. The expression may contain indices of the edge family.
+A set of edges. Almost identical to *node family*. The difference is that the edge should contain a definition of  source and target nodes. As we can have several node families, we need to choose which families target and source nodes belong to. (Note that they can belong to different families.) After choosing the family, we need to define how we will get the identifier of the corresponding node, so we specify the *expression* for every index in the node *identifier*. The expression may contain indices of the edge family.
 
 #### Conditional properties
 
-List of *conditions* with *properties*. Each condition may have multiple properties of different types. If a condition is fulfilled, its properties are applied. Conditions with the less index in the list have higher priority.
+List of *conditions* with *properties*. Each condition may have multiple properties of different types. If a condition is fulfilled, its properties are applied. Conditions with the smaller index in the list have higher priority.
 
 #### Condition
 
-Contains *condition expression* (an *expression* which can be cast to bool), *function regex* (a regular expression which should much a function name in a stack frame), and a mode.
+Contains *condition expression* (an *expression* which can be cast to bool), *function regex* (a regular expression which should match a function name in a stack frame), and a mode.
 * *CurrentStackfame* means that the condition is fulfilled if the *condition expression* is true and function regex matches current function name.
 * *AllStackframes* means that the condition is fulfilled if there is a stack frame in the call stack there *condition expression* is true and function regex matches current function name. (Note that this option works rather slowly).
 * *AllStackframes (args only)* means that the condition is fulfilled if there is a stack frame in the call stack there function regex matches current function name and the *condition expression*, after substitution of function arguments (i.e. `__ARG1__`, `__ARG2__` placeholders, not named arguments) in **that** stack frame is true in the **current** stack frame. For example, we can use this mode if we want to highlight all DFS nodes in the call stack. This option works faster than the previous ones, as it doesn't require changing the stack frame to evaluate the expression.
@@ -266,7 +266,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 17. Now we have the following node properties.![1558364631346](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\node_properties.png)
 18. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
 19. Current edge... ![1558284941427](readme-images/1558284941427.png)
-20. Now we can the colorized graph! ![1558365514928](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\colorized_graph.png)
+20. Now we can the colorized graph! ![1558365514928](readme-images/colorized_graph.png)
 21. Finally, we can serialize the generated config in JSON, save it somewhere, and deserialize it next time to avoid creating this config from the beginning. 
 
 ![1558284854490](readme-images/1558284854490.png)
@@ -280,6 +280,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 3. Remember that mode *AllStackframes* significantly increase the execution time. It seems more efficient to have a bool array which indicates if the property should be applied.
 4. You can use custom functions in the expressions. Note that it works slower than accessing `std::vector` elements.
 5. Keep in mind that it takes a second to process 100-200 expressions.
-6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being a notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but 
-7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
+6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being a notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but note that it works slower than accessing elements of `std::vector`.
+7. Sometimes text boxes in Graph Visualization settings seem to be blocked and a text cannot be entered or it appears somewhere else, for example in the file with the code. You can try to close all other windows including the source file (it doesn't mean closing the Solution or stopping the debugger). We would be grateful if you help us to find out how to reproduce this bug.
+8. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
    ![1558294468910](readme-images/1558294468910.png)
