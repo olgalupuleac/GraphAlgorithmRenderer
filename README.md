@@ -46,7 +46,7 @@ To update the extension, uninstall it first and then install a new version.
 5. Select *View > Other windows > Graph Visualization* 
 6. Open tab with JSON.
 7. Copy-paste the the [JSON config](<GraphAlgorithmRenderer/Samples/Components/config.json>) in the text box, click *Deserialize*.
-8. Set a breakpoint at [line 69](<GraphAlgorithmRenderer/Samples/Components/Source.cpp#L69>).
+8. Set a breakpoint at [line 71](<GraphAlgorithmRenderer/Samples/Components/Source.cpp#L71>).
 9. Start debugging.
 10. The window with the graph appears.
 11. Step into dfs.
