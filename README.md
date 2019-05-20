@@ -237,6 +237,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 7. Click *Set source indices*. The following window appear. In our example, the source node corresponds to the first edge index. 
 
    ![1558362644109](readme-images/source.png)
+   
    And the target corresponds to `g[a][x].to`.
 
    ![1558362581186](readme-images/target.png)
