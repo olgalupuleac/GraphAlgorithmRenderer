@@ -101,7 +101,7 @@ namespace GraphAlgorithmRenderer
             var json = _control.Config.Text;
             if (String.IsNullOrWhiteSpace(json))
             {
-                var res = MessageBox.Show("Deserializing an empty JSON will produce NullReferenceException!",
+                var res = MessageBox.Show("Cannot deserialize an empty JSON!",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -144,20 +144,7 @@ namespace GraphAlgorithmRenderer
             var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
             DebuggerOperations.Log = outputWindowPane;
-            _control.MainControl.OnTop.Checked += (sender, args) =>
-            {
-                if (_form != null)
-                {
-                    _form.TopMost = true;
-                }
-            };
-            _control.MainControl.OnTop.Unchecked += (sender, args) =>
-            {
-                if (_form != null)
-                {
-                    _form.TopMost = false;
-                }
-            };
+            
         }
 
         protected override void Initialize()
@@ -175,7 +162,31 @@ namespace GraphAlgorithmRenderer
             Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.TreapConfig));
 
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
+            _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>
+            {
+                if (_drawingMode == DrawingMode.Canceled)
+                {
+                    CreateForm();
+                    _drawingMode = DrawingMode.ShouldBeRedrawn;
+                    HandleException(DrawGraph, "Error while drawing graph");
+                }
+            };
+
             InitializeLog(applicationObject);
+            _control.MainControl.OnTop.Checked += (sender, args) =>
+            {
+                if (_form != null)
+                {
+                    _form.TopMost = true;
+                }
+            };
+            _control.MainControl.OnTop.Unchecked += (sender, args) =>
+            {
+                if (_form != null)
+                {
+                    _form.TopMost = false;
+                }
+            };
         }
 
         private void GenerateConfigOnClick(object sender, RoutedEventArgs e)

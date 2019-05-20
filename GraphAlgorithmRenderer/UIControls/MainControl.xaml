@@ -15,8 +15,12 @@
          <local:PropertiesControl x:Name="Nodes" Grid.Row="0" Grid.Column="0"/>
         <local:PropertiesControl x:Name="Edges" Grid.Row="0" Grid.Column="1"></local:PropertiesControl>
         <StackPanel Grid.Row="0" Grid.Column="2">
-            <Button x:Name="GenerateConfig" Content="Generate config"  VerticalAlignment="Center" HorizontalAlignment="Center"></Button>
+            <UniformGrid HorizontalAlignment="Center" Rows="2" Columns="1">
+            <Button x:Name="GenerateConfig" Content="Generate config"  VerticalAlignment="Center" Margin="10"></Button>
+            <Button x:Name="ShowGraph" Content="Show graph"  VerticalAlignment="Center" Margin="10"></Button>
+             </UniformGrid>
             <CheckBox x:Name="OnTop" Margin="10" IsChecked="True">Draw graph window on top</CheckBox>
+
         </StackPanel>
     </Grid>
 </UserControl>
