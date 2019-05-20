@@ -54,7 +54,7 @@ To update the extension, uninstall it first and then install a new version.
 
 ### Other samples
 
-To explore other samples, look at the <GraphAlgorithmRenderer/Samples>. Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
+To explore other samples, look at the [Samples](<GraphAlgorithmRenderer/Samples>). Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
 
 ## Glossary
 
