@@ -246,6 +246,7 @@ namespace GraphAlgorithmRenderer
 
         private void DrawGraph()
         {
+            DebuggerOperations.ClearOutput();
             _drawingMode = DrawingMode.Redrawing;
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -254,7 +255,7 @@ namespace GraphAlgorithmRenderer
                 _drawingMode = DrawingMode.NotChanged;
                 return;
             }
-
+            
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);

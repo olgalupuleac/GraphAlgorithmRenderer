@@ -171,6 +171,12 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             
         }
 
+        public static void ClearOutput()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Log.Clear();
+        }
+
         public static void Reset()
         {
             _numberOfGetExpressionCalls = 0;
