@@ -267,7 +267,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 17. Now we have the following node properties.![1558364631346](readme-images/node_properties.png)
 18. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
 19. Current edge... ![1558284941427](readme-images/1558284941427.png)
-20. Now we can the colorized graph! ![1558365514928](readme-images/colorized_graph.png)
+20. Now we can see the colorized graph.![1558365514928](readme-images/colorized_graph.png)
 21. Finally, we can serialize the generated config in JSON, save it somewhere, and deserialize it next time to avoid creating this config from the beginning. 
 
 ![1558284854490](readme-images/1558284854490.png)
@@ -283,5 +283,6 @@ Now we will create a config. We will have one node family with the index `v`  wi
 5. Keep in mind that it takes a second to process 100-200 expressions.
 6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being a notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but note that it works slower than accessing elements of `std::vector`.
 7. Sometimes text boxes in Graph Visualization settings seem to be blocked and a text cannot be entered or it appears somewhere else, for example in the file with the code. You can try to close all other windows including the source file (it doesn't mean closing the Solution or stopping the debugger). We would be grateful if you help us to find out how to reproduce this bug.
-8. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
+8. If you change a node family name in the UI, it will not change in the existing edge family windows. You can change it directly in the JSON config and deserialize it.
+9. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
    ![1558294468910](readme-images/1558294468910.png)

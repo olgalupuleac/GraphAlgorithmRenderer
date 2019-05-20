@@ -7,7 +7,7 @@
         "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
         "Source": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
-          "NodeFamilyName": "",
+          "NodeFamilyName": "node#0",
           "NamesWithTemplates": {
             "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
             "v": "edges[__e__].from"
@@ -15,13 +15,13 @@
         },
         "Target": {
           "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
-          "NodeFamilyName": "",
+          "NodeFamilyName": "node#0",
           "NamesWithTemplates": {
             "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
             "v": "edges[__e__].to"
           }
         },
-        "Name": "",
+        "Name": "edge#0",
         "Ranges": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer]], mscorlib",
           "$values": [
@@ -75,7 +75,7 @@
     "$values": [
       {
         "$type": "GraphAlgorithmRenderer.Config.NodeFamily, GraphAlgorithmRenderer",
-        "Name": "",
+        "Name": "node#0",
         "Ranges": {
           "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer]], mscorlib",
           "$values": [
