@@ -49,7 +49,7 @@
                 "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
                 "Template": "used_edges[g[__a__][__x__].id]",
                 "Mode": 0,
-                "FunctionNameRegex": "dfs"
+                "FunctionNameRegex": ".*"
               },
               "Properties": {
                 "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
@@ -71,7 +71,7 @@
                 "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
                 "Template": "g[v][i].id == g[__a__][__x__].id",
                 "Mode": 0,
-                "FunctionNameRegex": "dfs"
+                "FunctionNameRegex": ".*"
               },
               "Properties": {
                 "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
@@ -123,6 +123,27 @@
               "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
               "Condition": {
                 "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
+                "Template": "vertex_component[__v__] != -1",
+                "Mode": 0,
+                "FunctionNameRegex": ".*"
+              },
+              "Properties": {
+                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
+                "$values": [
+                  {
+                    "$type": "GraphAlgorithmRenderer.Config.LabelNodeProperty, GraphAlgorithmRenderer",
+                    "HighlightIfChanged": false,
+                    "ColorToHighLight": null,
+                    "LabelTextExpression": "{__v__ + 1}, comp={vertex_component[__v__]}, size={components_size[vertex_component[__v__]]}",
+                    "FontSize": null
+                  }
+                ]
+              }
+            },
+            {
+              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
+              "Condition": {
+                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
                 "Template": "true",
                 "Mode": 0,
                 "FunctionNameRegex": ".*"
@@ -134,7 +155,7 @@
                     "$type": "GraphAlgorithmRenderer.Config.LabelNodeProperty, GraphAlgorithmRenderer",
                     "HighlightIfChanged": false,
                     "ColorToHighLight": null,
-                    "LabelTextExpression": "{__v__}, comp={vertex_component[__v__]}, size={components_size[vertex_component[__v__]]}",
+                    "LabelTextExpression": "{__v__ + 1}",
                     "FontSize": null
                   }
                 ]

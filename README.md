@@ -35,7 +35,7 @@ To install the extension, download the VSIX file from the latest release here <h
 
 To remove the extension, select *Tools > Extensions and updates > Graph Visualization* and click uninstall.
 
-To update the extension, uninstall it first and install a new version.
+To update the extension, uninstall it first and then install a new version.
 
 ### Rendering DFS
 
@@ -159,8 +159,10 @@ void dfs(int v)
 
 int main()
 {
+#ifdef _DEBUG
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
+#endif
 	cin >> n >> m;
 	for (int i = 0; i < m; i++)
 	{
@@ -179,12 +181,13 @@ int main()
 			g[b - 1].push_back({ i , a - 1 });
 		}
 	}
+	fill(vertex_component, vertex_component + n, -1);
 	for (int i = 0; i < n; i++)
 	{
 		if (!used_vertexes[i])
 		{
+			dfs(i);
 			cur_component++;
-			dfs(i);	
 		}
 	}
 	cout << *max_element(components_size, components_size + cur_component) << endl;
@@ -215,36 +218,30 @@ Now, let's visualize this code. Assume we have the following input:
 Now we will create a config. We will have one node family with the index `v`  with values from `0` to `n`. After that, we will create an edge family with two indices corresponding to `g[][]`: 
 `a` from `0` to `n` and `x` from `0` to `g[a].size()`.  Then, we will define the edge source as `a` and edge target as `g[a][x].to`.
 
-1. First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.
+1. First, we want to specify the nodes. We can have several families of nodes and edges. For this particular problem, we will only need one node family and one edge family. To add a new node family click *Add* under the list with nodes.![start](readme-images/start.png)
 
- ![1557679512147](readme-images/1557679512147.png)
+ 
 
 2. The window with node family settings opens automatically. The default family names are *node#0, node#1* and so on, but you can specify your own.
 
-![1557745092625](readme-images/1557745092625.png)
+![1558348363365](readme-images/node_family_empty.png)
 
 3. In our example, we have one node family with the name *node#0* and one index in its identifier named *v*. Begin template is `0` and end template is `n`, which equals 10, so the nodes will be `node#0 v 0, node#0 v 1, ..., node#0 v 9`.
 
 ![1558285655171](readme-images/1558285655171.png)
 
-4. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x].to == b`.
-   So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.
+4. To access the window again after closing it double click its name in the list. ![1558348643653](readme-images/main_window.png)
+5. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x].to == b`.
+   So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.![1558348823781](readme-images/edge_family_window_indices.png)
+6. After choosing the family (we have only one option here), we need to set the target and source indices.![1558348965665](readme-images/choose_target_and_source.png)
+7. Click *Set source indices*. The following window appear. In our example, the source node corresponds to the first edge index. 
+   ![1558362644109](readme-images/source.png)
+   And the target corresponds to `g[a][x].to`.
+   ![1558362581186](readme-images/target.png)
 
-![1558285556838](readme-images/1558285556838.png)
 
-5. After choosing the family (we have only one option here), we need to set the target and source indices.
 
-![1558285516783](readme-images/1558285516783.png)
-
-6. So, we can get the target using this expression.
-
-![1558294076802](readme-images/1558294076802.png)
-
-And the source is the first identifier index.
-
-![1558286650083](readme-images/1558286650083.png)
-
-7. Finally, to avoid duplication of edges, we will specify the validation expression.
+7. Finally, to avoid duplication of edges, we will specify the validation expression. We will keep only those edges, where the source is less than or equals the target. 
 
 ![1558285463758](readme-images/1558285463758.png)
 
@@ -252,49 +249,22 @@ And the source is the first identifier index.
 
 8. Now, let's generate our config and see how it looks like. Click *Generate config*.
 
-![1557680335440](readme-images/1557680335440.png)
-
-As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add conditional properties to our config.
+![1558362786821](readme-images/created_config.png)As we can see, the graph is rendered correctly, but the node labels may seem confusing. To avoid it, let's add conditional properties to our config.
 
 ![1558285779613](readme-images/1558285779613.png)
 
-9. To add a conditional property, click *Add* under the list with conditional properties. The label will contain node id, the component id and the number of edges in the component (size).
-
-![1558284026226](readme-images/1558284026226.png)
-
-The short description of the condition appears in the list. 
-
-![1558285130507](readme-images/1558285130507.png)After adding a label to nodes, our picture improved. 
-
-![1557687893842](readme-images/1557687893842.png)
-
-10. Now let's add other node properties. 
-
-![1558285025190](readme-images/1558285025190.png)
-
-![1558284298986](readme-images/1558284298986.png)
-
-![1558284365990](readme-images/1558284365990.png)
-
-![1558286706767](readme-images/1558286706767.png)
-
-11. Edge properties...
-
-![1558284915478](readme-images/1558284915478.png)
-
-![1558284941427](readme-images/1558284941427.png)
-
-![1558284555106](readme-images/1558284555106.png)
-
-
-
-![1558284673055](readme-images/1558284673055.png)
-
-
-
-![1558284759186](readme-images/1558284759186.png)
-
-12. Finally, we can serialize the generated config in JSON, save it somewhere, and deserialize it next time to avoid creating this config from the beginning. 
+9. To add a conditional property, click *Add* under the list with conditional properties.![1558362922633](readme-images/add_conditional_property.png)
+10.  The default label will contain node id. ![1558363055779](readme-images/default_label.png)
+11. The short description of the condition appears in the list. To access the window with the conditional property, double click on the description. ![1558285130507](readme-images/1558285130507.png)
+12. In the main window, click *Generate config*. After adding a label to nodes, our picture has changed. ![1558363398476](readme-images/default_label_graph.png)
+13. Now let's add other node properties. First, we want to see which component a node belongs to a current number of edges in this component. ![1558363747957](readme-images/label.png)
+14. This property should have higher priority than the default label. Select a new property and click *Move up*. ![1558363908070](readme-images\move_up.png)
+15. Let's highlight the current DFS node... ![1558285025190](readme-images/1558285025190.png)....DFS nodes in the stack...![1558364238009](readme-images/stack_node.png)...and all visited nodes.![1558364398056](readme-images/visited_nodes.png)
+16. Now we have the following node properties.![1558364631346](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\node_properties.png)
+17. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
+18. Current edge... ![1558284941427](readme-images/1558284941427.png)
+19. Now we can the colorized graph! ![1558365514928](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\colorized_graph.png)
+20. Finally, we can serialize the generated config in JSON, save it somewhere, and deserialize it next time to avoid creating this config from the beginning. 
 
 ![1558284854490](readme-images/1558284854490.png)
 

@@ -45,8 +45,10 @@ void dfs(int v)
 
 int main()
 {
+#ifdef _DEBUG
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
+#endif
 	cin >> n >> m;
 	for (int i = 0; i < m; i++)
 	{
@@ -65,12 +67,13 @@ int main()
 			g[b - 1].push_back({ i , a - 1 });
 		}
 	}
+	fill(vertex_component, vertex_component + n, -1);
 	for (int i = 0; i < n; i++)
 	{
 		if (!used_vertexes[i])
 		{
-			cur_component++;
 			dfs(i);
+			cur_component++;
 		}
 	}
 	cout << *max_element(components_size, components_size + cur_component) << endl;
