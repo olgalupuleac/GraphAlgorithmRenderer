@@ -40,7 +40,7 @@ To update the extension, uninstall it first and then install a new version.
 ### Rendering DFS
 
 1. Install the extension.
-2. Open Visual Studio and create empty C++ project.
+2. Open Visual Studio and create an empty C++ project.
 3. Add *Source.cpp* file. Copy-paste [the code](<GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
 4. Add *in.txt* file. Copy-paste [the input](<GraphAlgorithmRenderer/Samples/Components/in.txt>)
 5. Select *View > Other windows > Graph Visualization* 
@@ -49,7 +49,7 @@ To update the extension, uninstall it first and then install a new version.
 8. Set a breakpoint at [line 71](<GraphAlgorithmRenderer/Samples/Components/Source.cpp#L71>).
 9. Start debugging.
 10. The window with the graph appears.
-11. Step into dfs.
+11. Step into DFS.
 12. The window with the graph updates automatically.
 
 ### Other samples
@@ -123,8 +123,8 @@ const int N = int(1e5);
 
 struct edge
 {
-	int id;
-	int to;
+    int id;
+    int to;
 };
 
 vector<edge> g[N];
@@ -138,60 +138,60 @@ int cur_component;
 
 void dfs(int v)
 {
-	used_vertexes[v] = true;
-	vertex_component[v] = cur_component;
-	for (int i = 0; i < g[v].size(); i++)
-	{
-		if (used_edges[g[v][i].id])
-		{
-			continue;
-		}
-		components_size[cur_component]++;
-		used_edges[g[v][i].id] = true;
-		int u = g[v][i].to;
-		if (used_vertexes[u])
-		{
-			continue;
-		}
-		dfs(u);
-	}
+    used_vertexes[v] = true;
+    vertex_component[v] = cur_component;
+    for (int i = 0; i < g[v].size(); i++)
+    {
+        if (used_edges[g[v][i].id])
+        {
+            continue;
+        }
+        components_size[cur_component]++;
+        used_edges[g[v][i].id] = true;
+        int u = g[v][i].to;
+        if (used_vertexes[u])
+        {
+            continue;
+        }
+        dfs(u);
+    }
 }
 
 int main()
 {
 #ifdef _DEBUG
-	freopen("in.txt", "r", stdin);
-	freopen("out.txt", "w", stdout);
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
 #endif
-	cin >> n >> m;
-	for (int i = 0; i < m; i++)
-	{
-		int a, b;
-		cin >> a >> b;
-		g[a - 1].push_back({ i, b - 1 });
-		// Checking (a != b) to avoid duplication of edges in config.
-		// It could be also achieved through
-		// following validation expression
-		// "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
-		// && __x__ % 2 == 0"
-		// but it seems slightly easier to do it in this way and use 
-		// this validation expression: "__a__ <= g[__a__][__x__].to"
-		if (a != b)
-		{
-			g[b - 1].push_back({ i , a - 1 });
-		}
-	}
-	fill(vertex_component, vertex_component + n, -1);
-	for (int i = 0; i < n; i++)
-	{
-		if (!used_vertexes[i])
-		{
-			dfs(i);
-			cur_component++;
-		}
-	}
-	cout << *max_element(components_size, components_size + cur_component) << endl;
-	return 0;
+    cin >> n >> m;
+    for (int i = 0; i < m; i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        g[a - 1].push_back({ i, b - 1 });
+        // Checking (a != b) to avoid duplication of edges in config.
+        // It could be also achieved through
+        // following validation expression
+        // "__a__ < g[__a__][__x__].to || __a__ == g[__a__][__x__].to
+        // && __x__ % 2 == 0"
+        // but it seems slightly easier to do it in this way and use 
+        // this validation expression: "__a__ <= g[__a__][__x__].to"
+        if (a != b)
+        {
+            g[b - 1].push_back({ i , a - 1 });
+        }
+    }
+    fill(vertex_component, vertex_component + n, -1);
+    for (int i = 0; i < n; i++)
+    {
+        if (!used_vertexes[i])
+        {
+            dfs(i);
+            cur_component++;
+        }
+    }
+    cout << *max_element(components_size, components_size + cur_component) << endl;
+    return 0;
 }
 ```
 
@@ -234,7 +234,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 5. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x].to == b`.
    So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.![1558348823781](readme-images/edge_family_window_indices.png)
 6. After choosing the family (we have only one option here), we need to set the target and source indices.![1558348965665](readme-images/choose_target_and_source.png)
-7. Click *Set source indices*. The following window appear. In our example, the source node corresponds to the first edge index. 
+7. Click *Set source indices*. The following window appears. In our example, the source node corresponds to the first edge index. 
 
    ![1558362644109](readme-images/source.png)
    
@@ -261,7 +261,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 12. The short description of the condition appears in the list. To access the window with the conditional property, double click on the description. ![1558285130507](readme-images/1558285130507.png)
 13. In the main window, click *Generate config*. After adding a label to nodes, our picture has changed. ![1558363398476](readme-images/default_label_graph.png)
 14. Now let's add other node properties. First, we want to see which component a node belongs to a current number of edges in this component. ![1558363747957](readme-images/label.png)
-15. This property should have higher priority than the default label. Select a new property and click *Move up*. ![1558363908070](readme-images/move_up.png)
+15. This property should have a higher priority than the default label. Select a new property and click *Move up*. ![1558363908070](readme-images/move_up.png)
 16. Let's highlight the current DFS node... ![1558285025190](readme-images/1558285025190.png)....DFS nodes in the stack...![1558364238009](readme-images/stack_node.png)...and all visited nodes.![1558364398056](readme-images/visited_nodes.png)
 17. Now we have the following node properties.![1558364631346](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\node_properties.png)
 18. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
@@ -280,6 +280,6 @@ Now we will create a config. We will have one node family with the index `v`  wi
 3. Remember that mode *AllStackframes* significantly increase the execution time. It seems more efficient to have a bool array which indicates if the property should be applied.
 4. You can use custom functions in the expressions. Note that it works slower than accessing `std::vector` elements.
 5. Keep in mind that it takes a second to process 100-200 expressions.
-6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but 
-7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
+6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being a notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but 
+7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
    ![1558294468910](readme-images/1558294468910.png)
