@@ -263,7 +263,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 14. Now let's add other node properties. First, we want to see which component a node belongs to a current number of edges in this component. ![1558363747957](readme-images/label.png)
 15. This property should have a higher priority than the default label. Select a new property and click *Move up*. ![1558363908070](readme-images/move_up.png)
 16. Let's highlight the current DFS node... ![1558285025190](readme-images/1558285025190.png)....DFS nodes in the stack...![1558364238009](readme-images/stack_node.png)...and all visited nodes.![1558364398056](readme-images/visited_nodes.png)
-17. Now we have the following node properties.![1558364631346](C:\Users\olga\source\repos\GraphAlgorithmRenderer\readme-images\node_properties.png)
+17. Now we have the following node properties.![1558364631346](readme-images/node_properties.png)
 18. Edges, visited by DFS...![1558284915478](readme-images/1558284915478.png)
 19. Current edge... ![1558284941427](readme-images/1558284941427.png)
 20. Now we can the colorized graph! ![1558365514928](readme-images/colorized_graph.png)
