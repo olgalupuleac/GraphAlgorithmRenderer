@@ -1,24 +1,24 @@
 # Graph algorithm visualization for debugging competitive programming tasks
 
 ## Table of Content
-* [Introduction/Graph Algorithm Renderer](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#introductiongraph-algorithm-renderer)
-* [Getting started](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#getting-started)
-  - [Prerequisites](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#prerequisites)
-  - [Installation](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#installation)
-  - [Rendering DFS](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#rendering-dfs)
-  - [Other samples](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#other-samples)
-* [Glossary](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#glossary)
-  - [Graph config](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#graph-config)
-  - [Node family](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#node-family)
-  - [Identifier](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#identifier)
-  - [Expression](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#expression)
-  - [Validation template](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#validation-template)
-  - [Edge family](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#edge-family)
-  - [Conditional properties](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#conditional-properties)
-  - [Condition](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#condition)
-  - [Properties](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#properties)
-* [Step-by-step DFS](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#step-by-step-dfs)
-* [Tips & tricks](https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/README.md#tips--tricks)
+* [Introduction/Graph Algorithm Renderer](#introductiongraph-algorithm-renderer)
+* [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Rendering DFS](#rendering-dfs)
+  - [Other samples](#other-samples)
+* [Glossary](#glossary)
+  - [Graph config](#graph-config)
+  - [Node family](#node-family)
+  - [Identifier](#identifier)
+  - [Expression](#expression)
+  - [Validation template](#validation-template)
+  - [Edge family](#edge-family)
+  - [Conditional properties](#conditional-properties)
+  - [Condition](#condition)
+  - [Properties](#properties)
+* [Step-by-step DFS](#step-by-step-dfs)
+* [Tips & tricks](#tips--tricks)
 ## Introduction/Graph Algorithm Renderer
 
 This Visual Studio extension was developed as an additional debugging tool for graph algorithms in competitive programming problems. It takes a description of a graph config from the user and renders a graph. The graph is redrawn every time when the debugger's context is changed. 
@@ -41,7 +41,7 @@ To update the extension, uninstall it first and install a new version.
 
 1. Install the extension.
 2. Open Visual Studio and create empty C++ project.
-3. Add *Source.cpp* file. Copy-paste [the code](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
+3. Add *Source.cpp* file. Copy-paste [the code](<GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
 4. Add *in.txt* file. Copy-paste [the input](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/in.txt>)
 5. Select *View > Other windows > Graph Visualization* 
 6. Open tab with JSON.
