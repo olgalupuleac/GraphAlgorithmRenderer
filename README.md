@@ -235,8 +235,10 @@ Now we will create a config. We will have one node family with the index `v`  wi
    So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.![1558348823781](readme-images/edge_family_window_indices.png)
 6. After choosing the family (we have only one option here), we need to set the target and source indices.![1558348965665](readme-images/choose_target_and_source.png)
 7. Click *Set source indices*. The following window appear. In our example, the source node corresponds to the first edge index. 
+
    ![1558362644109](readme-images/source.png)
    And the target corresponds to `g[a][x].to`.
+
    ![1558362581186](readme-images/target.png)
 
 
