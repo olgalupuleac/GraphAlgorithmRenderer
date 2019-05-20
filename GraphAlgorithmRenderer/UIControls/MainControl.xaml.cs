@@ -15,6 +15,7 @@ namespace GraphAlgorithmRenderer.UIControls
             InitializeComponent();
             Nodes.Label.Content = "Node families";
             Edges.Label.Content = "Edge families";
+            OnTop.Content = "Draw graph window\non top";
 
             Nodes.WindowGenerator = () => new NodeFamilyWindow{ NameIsSet = false };
             Nodes.Description = w =>
