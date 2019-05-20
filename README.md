@@ -41,7 +41,7 @@ To update the extension, uninstall it first and install a new version.
 
 1. Install the extension.
 2. Open Visual Studio and create empty C++ project.
-3. Add *Source.cpp* file. Copy-paste [the code](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/Source.cpp>)
+3. Add *Source.cpp* file. Copy-paste [the code](<Samples/Components/Source.cpp>)
 4. Add *in.txt* file. Copy-paste [the input](<https://github.com/olgalupuleac/GraphAlgorithmRenderer/blob/master/GraphAlgorithmRenderer/Samples/Components/in.txt>)
 5. Select *View > Other windows > Graph Visualization* 
 6. Open tab with JSON.
