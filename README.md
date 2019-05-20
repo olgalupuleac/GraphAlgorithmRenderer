@@ -230,7 +230,7 @@ Now we will create a config. We will have one node family with the index `v`  wi
 
 ![1558285655171](readme-images/1558285655171.png)
 
-4. To access the window again after closing it double click its name in the list. ![1558348643653](readme-images/main_window.png)
+4. To access the window again after closing, double click on its name in the list. ![1558348643653](readme-images/main_window.png)
 5. Now let's take a look at the edge family config. First, we will set indices. There is an edge between `a` and `b` if there is `x` such that `g[a][x].to == b`.
    So, our indices will be `a` and `x`. Note that we use a previous index to define a range of `x`.![1558348823781](readme-images/edge_family_window_indices.png)
 6. After choosing the family (we have only one option here), we need to set the target and source indices.![1558348965665](readme-images/choose_target_and_source.png)
@@ -281,5 +281,5 @@ Now we will create a config. We will have one node family with the index `v`  wi
 4. You can use custom functions in the expressions. Note that it works slower than accessing `std::vector` elements.
 5. Keep in mind that it takes a second to process 100-200 expressions.
 6. The Standard Template Library functions and class methods are not supported in the expressions (`operator[]` being a notable exception). It means that you cannot render elements in `std::unordered_set` or use `std::find`. Try to use `std::vector` or arrays instead. You can use custom functions, but 
-7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*.
+7. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
    ![1558294468910](readme-images/1558294468910.png)
