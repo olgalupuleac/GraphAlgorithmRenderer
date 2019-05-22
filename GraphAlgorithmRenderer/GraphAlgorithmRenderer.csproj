@@ -135,6 +135,7 @@
     <None Include="Samples\Components\config.json" />
     <None Include="Samples\Dinic\config.json" />
     <None Include="Samples\DSU\config.json" />
+    <None Include="Samples\FordBellman\config.json" />
     <None Include="Samples\Treap\config.json" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -165,6 +166,9 @@
     <Content Include="Samples\DSU\join.png" />
     <Content Include="Samples\DSU\get.png" />
     <Content Include="Samples\DSU\Source.cpp" />
+    <Content Include="Samples\FordBellman\in.txt" />
+    <Content Include="Samples\FordBellman\ford_bellman.png" />
+    <Content Include="Samples\FordBellman\Source.cpp" />
     <Content Include="Samples\Treap\Source.cpp" />
     <Content Include="Samples\Treap\split.png" />
     <Content Include="stylesheet.css" />
