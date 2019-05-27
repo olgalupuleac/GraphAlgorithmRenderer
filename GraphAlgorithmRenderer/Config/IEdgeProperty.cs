@@ -80,12 +80,12 @@ namespace GraphAlgorithmRenderer.Config
         }
     }
 
-    public class ArrowProperty : IEdgeProperty
+    public class ArrowEdgeProperty : IEdgeProperty
     {
         public bool ArrowAtTarget { get; set; }
         public bool ArrowAtSource { get; set; }
         [JsonConstructor]
-        public ArrowProperty(bool arrowAtTarget, bool arrowAtSource)
+        public ArrowEdgeProperty(bool arrowAtTarget, bool arrowAtSource)
         {
             ArrowAtSource = arrowAtSource;
             ArrowAtTarget = arrowAtTarget;

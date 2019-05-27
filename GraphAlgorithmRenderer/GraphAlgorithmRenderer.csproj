@@ -131,6 +131,7 @@
     <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="packages.config" />
+    <None Include="Samples\BinaryHeap\config.json" />
     <None Include="Samples\Bridges\config.json" />
     <None Include="Samples\Components\config.json" />
     <None Include="Samples\Dinic\config.json" />
@@ -152,6 +153,8 @@
     <VSCTCompile Include="SettingsWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
+    <Content Include="Samples\BinaryHeap\sift_up.png" />
+    <Content Include="Samples\BinaryHeap\Source.cpp" />
     <Content Include="Samples\Bridges\dfs.png" />
     <Content Include="Samples\Bridges\in.txt" />
     <Content Include="Samples\Bridges\new_comp.png" />
