@@ -177,6 +177,21 @@
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="App.Metrics.Abstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812, processorArchitecture=MSIL">
+      <HintPath>..\packages\App.Metrics.Abstractions.2.1.0\lib\net45\App.Metrics.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Metrics.Concurrency, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812, processorArchitecture=MSIL">
+      <HintPath>..\packages\App.Metrics.Concurrency.2.0.1\lib\net45\App.Metrics.Concurrency.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Metrics.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812, processorArchitecture=MSIL">
+      <HintPath>..\packages\App.Metrics.Core.2.1.0\lib\net452\App.Metrics.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Metrics.Formatters.Ascii, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0d5193a913d1b812, processorArchitecture=MSIL">
+      <HintPath>..\packages\App.Metrics.Formatters.Ascii.2.1.0\lib\net452\App.Metrics.Formatters.Ascii.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Metrics.OpenTracing, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\App.Metrics.OpenTracing.0.0.0.1\lib\net452\App.Metrics.OpenTracing.dll</HintPath>
+    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -267,15 +282,23 @@
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTracing, Version=0.12.0.0, Culture=neutral, PublicKeyToken=61503406977abdaf, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTracing.0.12.0\lib\net45\OpenTracing.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTracing.Contrib.Decorators, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTracing.Contrib.Decorators.0.0.2\lib\net45\OpenTracing.Contrib.Decorators.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />

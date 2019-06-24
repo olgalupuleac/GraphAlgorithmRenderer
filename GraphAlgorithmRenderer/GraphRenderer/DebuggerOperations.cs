@@ -50,16 +50,16 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var res = MeasureTime(() =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                return debugger.GetExpression(expression);
+                var expr = debugger.GetExpression(expression);
+                return new GetExpressionResult {IsValid = expr.IsValidValue, Value = expr.Value};
             }, ref _timeSpanGetExpressions, ref _numberOfGetExpressionCalls);
-            var isValid = res.IsValidValue;
-            var value = res.Value;
-            if (!isValid)
+       
+            if (!res.IsValid)
             {
-                Log.OutputString($"Expression {expression} is not a valid value:\n{value}\n");
+                Log.OutputString($"Expression {expression} is not a valid value:\n{res.Value}\n");
             }
 
-            return new GetExpressionResult {IsValid = isValid, Value = value};
+            return res;
         }
 
         public static GetExpressionResult GetExpressionForIdentifier(string template, Identifier identifier,

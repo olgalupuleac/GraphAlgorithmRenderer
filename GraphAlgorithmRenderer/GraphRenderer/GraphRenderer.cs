@@ -50,12 +50,11 @@ namespace GraphAlgorithmRenderer.GraphRenderer
                 void EdgeAddition(GraphElementFamily<IEdgeProperty> family, Identifier identifier) =>
                     AddEdge(family as EdgeFamily, identifier);
 
-                ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);
-                WriteDebugOutput();
-                Reset();
+                ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);  
             }
+            WriteDebugOutput();
+            Reset();
 
-           
             return _graph;
         }
 
