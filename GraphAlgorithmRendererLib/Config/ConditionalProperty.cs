@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace GraphAlgorithmRendererLib.Config
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ConditionMode
     {
         CurrentStackFrame,
@@ -23,10 +25,8 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty] public string Template { get; }
         [JsonProperty] public ConditionMode Mode { get; }
 
-        public string WrappedRegex()
-        {
-            return "^" + FunctionNameRegex + "$";
-        }
+        [JsonIgnore]
+        public string WrappedRegex => "^" + FunctionNameRegex + "$";
 
         [JsonProperty]
         public string FunctionNameRegex { get; set; }

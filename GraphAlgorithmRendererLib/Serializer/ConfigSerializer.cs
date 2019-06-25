@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using GraphAlgorithmRendererLib.Config;
 using Newtonsoft.Json;
 
@@ -12,12 +13,16 @@ namespace GraphAlgorithmRendererLib.Serializer
         {
             _jsonSettings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All,
+                //TypeNameHandling = TypeNameHandling.All,
                 //TypeNameAssemblyFormat = FormatterAssemblyStyle.Full,
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                MaxDepth = 100
+                MaxDepth = 100,
+                Converters = new List<JsonConverter>
+                {
+                    new EdgePropertyConverter(),
+                    new NodePropertyConverter()
+                }
             };
-            Debug.WriteLine("Initialized");
         }
 
 

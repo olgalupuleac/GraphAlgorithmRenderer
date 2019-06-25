@@ -43,11 +43,11 @@ namespace GraphAlgorithmRendererLib.Config
     {
         public class EdgeEnd
         {
-            public string NodeFamilyName { get; set; }
+            public string FamilyName { get; set; }
             public EdgeEnd(NodeFamily node, List<string> templates)
             {
-                NamesWithTemplates = GetTemplates(node, templates);
-                NodeFamilyName = node.Name;
+                Templates = GetTemplates(node, templates);
+                FamilyName = node.Name;
             }
 
             [JsonConstructor]
@@ -55,7 +55,7 @@ namespace GraphAlgorithmRendererLib.Config
             {
             }
 
-            [JsonProperty] public Dictionary<string, string> NamesWithTemplates { get; set; }
+            [JsonProperty] public Dictionary<string, string> Templates { get; set; }
 
             private Dictionary<string, string> GetTemplates(NodeFamily node, List<string> templates)
             {

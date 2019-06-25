@@ -148,7 +148,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         {
 
             if (!Regex.IsMatch(DebuggerOperations.FunctionName(DebuggerOperations.CurrentStackFrame(_debugger)),
-                conditionalProperty.Condition.WrappedRegex()))
+                conditionalProperty.Condition.WrappedRegex))
             {
                 return;
             }
@@ -164,7 +164,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex))
                 {
                     continue;
                 }
@@ -185,7 +185,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex))
                 {
                     continue;
                 }
@@ -212,7 +212,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
 
         private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier, string message)
         {
-            var templates = edgeEnd.NamesWithTemplates;
+            var templates = edgeEnd.Templates;
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
@@ -220,7 +220,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
-            return new Identifier(edgeEnd.NodeFamilyName, res);
+            return new Identifier(edgeEnd.FamilyName, res);
         }
     }
 }

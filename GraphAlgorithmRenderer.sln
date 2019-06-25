@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithmRenderer", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithmRendererLib", "GraphAlgorithmRendererLib\GraphAlgorithmRendererLib.csproj", "{1115F06A-EBCF-4172-8EE7-ED3A3F1B2E5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithmRenderer.Tests", "GraphAlgorithmRenderer.Tests\GraphAlgorithmRenderer.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1115F06A-EBCF-4172-8EE7-ED3A3F1B2E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1115F06A-EBCF-4172-8EE7-ED3A3F1B2E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1115F06A-EBCF-4172-8EE7-ED3A3F1B2E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

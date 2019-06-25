@@ -47,7 +47,7 @@ namespace GraphAlgorithmRendererLib.Config
                 { ValidationTemplate = "__x__ < g[__a__].size()" };
                 var directed = new ConditionalProperty<IEdgeProperty>(
                     new Condition("true"), 
-                    new ArrowProperty(true, false));
+                    new ArrowEdgeProperty(true, false));
                 var dfsEdges = new ConditionalProperty<IEdgeProperty>(
                     new Condition("p[g[__a__][__x__]].first == __a__ && p[g[__a__][__x__]].second == __x__"),
                     new LineColorEdgeProperty(Color.Red));
@@ -233,7 +233,7 @@ namespace GraphAlgorithmRendererLib.Config
                 nodes.ConditionalProperties.Add(label);
                 var directed = new ConditionalProperty<IEdgeProperty>(
                     new Condition("true"),
-                    new ArrowProperty(true, false));
+                    new ArrowEdgeProperty(true, false));
                 var edges = new EdgeFamily(new List<IdentifierPartTemplate>
                     {
                         new IdentifierPartTemplate("i", "0", "n")
@@ -345,7 +345,7 @@ namespace GraphAlgorithmRendererLib.Config
                 rightNull.ConditionalProperties.Add(curTNullNode);
                 var directed = new ConditionalProperty<IEdgeProperty>(
                     new Condition("true"),
-                    new ArrowProperty(true, false));
+                    new ArrowEdgeProperty(true, false));
                 var rightEdges = new EdgeFamily(
                         new List<IdentifierPartTemplate>
                         {

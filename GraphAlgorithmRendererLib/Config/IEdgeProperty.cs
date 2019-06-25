@@ -1,12 +1,15 @@
 ﻿using GraphAlgorithmRendererLib.GraphRenderer;
+using GraphAlgorithmRendererLib.Serializer;
 using Microsoft.Msagl.Drawing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Debugger = EnvDTE.Debugger;
 
 namespace GraphAlgorithmRendererLib.Config
 {
     public interface IEdgeProperty
     {
+        string Type { get; }
         void Apply(Edge edge, Debugger debugger, Identifier identifier);
     }
 
@@ -17,6 +20,9 @@ namespace GraphAlgorithmRendererLib.Config
         {
             FontSize = 6;
         }
+
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "Label";
 
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
@@ -38,6 +44,9 @@ namespace GraphAlgorithmRendererLib.Config
             LineWidth = lineWidth;
         }
 
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "LineWidth";
+
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
             edge.Attr.LineWidth = LineWidth;
@@ -51,6 +60,9 @@ namespace GraphAlgorithmRendererLib.Config
         {
             Color = color;
         }
+
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "LineColor";
 
         [JsonProperty] public Color Color { get; }
 
@@ -68,7 +80,12 @@ namespace GraphAlgorithmRendererLib.Config
             Style = style;
         }
 
-        [JsonProperty] public Style Style { get; }
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "Style";
+
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Style Style { get; }
 
         public void Apply(Edge edge, Debugger debugger, Identifier identifier)
         {
@@ -76,12 +93,16 @@ namespace GraphAlgorithmRendererLib.Config
         }
     }
 
-    public class ArrowProperty : IEdgeProperty
+    public class ArrowEdgeProperty : IEdgeProperty
     {
         public bool ArrowAtTarget { get; set; }
         public bool ArrowAtSource { get; set; }
+
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "Arrow";
+
         [JsonConstructor]
-        public ArrowProperty(bool arrowAtTarget, bool arrowAtSource)
+        public ArrowEdgeProperty(bool arrowAtTarget, bool arrowAtSource)
         {
             ArrowAtSource = arrowAtSource;
             ArrowAtTarget = arrowAtTarget;

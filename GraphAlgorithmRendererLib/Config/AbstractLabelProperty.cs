@@ -14,7 +14,9 @@ namespace GraphAlgorithmRendererLib.Config
             LabelTextExpression = labelTextExpression;
         }
 
+        [JsonIgnore]
         public bool HighlightIfChanged { get; set; }
+        [JsonIgnore]
         public Color? ColorToHighLight { get; set; }
         [JsonProperty] public string LabelTextExpression { get; }
         public double? FontSize { get; set; }
