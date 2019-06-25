@@ -155,11 +155,6 @@ namespace GraphAlgorithmRenderer
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
-            Debug.WriteLine("DSU");
-            Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.DsuConfig));
-
-            Debug.WriteLine("Treap");
-            Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.TreapConfig));
 
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>

@@ -89,7 +89,9 @@ namespace GraphAlgorithmRendererLib.Config
 
     public class GraphConfig
     {
+        [JsonProperty(Order = 1)]
         public List<EdgeFamily> Edges { get; set; }
+        [JsonProperty]
         public List<NodeFamily> Nodes { get; set; }
 
         public GraphConfig()

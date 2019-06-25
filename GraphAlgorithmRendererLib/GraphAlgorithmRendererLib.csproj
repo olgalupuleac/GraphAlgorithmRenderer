@@ -78,7 +78,6 @@
     <Compile Include="Config\IdentifierTemplate.cs" />
     <Compile Include="Config\IEdgeProperty.cs" />
     <Compile Include="Config\INodeProperty.cs" />
-    <Compile Include="Config\NetConfigs.cs" />
     <Compile Include="GraphRenderer\DebuggerOperations.cs" />
     <Compile Include="GraphRenderer\GraphRenderer.cs" />
     <Compile Include="GraphRenderer\GraphRenderException.cs" />
