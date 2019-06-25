@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using GraphAlgorithmRenderer.GraphRenderer;
+﻿using GraphAlgorithmRendererLib.GraphRenderer;
 using Microsoft.Msagl.Drawing;
-using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
 using Debugger = EnvDTE.Debugger;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public interface IEdgeProperty
     {

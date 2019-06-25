@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using GraphAlgorithmRenderer.Serializer;
+using GraphAlgorithmRendererLib.Serializer;
 using Microsoft.Msagl.Drawing;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public class ConfigCreator
     {
-        public static Config.GraphConfig DfsConfig
+        public static GraphConfig DfsConfig
         {
             get
             {
@@ -55,7 +55,7 @@ namespace GraphAlgorithmRenderer.Config
                 edges.ConditionalProperties.Add(dfsEdges);
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                var config =  new Config.GraphConfig
+                var config =  new GraphConfig
                 {
                     Edges = new List<EdgeFamily> { edges },
                     Nodes = new List<NodeFamily> { nodes }
@@ -65,7 +65,7 @@ namespace GraphAlgorithmRenderer.Config
             }
         }
 
-        public static Config.GraphConfig FlowConfig
+        public static GraphConfig FlowConfig
         {
             get
             {
@@ -144,7 +144,7 @@ namespace GraphAlgorithmRenderer.Config
 
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                return new Config.GraphConfig
+                return new GraphConfig
                 {
                     Edges = new List<EdgeFamily> { edges },
                     Nodes = new List<NodeFamily> { nodes }
@@ -152,7 +152,7 @@ namespace GraphAlgorithmRenderer.Config
             }
         }
 
-        public static Config.GraphConfig BridgesConfig
+        public static GraphConfig BridgesConfig
         {
             get
             {
@@ -208,7 +208,7 @@ namespace GraphAlgorithmRenderer.Config
 
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                return new Config.GraphConfig
+                return new GraphConfig
                 {
                     Nodes = new List<NodeFamily> { nodes },
                     Edges = new List<EdgeFamily> { edges }
@@ -216,7 +216,7 @@ namespace GraphAlgorithmRenderer.Config
             }
         }
 
-        public static Config.GraphConfig DsuConfig
+        public static GraphConfig DsuConfig
         {
             get
             {
@@ -243,7 +243,7 @@ namespace GraphAlgorithmRenderer.Config
 
                 nodes.ConditionalProperties.Reverse();
                 edges.ConditionalProperties.Reverse();
-                var config = new Config.GraphConfig()
+                var config = new GraphConfig()
                 {
                     Edges = new List<EdgeFamily> { edges },
                     Nodes = new List<NodeFamily> { nodes }
@@ -255,7 +255,7 @@ namespace GraphAlgorithmRenderer.Config
         }
 
 
-        public static Config.GraphConfig TreapConfig
+        public static GraphConfig TreapConfig
         {
             get
             {
@@ -401,7 +401,7 @@ namespace GraphAlgorithmRenderer.Config
                 leftEdges.ConditionalProperties.Reverse();
                 nullLeftEdges.ConditionalProperties.Reverse();
                 
-                var config = new Config.GraphConfig
+                var config = new GraphConfig
                 {
                     Nodes = new List<NodeFamily>
                     {

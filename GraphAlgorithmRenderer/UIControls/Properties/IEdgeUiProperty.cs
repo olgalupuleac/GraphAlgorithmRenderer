@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties
 {

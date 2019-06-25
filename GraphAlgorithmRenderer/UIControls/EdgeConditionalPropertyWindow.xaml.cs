@@ -10,10 +10,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.UIControls.Properties;
+using GraphAlgorithmRendererLib.Config;
 using static System.Single;
-using Condition = GraphAlgorithmRenderer.Config.Condition;
+using Condition = GraphAlgorithmRendererLib.Config.Condition;
 using Style = Microsoft.Msagl.Drawing.Style;
 
 namespace GraphAlgorithmRenderer.UIControls

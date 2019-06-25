@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
-using GraphAlgorithmRenderer.Config;
-using GraphAlgorithmRenderer.GraphRenderer;
-using GraphAlgorithmRenderer.Serializer;
+using GraphAlgorithmRendererLib.Config;
+using GraphAlgorithmRendererLib.GraphRenderer;
+using GraphAlgorithmRendererLib.Serializer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using WpfExceptionViewer;
@@ -23,7 +23,7 @@ namespace GraphAlgorithmRenderer
     using System;
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
-    using GraphConfig = Config.GraphConfig;
+    using GraphConfig = GraphConfig;
 
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -258,7 +258,7 @@ namespace GraphAlgorithmRenderer
             
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
+            var renderer = new GraphAlgorithmRendererLib.GraphRenderer.GraphRenderer(_config, _debugger);
             Graph graph = renderer.RenderGraph();
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using static System.String;
 
 namespace GraphAlgorithmRenderer.UIControls

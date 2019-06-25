@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Runtime.Serialization.Formatters;
+using GraphAlgorithmRendererLib.Config;
 using Newtonsoft.Json;
-using static Newtonsoft.Json.JsonConvert;
 
-namespace GraphAlgorithmRenderer.Serializer
+namespace GraphAlgorithmRendererLib.Serializer
 {
     public class ConfigSerializer
     {
@@ -24,12 +23,12 @@ namespace GraphAlgorithmRenderer.Serializer
 
         public static string ToJson(object data)
         {
-            return SerializeObject(data, Formatting.Indented, _jsonSettings);
+            return JsonConvert.SerializeObject(data, Formatting.Indented, _jsonSettings);
         }
 
-        public static Config.GraphConfig FromJson(string json)
+        public static GraphConfig FromJson(string json)
         {
-            return DeserializeObject<Config.GraphConfig>(json, _jsonSettings);
+            return JsonConvert.DeserializeObject<GraphConfig>(json, _jsonSettings);
         }
     }
 }

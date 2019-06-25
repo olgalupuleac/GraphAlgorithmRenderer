@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties
 {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using EnvDTE;
-using GraphAlgorithmRenderer.GraphRenderer;
+using GraphAlgorithmRendererLib.GraphRenderer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
-using static GraphAlgorithmRenderer.GraphRenderer.DebuggerOperations;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public abstract class AbstractLabelProperty
     {
@@ -28,8 +26,8 @@ namespace GraphAlgorithmRenderer.Config
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
-                var expression = Substitute(v.Substring(1, v.Length - 2), identifier, CurrentStackFrame(debugger));
-                return GetExpressionForIdentifier(expression, identifier, debugger).Value;
+                var expression = DebuggerOperations.Substitute(v.Substring(1, v.Length - 2), identifier, DebuggerOperations.CurrentStackFrame(debugger));
+                return DebuggerOperations.GetExpressionForIdentifier(expression, identifier, debugger).Value;
             });
 
             if (FontSize.HasValue)

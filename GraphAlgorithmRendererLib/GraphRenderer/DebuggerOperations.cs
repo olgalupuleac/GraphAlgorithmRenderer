@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Shell;
 using Debugger = EnvDTE.Debugger;
 using StackFrame = EnvDTE.StackFrame;
 
-namespace GraphAlgorithmRenderer.GraphRenderer
+namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public struct GetExpressionResult
     {

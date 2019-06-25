@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Threading;
-using EnvDTE;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using Microsoft.Msagl.Drawing;
-using Microsoft.VisualStudio.Shell;
-using static GraphAlgorithmRenderer.GraphRenderer.DebuggerOperations;
 using Debugger = EnvDTE.Debugger;
 using StackFrame = EnvDTE.StackFrame;
 
-namespace GraphAlgorithmRenderer.GraphRenderer
+namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public class GraphRenderer
     {
-        private readonly GraphAlgorithmRenderer.Config.GraphConfig _config;
+        private readonly GraphConfig _config;
         private readonly Debugger _debugger;
         private Graph _graph;
         private readonly Dictionary<Identifier, Edge> _edges;
         private readonly Dictionary<Identifier, Node> _nodes;
 
 
-        public GraphRenderer(GraphAlgorithmRenderer.Config.GraphConfig config, Debugger debugger)
+        public GraphRenderer(GraphConfig config, Debugger debugger)
         {
             _config = config;
             _debugger = debugger;
@@ -52,8 +47,8 @@ namespace GraphAlgorithmRenderer.GraphRenderer
 
                 ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);  
             }
-            WriteDebugOutput();
-            Reset();
+            DebuggerOperations.WriteDebugOutput();
+            DebuggerOperations.Reset();
 
             return _graph;
         }
@@ -143,7 +138,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ApplyProperty<T> applyProperty)
         {
             identifiers.Where(id =>
-                    CheckExpressionForIdentifier(conditionalProperty.Condition.Template, id, _debugger))
+                    DebuggerOperations.CheckExpressionForIdentifier(conditionalProperty.Condition.Template, id, _debugger))
                 .ToList().ForEach(id => conditionalProperty.Properties.ForEach(p => applyProperty(p, id)));
         }
 
@@ -152,7 +147,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ApplyProperty<T> applyProperty)
         {
 
-            if (!Regex.IsMatch(FunctionName(CurrentStackFrame(_debugger)),
+            if (!Regex.IsMatch(DebuggerOperations.FunctionName(DebuggerOperations.CurrentStackFrame(_debugger)),
                 conditionalProperty.Condition.WrappedRegex()))
             {
                 return;
@@ -165,21 +160,21 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            var currentStackFrame = CurrentStackFrame(_debugger);
-            var stackFrames = GetStackFrames(_debugger);
+            var currentStackFrame = DebuggerOperations.CurrentStackFrame(_debugger);
+            var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
                 {
                     continue;
                 }
 
-                SetStackFrame(stackFrame, _debugger);
+                DebuggerOperations.SetStackFrame(stackFrame, _debugger);
                 ApplyPropertyStackFrame(identifiers,
                     conditionalProperty, applyProperty);
             }
 
-            SetStackFrame(currentStackFrame, _debugger);
+            DebuggerOperations.SetStackFrame(currentStackFrame, _debugger);
         }
 
 
@@ -187,18 +182,18 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            var stackFrames = GetStackFrames(_debugger);
+            var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
             foreach (StackFrame stackFrame in stackFrames)
             {
-                if (!Regex.IsMatch(FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
+                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex()))
                 {
                     continue;
                 }
 
                 foreach (var id in identifiers)
                 {
-                    var expressionString = Substitute(conditionalProperty.Condition.Template, id, stackFrame);
-                    if (CheckExpression(expressionString, _debugger))
+                    var expressionString = DebuggerOperations.Substitute(conditionalProperty.Condition.Template, id, stackFrame);
+                    if (DebuggerOperations.CheckExpression(expressionString, _debugger))
                     {
                         conditionalProperty.Properties.ForEach(p => applyProperty(p, id));
                     }
@@ -211,7 +206,7 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             return String.IsNullOrEmpty(conditionTemplate)
                 ? identifiers
                 : identifiers.Where(id =>
-                    CheckExpressionForIdentifier(conditionTemplate, id, _debugger)).ToList();
+                    DebuggerOperations.CheckExpressionForIdentifier(conditionTemplate, id, _debugger)).ToList();
         }
 
 

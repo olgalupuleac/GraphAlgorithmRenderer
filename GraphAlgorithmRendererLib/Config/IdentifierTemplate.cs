@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public class IdentifierPartTemplate
     {

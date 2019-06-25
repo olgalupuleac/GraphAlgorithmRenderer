@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using static System.Single;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties

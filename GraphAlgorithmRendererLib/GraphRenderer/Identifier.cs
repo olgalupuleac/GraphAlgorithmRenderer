@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using Debugger = EnvDTE.Debugger;
 
-namespace GraphAlgorithmRenderer.GraphRenderer
+namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public class IdentifierPartRange
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GraphAlgorithmRenderer.GraphRenderer
+namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public class GraphRenderException : Exception
     {

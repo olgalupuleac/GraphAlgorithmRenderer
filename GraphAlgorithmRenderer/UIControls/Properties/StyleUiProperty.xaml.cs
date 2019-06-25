@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using Style = Microsoft.Msagl.Drawing.Style;
 
 namespace GraphAlgorithmRenderer.UIControls.Properties
