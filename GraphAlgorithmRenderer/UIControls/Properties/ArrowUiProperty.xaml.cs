@@ -51,7 +51,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
         public void FromIEdgeProperty(IEdgeProperty property)
         {
-            if (!(property is ArrowEdgeProperty arrowProperty)) return;
+            if (!(property is ArrowProperty arrowProperty)) return;
             CheckBox.IsChecked = true;
             Target.IsChecked = arrowProperty.ArrowAtTarget;
             Source.IsChecked = arrowProperty.ArrowAtSource;
@@ -68,7 +68,7 @@ namespace GraphAlgorithmRenderer.UIControls.Properties
 
                 return new List<IEdgeProperty>
                 {
-                    new ArrowEdgeProperty(Target.IsChecked == true, Source.IsChecked == true)
+                    new ArrowProperty(Target.IsChecked == true, Source.IsChecked == true)
                 };
             }
         }
