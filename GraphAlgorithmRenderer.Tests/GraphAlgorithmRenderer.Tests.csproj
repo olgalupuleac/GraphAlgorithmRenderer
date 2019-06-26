@@ -49,6 +49,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonOldFormatTest.cs" />
     <Compile Include="JsonTest.cs" />
   </ItemGroup>
   <ItemGroup>

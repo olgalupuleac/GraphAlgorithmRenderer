@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using GraphAlgorithmRendererLib.Config;
 using Microsoft.Msagl.Drawing;
 using Newtonsoft.Json;
@@ -6,9 +7,10 @@ using Newtonsoft.Json.Linq;
 
 namespace GraphAlgorithmRendererLib.Serializer
 {
-    public abstract  class JsonCreationConverter<T> : JsonConverter
+    public abstract class JsonCreationConverter<T> : JsonConverter
     {
         protected abstract T Create(Type objectType, JObject jObject);
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
@@ -42,22 +44,27 @@ namespace GraphAlgorithmRendererLib.Serializer
     {
         protected override IEdgeProperty Create(Type objectType, JObject jObject)
         {
-            switch (jObject["Type"].Value<string>())
+            var actualType = jObject["Type"] != null
+                ? jObject["Type"].Value<string>()
+                : jObject["$type"].Value<string>();
+            switch (actualType)
             {
-                case "Label":
+                case var type when new Regex("Label").IsMatch(type):
                     return new LabelEdgeProperty(jObject["LabelTextExpression"].Value<string>())
                     {
                         FontSize = jObject["FontSize"].Value<double?>()
                     };
-                case "LineWidth":
+                case var type when new Regex("LineWidth").IsMatch(type):
                     return new LineWidthEdgeProperty(jObject["LineWidth"].Value<double>());
-                case "LineColor":
+                case var type when new Regex("LineColor").IsMatch(type):
                     return new LineColorEdgeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(), jObject["Color"]["B"].Value<byte>()));
-                case "Style":
+                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
+                        jObject["Color"]["B"].Value<byte>()));
+                case var type when new Regex("Style").IsMatch(type):
                     return new StyleEdgeProperty((Style) Enum.Parse(typeof(Style), jObject["Style"].Value<string>()));
-                case "Arrow":
-                    return new ArrowEdgeProperty(jObject["ArrowAtTarget"].Value<bool>(), jObject["ArrowAtSource"].Value<bool>());
+                case var type when new Regex("Arrow").IsMatch(type):
+                    return new ArrowEdgeProperty(jObject["ArrowAtTarget"].Value<bool>(),
+                        jObject["ArrowAtSource"].Value<bool>());
                 default:
                     throw new NotImplementedException();
             }
@@ -68,25 +75,31 @@ namespace GraphAlgorithmRendererLib.Serializer
     {
         protected override INodeProperty Create(Type objectType, JObject jObject)
         {
-            switch (jObject["Type"].Value<string>())
+            var actualType = jObject["Type"] != null
+                ? jObject["Type"].Value<string>()
+                : jObject["$type"].Value<string>();
+
+            switch (actualType)
             {
-                case "Label":
+                case var type when new Regex("Label").IsMatch(type):
                     return new LabelNodeProperty(jObject["LabelTextExpression"].Value<string>())
                     {
                         FontSize = jObject["FontSize"].Value<double?>()
                     };
-                case "LineWidth":
+                case var type when new Regex("LineWidth").IsMatch(type):
                     return new LineWidthNodeProperty(jObject["LineWidth"].Value<double>());
-                case "LineColor":
+                case var type when new Regex("LineColor").IsMatch(type):
                     return new LineColorNodeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(), jObject["Color"]["B"].Value<byte>()));
-                case "Style":
-                    return new StyleNodeProperty((Style)Enum.Parse(typeof(Style), jObject["Style"].Value<string>()));
-                case "FillColor":
+                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
+                        jObject["Color"]["B"].Value<byte>()));
+                case var type when new Regex("Style").IsMatch(type):
+                    return new StyleNodeProperty((Style) Enum.Parse(typeof(Style), jObject["Style"].Value<string>()));
+                case var type when new Regex("FillColor").IsMatch(type):
                     return new FillColorNodeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(), jObject["Color"]["B"].Value<byte>()));
-                case "Shape":
-                    return new ShapeNodeProperty((Shape)Enum.Parse(typeof(Shape), jObject["Shape"].Value<string>()));
+                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
+                        jObject["Color"]["B"].Value<byte>()));
+                case var type when new Regex("Shape").IsMatch(type):
+                    return new ShapeNodeProperty((Shape) Enum.Parse(typeof(Shape), jObject["Shape"].Value<string>()));
                 default:
                     throw new NotImplementedException();
             }

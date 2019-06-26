@@ -20,7 +20,8 @@ namespace GraphAlgorithmRendererLib.Serializer
                 Converters = new List<JsonConverter>
                 {
                     new EdgePropertyConverter(),
-                    new NodePropertyConverter()
+                    new NodePropertyConverter(),
+                    //new OldFormatGraphConverter()
                 }
             };
         }
