@@ -175,7 +175,7 @@ namespace GraphAlgorithmRenderer.UIControls
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
             FamilyName.Text = edgeFamily.Name;
            
-            SetNodeFamilies(edgeFamily.Target.FamilyName, edgeFamily.Source.FamilyName);
+            SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
             _sourceWindow = new EdgeEndControl(edgeFamily.Source);
             _targetWindow.EdgeEndIdParts.ForEach(x => Debug.WriteLine($"{x.IdPart}, {x.Template}"));

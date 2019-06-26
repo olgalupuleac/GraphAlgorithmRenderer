@@ -46,10 +46,10 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public EdgeEndControl(EdgeFamily.EdgeEnd edgeEnd)
         {
-            _nodeName = edgeEnd.FamilyName;
+            _nodeName = edgeEnd.NodeFamilyName;
             InitializeComponent();
             EdgeEndIdParts = new List<EdgeEndIdPart>();
-            foreach (var kv in edgeEnd.Templates)
+            foreach (var kv in edgeEnd.NamesWithTemplates)
             {
                 EdgeEndIdParts.Add(new EdgeEndIdPart{IdPart = kv.Key, Template = kv.Value});
             }
@@ -75,9 +75,9 @@ namespace GraphAlgorithmRenderer.UIControls
                 return new EdgeFamily.EdgeEnd
                 {
                     //TODO check for null and throw exception
-                    Templates
+                    NamesWithTemplates
                         = EdgeEndIdParts.ToDictionary(x => x.IdPart, x => x.Template),
-                    FamilyName = _nodeName
+                    NodeFamilyName = _nodeName
                 };
             }
         }

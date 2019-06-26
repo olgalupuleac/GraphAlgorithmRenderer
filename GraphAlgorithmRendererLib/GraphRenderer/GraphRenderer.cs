@@ -212,7 +212,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
 
         private Identifier NodeIdentifier(EdgeFamily.EdgeEnd edgeEnd, Identifier identifier, string message)
         {
-            var templates = edgeEnd.Templates;
+            var templates = edgeEnd.NamesWithTemplates;
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
@@ -220,7 +220,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
                 res.Add(new IdentifierPart(template.Key, value));
             }
 
-            return new Identifier(edgeEnd.FamilyName, res);
+            return new Identifier(edgeEnd.NodeFamilyName, res);
         }
     }
 }

@@ -123,14 +123,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""__a__""
         }
       },
       ""Target"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""g[__a__][__x__]""
         }
       },
@@ -332,14 +332,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""__a__""
         }
       },
       ""Target"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""g[__a__][__x__]""
         }
       },
@@ -540,14 +540,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""edges[__e__].from""
         }
       },
       ""Target"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""edges[__e__].to""
         }
       },
@@ -710,14 +710,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""__i__""
         }
       },
       ""Target"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""p[__i__]""
         }
       },
@@ -884,14 +884,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""edges[__e__].from""
         }
       },
       ""Target"": {
-        ""FamilyName"": """",
-        ""Templates"": {
+        ""NodeFamilyName"": """",
+        ""NamesWithTemplates"": {
           ""v"": ""edges[__e__].to""
         }
       },
@@ -1329,14 +1329,14 @@ namespace GraphAlgorithmRenderer.Tests
   ""Edges"": [
     {
       ""Source"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__a__""
         }
       },
       ""Target"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__b__""
         }
       },
@@ -1387,14 +1387,14 @@ namespace GraphAlgorithmRenderer.Tests
     },
     {
       ""Source"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__i__""
         }
       },
       ""Target"": {
-        ""FamilyName"": ""rightNull"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""rightNull"",
+        ""NamesWithTemplates"": {
           ""v"": ""0""
         }
       },
@@ -1440,14 +1440,14 @@ namespace GraphAlgorithmRenderer.Tests
     },
     {
       ""Source"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__a__""
         }
       },
       ""Target"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__b__""
         }
       },
@@ -1498,14 +1498,14 @@ namespace GraphAlgorithmRenderer.Tests
     },
     {
       ""Source"": {
-        ""FamilyName"": ""nodes"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""nodes"",
+        ""NamesWithTemplates"": {
           ""v"": ""__i__""
         }
       },
       ""Target"": {
-        ""FamilyName"": ""leftNull"",
-        ""Templates"": {
+        ""NodeFamilyName"": ""leftNull"",
+        ""NamesWithTemplates"": {
           ""v"": ""0""
         }
       },

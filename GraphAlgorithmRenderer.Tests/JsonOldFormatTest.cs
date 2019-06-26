@@ -1,4 +1,5 @@
-﻿using GraphAlgorithmRendererLib.Serializer;
+﻿using System.Diagnostics;
+using GraphAlgorithmRendererLib.Serializer;
 using NUnit.Framework;
 
 namespace GraphAlgorithmRenderer.Tests
@@ -9,8 +10,9 @@ namespace GraphAlgorithmRenderer.Tests
         [Test]
         public void TestMethod()
         {
-            ConfigSerializer.FromJson(OldFormatSamples.JsonNoProperties);
-            ConfigSerializer.FromJson(OldFormatSamples.JsonDfsOldFormat);
+           // ConfigSerializer.FromJson(OldFormatSamples.JsonNoProperties);
+            var res = ConfigSerializer.FromJson(OldFormatSamples.JsonDfsOldFormat);
+            Debug.WriteLine(res);
         }
     }
 
