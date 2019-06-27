@@ -114,6 +114,9 @@
     <Compile Include="UIControls\Properties\StyleUiProperty.xaml.cs">
       <DependentUpon>StyleUiProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\SyntaxHighlighterTextBox.xaml.cs">
+      <DependentUpon>SyntaxHighlighterTextBox.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -389,6 +392,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIControls\Properties\StyleUiProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIControls\SyntaxHighlighterTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

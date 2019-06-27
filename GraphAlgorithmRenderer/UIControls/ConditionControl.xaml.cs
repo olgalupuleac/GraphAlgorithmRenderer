@@ -12,6 +12,7 @@ namespace GraphAlgorithmRenderer.UIControls
         public ConditionControl()
         {
             InitializeComponent();
+            ConditionBox.Text = "true";
             var groupName = $"Mode{GetHashCode()}";
             CurSf.GroupName = groupName;
             AllSf.GroupName = groupName;

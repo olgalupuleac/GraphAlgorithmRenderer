@@ -7,7 +7,7 @@
              mc:Ignorable="d">
     <StackPanel Orientation="Vertical">
             <Label Content="Condition" />
-        <TextBox x:Name="ConditionBox" HorizontalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="true"/>
+        <local:SyntaxHighlighterTextBox x:Name="ConditionBox"/>
         <Label Content="Function regex"/>
             <TextBox x:Name="RegexBox" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Text=".*"/>
             <StackPanel x:Name="ModePanel" Orientation="Vertical">
