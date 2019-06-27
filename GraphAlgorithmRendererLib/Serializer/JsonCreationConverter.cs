@@ -49,22 +49,16 @@ namespace GraphAlgorithmRendererLib.Serializer
                 : jObject["$type"].Value<string>();
             switch (actualType)
             {
-                case var type when new Regex("Label").IsMatch(type):
-                    return new LabelEdgeProperty(jObject["LabelTextExpression"].Value<string>())
-                    {
-                        FontSize = jObject["FontSize"].Value<double?>()
-                    };
-                case var type when new Regex("LineWidth").IsMatch(type):
-                    return new LineWidthEdgeProperty(jObject["LineWidth"].Value<double>());
-                case var type when new Regex("LineColor").IsMatch(type):
-                    return new LineColorEdgeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
-                        jObject["Color"]["B"].Value<byte>()));
-                case var type when new Regex("Style").IsMatch(type):
-                    return new StyleEdgeProperty((Style) Enum.Parse(typeof(Style), jObject["Style"].Value<string>()));
-                case var type when new Regex("Arrow").IsMatch(type):
-                    return new ArrowEdgeProperty(jObject["ArrowAtTarget"].Value<bool>(),
-                        jObject["ArrowAtSource"].Value<bool>());
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LabelEdgeProperty, GraphAlgorithmRenderer)|(Label)$").IsMatch(type):
+                    return jObject.ToObject<LabelEdgeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LineWidthEdgeProperty, GraphAlgorithmRenderer)|(LineWidth)$").IsMatch(type):
+                    return jObject.ToObject<LineWidthEdgeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LineColorEdgeProperty, GraphAlgorithmRenderer)|(LineColor)$").IsMatch(type):
+                    return jObject.ToObject<LineColorEdgeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.StyleEdgeProperty, GraphAlgorithmRenderer)|(Style)$").IsMatch(type):
+                    return jObject.ToObject<StyleEdgeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.ArrowProperty, GraphAlgorithmRenderer)|(Arrow)$").IsMatch(type):
+                    return jObject.ToObject<ArrowEdgeProperty>();
                 default:
                     throw new NotImplementedException();
             }
@@ -81,25 +75,18 @@ namespace GraphAlgorithmRendererLib.Serializer
 
             switch (actualType)
             {
-                case var type when new Regex("Label").IsMatch(type):
-                    return new LabelNodeProperty(jObject["LabelTextExpression"].Value<string>())
-                    {
-                        FontSize = jObject["FontSize"].Value<double?>()
-                    };
-                case var type when new Regex("LineWidth").IsMatch(type):
-                    return new LineWidthNodeProperty(jObject["LineWidth"].Value<double>());
-                case var type when new Regex("LineColor").IsMatch(type):
-                    return new LineColorNodeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
-                        jObject["Color"]["B"].Value<byte>()));
-                case var type when new Regex("Style").IsMatch(type):
-                    return new StyleNodeProperty((Style) Enum.Parse(typeof(Style), jObject["Style"].Value<string>()));
-                case var type when new Regex("FillColor").IsMatch(type):
-                    return new FillColorNodeProperty(new Color(jObject["Color"]["A"].Value<byte>(),
-                        jObject["Color"]["R"].Value<byte>(), jObject["Color"]["G"].Value<byte>(),
-                        jObject["Color"]["B"].Value<byte>()));
-                case var type when new Regex("Shape").IsMatch(type):
-                    return new ShapeNodeProperty((Shape) Enum.Parse(typeof(Shape), jObject["Shape"].Value<string>()));
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LabelNodeProperty, GraphAlgorithmRenderer)|(Label)$").IsMatch(type):
+                    return jObject.ToObject<LabelNodeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LineWidthNodeProperty, GraphAlgorithmRenderer)|(LineWidth)$").IsMatch(type):
+                    return jObject.ToObject<LineWidthNodeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.LineColorNodeProperty, GraphAlgorithmRenderer)|(LineColor)$").IsMatch(type):
+                    return jObject.ToObject<LineColorNodeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.StyleNodeProperty, GraphAlgorithmRenderer)|(Style)$").IsMatch(type):
+                    return jObject.ToObject<StyleNodeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.FillColorNodeProperty, GraphAlgorithmRenderer)|(FillColor)$").IsMatch(type):
+                    return jObject.ToObject<FillColorNodeProperty>();
+                case var type when new Regex(@"^(GraphAlgorithmRenderer\.Config\.ShapeNodeProperty, GraphAlgorithmRenderer)|(Shape)$").IsMatch(type):
+                    return jObject.ToObject<ShapeNodeProperty>();
                 default:
                     throw new NotImplementedException();
             }
