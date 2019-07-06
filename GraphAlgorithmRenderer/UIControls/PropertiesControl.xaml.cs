@@ -21,14 +21,14 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public delegate string GetDescription(Window window);
 
-        public delegate void UpdateDescriptionDelegate(Window window, ListBoxItem item); 
+        public delegate void UpdateDescriptionDelegate(Window window, ListBoxItem item);
 
-        private readonly Dictionary<ListBoxItem, Window> _itemsToWindow;
+        public Dictionary<ListBoxItem, Window> ItemsToWindows { get; }
 
 
         public PropertiesControl()
         {
-            _itemsToWindow = new Dictionary<ListBoxItem, Window>();
+            ItemsToWindows = new Dictionary<ListBoxItem, Window>();
             InitializeComponent();
         }
 
@@ -37,8 +37,8 @@ namespace GraphAlgorithmRenderer.UIControls
             var window = createWindow();
             var item = new ListBoxItem{Content = Description(window)};
             UpdateDescription(window, item);
-            _itemsToWindow[item] = window;
-            item.MouseDoubleClick += (o, args) => _itemsToWindow[item].Show();
+            ItemsToWindows[item] = window;
+            item.MouseDoubleClick += (o, args) => ItemsToWindows[item].Show();
             properties.Items.Add(item);
             return item;
         }
@@ -50,15 +50,15 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 return;
             }
-            _itemsToWindow[item].Hide();
-            _itemsToWindow.Remove(item);
+            ItemsToWindows[item].Hide();
+            ItemsToWindows.Remove(item);
             properties.Items.Remove(item);
         }
 
         public List<Window> Windows {
             get
             {
-                return properties.Items.OfType<ListBoxItem>().Select(x => _itemsToWindow[x]).ToList();
+                return properties.Items.OfType<ListBoxItem>().Select(x => ItemsToWindows[x]).ToList();
             }
         }
         
@@ -66,7 +66,7 @@ namespace GraphAlgorithmRenderer.UIControls
         private void AddProperty_Click(object sender, RoutedEventArgs e)
         {
             var item = AddNewProperty(WindowGenerator);
-            _itemsToWindow[item].Show();
+            ItemsToWindows[item].Show();
         }
 
         private void Up_Click(object sender, RoutedEventArgs e)
@@ -90,7 +90,7 @@ namespace GraphAlgorithmRenderer.UIControls
         {
             get
             {
-                return _itemsToWindow.ToDictionary(kv => (string)kv.Key.Content, kv => kv.Value);
+                return ItemsToWindows.ToDictionary(kv => (string)kv.Key.Content, kv => kv.Value);
             }
            
         }
@@ -98,7 +98,7 @@ namespace GraphAlgorithmRenderer.UIControls
         public void SetNewWindows(List<Window> windows)
         {
             properties.Items.Clear();
-            _itemsToWindow.Clear();
+            ItemsToWindows.Clear();
             windows.ForEach(w => AddNewProperty(() => w));
         }
 

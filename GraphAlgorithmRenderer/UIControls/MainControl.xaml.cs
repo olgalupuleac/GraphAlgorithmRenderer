@@ -33,8 +33,7 @@ namespace GraphAlgorithmRenderer.UIControls
                     (o, sender) => i.Content = ((NodeFamilyWindow) w).FamilyName.Text;
             };
             Edges.WindowGenerator = () =>
-                new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow) kv.Value)){ NameIsSet = false };
+                new EdgeFamilyWindow(Nodes.ItemsToWindows){ NameIsSet = false };
             Edges.Description = w =>
             {
                 var textBox = ((EdgeFamilyWindow) w).FamilyName;
@@ -75,8 +74,7 @@ namespace GraphAlgorithmRenderer.UIControls
             Nodes.SetNewWindows(nodeWindows);
             var edgeWindows = config.Edges.Select(e =>
             {
-                var w = new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow) kv.Value));
+                var w = new EdgeFamilyWindow(Nodes.ItemsToWindows);
                 w.FromEdgeFamily(e);
                 return (Window) w;
             }).ToList();
