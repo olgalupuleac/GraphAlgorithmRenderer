@@ -15,15 +15,14 @@ namespace GraphAlgorithmRenderer.UIControls
     /// </summary>
     public partial class EdgeFamilyWindow : Window
     {
-        public Dictionary<ListBoxItem, Window> AvailableNodes { get; }
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
 
         public bool NameIsSet { get; set; } = true;
 
-        public EdgeFamilyWindow(Dictionary<ListBoxItem, Window> availableNodes)
+        public EdgeFamilyWindow(List<NodeFamilyWindow> availableNodes)
         {
-            AvailableNodes = availableNodes;
+            
             InitializeComponent();
             PropertiesControl.WindowGenerator = () => new EdgeConditionalPropertyWindow();
             PropertiesControl.Description = w => ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
@@ -32,17 +31,15 @@ namespace GraphAlgorithmRenderer.UIControls
                 ((EdgeConditionalPropertyWindow) w).ok.Click += (o, sender) =>
                     i.Content = ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
             };
-            SetRadioButtons();
+            SetRadioButtons(availableNodes);
             FamilyName.TextChanged += (sender, args) => NameIsSet = true;
             this.PreviewKeyDown += CloseOnEscape;
         }
 
-        public void SetRadioButtons()
+        public void SetRadioButtons(List<NodeFamilyWindow> nodeFamilyWindows)
         {
-            foreach (var window in AvailableNodes.Values)
+            foreach (var nodeWindow in nodeFamilyWindows)
             {
-                var nodeWindow = (NodeFamilyWindow)window;
-                
                 var nodeName = nodeWindow.FamilyName.Text;
                 if (TargetPanel.Children.Cast<RadioButton>().Any(rb => ((string) rb.Content).Equals(nodeName)))
                 {
@@ -77,7 +74,7 @@ namespace GraphAlgorithmRenderer.UIControls
             var targetButtonsToRemove = new List<RadioButton>();
             foreach (RadioButton rb in TargetPanel.Children)
             {
-                if (!AvailableNodes.Any(w => ((string)rb.Content).Equals(((NodeFamilyWindow)w.Value).FamilyName.Text)))
+                if (!nodeFamilyWindows.Any(w => ((string)rb.Content).Equals(w.FamilyName.Text)))
                 {
                     targetButtonsToRemove.Add(rb);
                 }
@@ -86,7 +83,7 @@ namespace GraphAlgorithmRenderer.UIControls
             var sourceButtonsToRemove = new List<RadioButton>();
             foreach (RadioButton rb in SourcePanel.Children)
             {
-                if (!AvailableNodes.Any(w => ((string)rb.Content).Equals(((NodeFamilyWindow)w.Value).FamilyName.Text)))
+                if (!nodeFamilyWindows.Any(w => ((string)rb.Content).Equals(w.FamilyName.Text)))
                 {
                     sourceButtonsToRemove.Add(rb);
                 }

@@ -36,18 +36,18 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 foreach (var edgeWindow in Edges.Windows)
                 {
-                    ((EdgeFamilyWindow) edgeWindow).SetRadioButtons();
+                    ((EdgeFamilyWindow) edgeWindow).SetRadioButtons(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
                 }
             };
             Nodes.RemoveProperty.Click += (sender, args) =>
             {
                 foreach (var edgeWindow in Edges.Windows)
                 {
-                    ((EdgeFamilyWindow)edgeWindow).SetRadioButtons();
+                    ((EdgeFamilyWindow)edgeWindow).SetRadioButtons(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
                 }
             };
             Edges.WindowGenerator = () =>
-                new EdgeFamilyWindow(Nodes.ItemsToWindows){ NameIsSet = false };
+                new EdgeFamilyWindow(Nodes.Windows.Cast<NodeFamilyWindow>().ToList()) { NameIsSet = false };
             Edges.Description = w =>
             {
                 var textBox = ((EdgeFamilyWindow) w).FamilyName;
@@ -87,7 +87,7 @@ namespace GraphAlgorithmRenderer.UIControls
             Nodes.SetNewWindows(nodeWindows);
             var edgeWindows = config.Edges.Select(e =>
             {
-                var w = new EdgeFamilyWindow(Nodes.ItemsToWindows);
+                var w = new EdgeFamilyWindow(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
                 w.FromEdgeFamily(e);
                 return (Window) w;
             }).ToList();
