@@ -32,6 +32,20 @@ namespace GraphAlgorithmRenderer.UIControls
                 ((NodeFamilyWindow) w).ok.Click +=
                     (o, sender) => i.Content = ((NodeFamilyWindow) w).FamilyName.Text;
             };
+            Nodes.AddProperty.Click += (sender, args) =>
+            {
+                foreach (var edgeWindow in Edges.Windows)
+                {
+                    ((EdgeFamilyWindow) edgeWindow).SetRadioButtons();
+                }
+            };
+            Nodes.RemoveProperty.Click += (sender, args) =>
+            {
+                foreach (var edgeWindow in Edges.Windows)
+                {
+                    ((EdgeFamilyWindow)edgeWindow).SetRadioButtons();
+                }
+            };
             Edges.WindowGenerator = () =>
                 new EdgeFamilyWindow(Nodes.ItemsToWindows){ NameIsSet = false };
             Edges.Description = w =>
@@ -41,8 +55,7 @@ namespace GraphAlgorithmRenderer.UIControls
                 {
                     textBox.Text = $"edge#{Edges.properties.Items.Count}";
                 }
-                return textBox.Text;
-                
+                return textBox.Text;  
             };
             Edges.UpdateDescription = (w, i) =>
             {

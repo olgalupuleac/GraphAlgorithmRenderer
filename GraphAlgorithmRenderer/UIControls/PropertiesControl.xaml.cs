@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
+
 namespace GraphAlgorithmRenderer.UIControls
 {
     /// <summary>
@@ -84,15 +85,6 @@ namespace GraphAlgorithmRenderer.UIControls
 
             properties.Items.Remove(item);
             properties.Items.Insert(index - 1, item);
-        }
-
-        public Dictionary<string, Window> WindowsWithDescriptions
-        {
-            get
-            {
-                return ItemsToWindows.ToDictionary(kv => (string)kv.Key.Content, kv => kv.Value);
-            }
-           
         }
 
         public void SetNewWindows(List<Window> windows)

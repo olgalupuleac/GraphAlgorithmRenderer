@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using GraphAlgorithmRendererLib.Config;
 using static System.String;
@@ -16,8 +14,8 @@ namespace GraphAlgorithmRenderer.UIControls
     /// Interaction logic for EdgeFamilyWindow.xaml
     /// </summary>
     public partial class EdgeFamilyWindow : Window
-    { 
-        private readonly Dictionary<ListBoxItem, Window> _availableNodes;
+    {
+        public Dictionary<ListBoxItem, Window> AvailableNodes { get; }
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
 
@@ -25,47 +23,75 @@ namespace GraphAlgorithmRenderer.UIControls
 
         public EdgeFamilyWindow(Dictionary<ListBoxItem, Window> availableNodes)
         {
-            _availableNodes = availableNodes;
-            
-            
+            AvailableNodes = availableNodes;
             InitializeComponent();
-       
             PropertiesControl.WindowGenerator = () => new EdgeConditionalPropertyWindow();
             PropertiesControl.Description = w => ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
             PropertiesControl.UpdateDescription = (w, i) =>
             {
                 ((EdgeConditionalPropertyWindow) w).ok.Click += (o, sender) =>
-                        i.Content = ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
-               
+                    i.Content = ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
             };
-            foreach (var window in _availableNodes.Values)
+            SetRadioButtons();
+            FamilyName.TextChanged += (sender, args) => NameIsSet = true;
+            this.PreviewKeyDown += CloseOnEscape;
+        }
+
+        public void SetRadioButtons()
+        {
+            foreach (var window in AvailableNodes.Values)
             {
-                var nodeWindow = (NodeFamilyWindow) window;
+                var nodeWindow = (NodeFamilyWindow)window;
+                
                 var nodeName = nodeWindow.FamilyName.Text;
+                if (TargetPanel.Children.Cast<RadioButton>().Any(rb => ((string) rb.Content).Equals(nodeName)))
+                {
+                    continue;
+                }
                 var targetRadioButton = new RadioButton { Content = nodeName, GroupName = $"TargetNodes{GetHashCode()}" };
                 targetRadioButton.Checked += (sender, args) =>
                 {
-                    Debug.WriteLine("Creating new window");
                     _targetWindow =
                         new EdgeEndControl(
                             nodeWindow.IdentifierPartRangeControl.Ranges
                                 .Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), nodeName);
                 };
-                    
+
                 TargetPanel.Children.Add(targetRadioButton);
                 var sourceRadioButton = new RadioButton { Content = nodeName, GroupName = $"SourceNodes{GetHashCode()}" };
                 sourceRadioButton.Checked += (sender, args) =>
-                    _sourceWindow = new EdgeEndControl(nodeWindow.IdentifierPartRangeControl.Ranges.Where(id => !IsNullOrEmpty(id.Name)).Select(id => id.Name).ToList(), nodeName);
+                    _sourceWindow =
+                        new EdgeEndControl(
+                            nodeWindow.IdentifierPartRangeControl.Ranges.Where(id => !IsNullOrEmpty(id.Name))
+                                .Select(id => id.Name).ToList(), nodeName);
+                
                 nodeWindow.ok.Click += (sender, args) =>
                 {
                     sourceRadioButton.Content = nodeWindow.FamilyName.Text;
                     targetRadioButton.Content = nodeWindow.FamilyName.Text;
                 };
+
                 SourcePanel.Children.Add(sourceRadioButton);
             }
 
-            FamilyName.TextChanged += (sender, args) => NameIsSet = true;
-            this.PreviewKeyDown += CloseOnEscape;
+            var targetButtonsToRemove = new List<RadioButton>();
+            foreach (RadioButton rb in TargetPanel.Children)
+            {
+                if (!AvailableNodes.Any(w => ((string)rb.Content).Equals(((NodeFamilyWindow)w.Value).FamilyName.Text)))
+                {
+                    targetButtonsToRemove.Add(rb);
+                }
+            }
+            targetButtonsToRemove.ForEach(rb => TargetPanel.Children.Remove(rb));
+            var sourceButtonsToRemove = new List<RadioButton>();
+            foreach (RadioButton rb in SourcePanel.Children)
+            {
+                if (!AvailableNodes.Any(w => ((string)rb.Content).Equals(((NodeFamilyWindow)w.Value).FamilyName.Text)))
+                {
+                    sourceButtonsToRemove.Add(rb);
+                }
+            }
+            sourceButtonsToRemove.ForEach(rb => SourcePanel.Children.Remove(rb));
         }
 
         private void CloseOnEscape(object sender, KeyEventArgs e)
@@ -79,8 +105,8 @@ namespace GraphAlgorithmRenderer.UIControls
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;    
-            Hide(); 
+            e.Cancel = true;
+            Hide();
         }
 
         private void TargetButton_Click(object sender, RoutedEventArgs e)
@@ -96,6 +122,7 @@ namespace GraphAlgorithmRenderer.UIControls
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             window.Show();
         }
 
@@ -132,7 +159,6 @@ namespace GraphAlgorithmRenderer.UIControls
             Hide();
         }
 
-      
 
         public EdgeFamily EdgeFamily
         {
@@ -140,9 +166,10 @@ namespace GraphAlgorithmRenderer.UIControls
             {
                 var conditionalProperties = PropertiesControl.Windows.Cast<EdgeConditionalPropertyWindow>()
                     .Select(w => w.ConditionalProperty).ToList();
-                
+
                 //TODO check for null
-                return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd, _targetWindow.EdgeEnd)
+                return new EdgeFamily(IdentifierPartRangeControl.Ranges.ToList(), _sourceWindow.EdgeEnd,
+                    _targetWindow.EdgeEnd)
                 {
                     Name = FamilyName.Text,
                     ValidationTemplate = validationTemplateBox.Text,
@@ -163,13 +190,14 @@ namespace GraphAlgorithmRenderer.UIControls
                     {
                         continue;
                     }
+
                     rb.IsChecked = true;
                 }
             }
 
             foreach (var child in SourcePanel.Children)
             {
-                if (child is RadioButton rb && (string)rb.Content == source)
+                if (child is RadioButton rb && (string) rb.Content == source)
                 {
                     rb.IsChecked = true;
                 }
@@ -181,21 +209,21 @@ namespace GraphAlgorithmRenderer.UIControls
             IdentifierPartRangeControl.FromRanges(edgeFamily.Ranges);
             validationTemplateBox.Text = edgeFamily.ValidationTemplate;
             FamilyName.Text = edgeFamily.Name;
-           
+
             SetNodeFamilies(edgeFamily.Target.NodeFamilyName, edgeFamily.Source.NodeFamilyName);
             _targetWindow = new EdgeEndControl(edgeFamily.Target);
             _sourceWindow = new EdgeEndControl(edgeFamily.Source);
             _targetWindow.EdgeEndIdParts.ForEach(x => Debug.WriteLine($"{x.IdPart}, {x.Template}"));
-           
+
             var windows = new List<Window>();
             foreach (var conditionalProperty in edgeFamily.ConditionalProperties)
             {
-               var window = new EdgeConditionalPropertyWindow();
-               window.FromConditionalProperty(conditionalProperty);
-               windows.Add(window);
+                var window = new EdgeConditionalPropertyWindow();
+                window.FromConditionalProperty(conditionalProperty);
+                windows.Add(window);
             }
+
             PropertiesControl.SetNewWindows(windows);
         }
-     
     }
 }
