@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -18,11 +19,13 @@ namespace GraphAlgorithmRenderer.UIControls
         private EdgeEndControl _targetWindow;
         private EdgeEndControl _sourceWindow;
 
+        private readonly Dictionary<NodeFamilyWindow, Tuple<RadioButton, RadioButton>> _nodesToButtons =
+            new Dictionary<NodeFamilyWindow, Tuple<RadioButton, RadioButton>>();
+
         public bool NameIsSet { get; set; } = true;
 
         public EdgeFamilyWindow(List<NodeFamilyWindow> availableNodes)
         {
-            
             InitializeComponent();
             PropertiesControl.WindowGenerator = () => new EdgeConditionalPropertyWindow();
             PropertiesControl.Description = w => ((EdgeConditionalPropertyWindow) w).ConditionControl.Description;
@@ -41,11 +44,12 @@ namespace GraphAlgorithmRenderer.UIControls
             foreach (var nodeWindow in nodeFamilyWindows)
             {
                 var nodeName = nodeWindow.FamilyName.Text;
-                if (TargetPanel.Children.Cast<RadioButton>().Any(rb => ((string) rb.Content).Equals(nodeName)))
+                if (_nodesToButtons.ContainsKey(nodeWindow))
                 {
                     continue;
                 }
-                var targetRadioButton = new RadioButton { Content = nodeName, GroupName = $"TargetNodes{GetHashCode()}" };
+
+                var targetRadioButton = new RadioButton {Content = nodeName, GroupName = $"TargetNodes{GetHashCode()}"};
                 targetRadioButton.Checked += (sender, args) =>
                 {
                     _targetWindow =
@@ -55,13 +59,13 @@ namespace GraphAlgorithmRenderer.UIControls
                 };
 
                 TargetPanel.Children.Add(targetRadioButton);
-                var sourceRadioButton = new RadioButton { Content = nodeName, GroupName = $"SourceNodes{GetHashCode()}" };
+                var sourceRadioButton = new RadioButton {Content = nodeName, GroupName = $"SourceNodes{GetHashCode()}"};
                 sourceRadioButton.Checked += (sender, args) =>
                     _sourceWindow =
                         new EdgeEndControl(
                             nodeWindow.IdentifierPartRangeControl.Ranges.Where(id => !IsNullOrEmpty(id.Name))
                                 .Select(id => id.Name).ToList(), nodeName);
-                
+
                 nodeWindow.ok.Click += (sender, args) =>
                 {
                     sourceRadioButton.Content = nodeWindow.FamilyName.Text;
@@ -69,26 +73,28 @@ namespace GraphAlgorithmRenderer.UIControls
                 };
 
                 SourcePanel.Children.Add(sourceRadioButton);
+                _nodesToButtons.Add(nodeWindow,
+                    new Tuple<RadioButton, RadioButton>(targetRadioButton, sourceRadioButton));
             }
 
-            var targetButtonsToRemove = new List<RadioButton>();
-            foreach (RadioButton rb in TargetPanel.Children)
+            var keysToRemove = _nodesToButtons.Keys.Where(w => !nodeFamilyWindows.Contains(w)).ToList();
+            keysToRemove.ForEach(w =>
             {
-                if (!nodeFamilyWindows.Any(w => ((string)rb.Content).Equals(w.FamilyName.Text)))
+                var targetRadioButton = _nodesToButtons[w].Item1;
+                var sourceRadioButton = _nodesToButtons[w].Item2;
+                if (targetRadioButton.IsChecked == true)
                 {
-                    targetButtonsToRemove.Add(rb);
+                    _targetWindow = null;
                 }
-            }
-            targetButtonsToRemove.ForEach(rb => TargetPanel.Children.Remove(rb));
-            var sourceButtonsToRemove = new List<RadioButton>();
-            foreach (RadioButton rb in SourcePanel.Children)
-            {
-                if (!nodeFamilyWindows.Any(w => ((string)rb.Content).Equals(w.FamilyName.Text)))
+
+                if (sourceRadioButton.IsChecked == true)
                 {
-                    sourceButtonsToRemove.Add(rb);
+                    _sourceWindow = null;
                 }
-            }
-            sourceButtonsToRemove.ForEach(rb => SourcePanel.Children.Remove(rb));
+                TargetPanel.Children.Remove(targetRadioButton);
+                SourcePanel.Children.Remove(sourceRadioButton);
+                _nodesToButtons.Remove(w);
+            });
         }
 
         private void CloseOnEscape(object sender, KeyEventArgs e)
