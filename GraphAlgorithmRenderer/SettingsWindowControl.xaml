@@ -19,19 +19,21 @@
                <ui:MainControl x:Name="MainControl"/>
             </TabItem>
             <TabItem Header="Json">
+                
                 <StackPanel Orientation="Vertical">
 
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <avalonEdit:TextEditor  Name="Config"
                                                 FontFamily="Consolas"
-                                                FontSize="10pt"  MaxHeight="320"
+                                                FontSize="10pt" 
+                                                MaxHeight="320"
                      />
                     </ScrollViewer>
-                    <Button x:Name="Load" Content="Deserialize" Margin="20" MaxWidth="90"/>
-
-                    <Button x:Name="Export" Content="Serialize" Margin="20" MaxWidth="90"/>
-
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="Load" Content="Deserialize" Margin="10" MaxWidth="90"/>
+                        <Button x:Name="Export" Content="Serialize" Margin="10" MaxWidth="90"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
 
