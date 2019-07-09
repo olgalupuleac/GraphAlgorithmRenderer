@@ -88,7 +88,7 @@ namespace GraphAlgorithmRendererLib.Config
         }
     }
 
-    public class GraphConfig
+    public class GraphConfig : IValidatable
     {
         [JsonProperty(Order = 1)]
         public List<EdgeFamily> Edges { get; set; }
@@ -99,6 +99,26 @@ namespace GraphAlgorithmRendererLib.Config
         {
             Edges = new List<EdgeFamily>();
             Nodes = new List<NodeFamily>();
+        }
+
+        public void Validate()
+        {
+            if (Nodes.Select(x => x.Name).Distinct().Count() < Nodes.Count)
+            {
+                throw new ValidationException("Node family names must be unique");
+            }
+            if (Edges.Select(x => x.Name).Distinct().Count() < Edges.Count)
+            {
+                throw new ValidationException("Edge family names must be unique");
+            }
+
+           /* foreach (var edgeFamily in Edges)
+            {
+                if (!Nodes.Any(x => x.Name.Equals(edgeFamily.Source.NodeFamilyName)))
+                {
+
+                }
+            }*/
         }
     }
 }

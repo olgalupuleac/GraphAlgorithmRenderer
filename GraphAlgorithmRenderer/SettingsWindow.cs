@@ -49,6 +49,14 @@ namespace GraphAlgorithmRenderer
 
         public delegate void MakeAction();
 
+        public delegate GraphConfig CreateConfig();
+
+        private void SetConfig(CreateConfig createConfig)
+        {
+            _config = createConfig();
+            _config.Validate();
+        }
+
 
         private void HandleException(MakeAction makeAction, string headerMessage)
         {
@@ -63,7 +71,7 @@ namespace GraphAlgorithmRenderer
                     _drawingMode = DrawingMode.NotChanged;
                 }
 
-                if (e is GraphRenderException)
+                if (e is GraphRenderException || e is ValidationException)
                 {
                     MessageBox.Show(e.Message, headerMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -107,7 +115,7 @@ namespace GraphAlgorithmRenderer
             }
             HandleException(() =>
             {
-                _config = ConfigSerializer.FromJson(json);
+                SetConfig(() => ConfigSerializer.FromJson(json));
 
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -188,7 +196,7 @@ namespace GraphAlgorithmRenderer
         {
             HandleException(() =>
             {
-                _config = _control.MainControl.Config;
+                SetConfig(() => _control.MainControl.Config);
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Error while generating config");
