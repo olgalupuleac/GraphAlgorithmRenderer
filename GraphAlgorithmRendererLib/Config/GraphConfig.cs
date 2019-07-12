@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace GraphAlgorithmRendererLib.Config
 {
-    public abstract class GraphElementFamily<T>
+    public abstract class GraphElementFamily<T> : IValidatable
     {
         public string Name { get; set; } = "";
         protected GraphElementFamily(List<IdentifierPartTemplate> ranges)
@@ -27,16 +27,14 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty] public string ValidationTemplate { get; set; }
         [JsonProperty] public List<ConditionalProperty<T>> ConditionalProperties { get; set; }
 
-        public List<ConditionalProperty<T>> GetCurrentStackFrameProperties()
+        public void Validate()
         {
-            return ConditionalProperties.Where(conditionalProperty =>
-                conditionalProperty.Condition.Mode == ConditionMode.CurrentStackFrame).ToList();
-        }
-
-        public List<ConditionalProperty<T>> GetAllStackFramesProperties()
-        {
-            return ConditionalProperties.Where(conditionalProperty =>
-                conditionalProperty.Condition.Mode == ConditionMode.AllStackFrames).ToList();
+            Ranges.ForEach(r => r.Validate());
+            ConditionalProperties.ForEach(x => x.Condition.Validate());
+            if (Ranges.Select(x => x.Name).Distinct().Count() < Ranges.Count)
+            {
+                throw new ValidationException($"{Name}: indices must have different names");
+            }
         }
     }
 
@@ -60,10 +58,7 @@ namespace GraphAlgorithmRendererLib.Config
 
             private Dictionary<string, string> GetTemplates(NodeFamily node, List<string> templates)
             {
-                // TODO throw exception
-                Debug.Assert(templates.Count == node.Ranges.Count);
-
-                return templates.Select((t, i) => Tuple.Create(node.Ranges[i].Name, t))
+             return templates.Select((t, i) => Tuple.Create(node.Ranges[i].Name, t))
                     .ToDictionary(x => x.Item1, x => x.Item2);
             }
         }
@@ -103,6 +98,8 @@ namespace GraphAlgorithmRendererLib.Config
 
         public void Validate()
         {
+            Nodes.ForEach(x => x.Validate());
+            Edges.ForEach(x => x.Validate());
             if (Nodes.Select(x => x.Name).Distinct().Count() < Nodes.Count)
             {
                 throw new ValidationException("Node family names must be unique");
@@ -112,13 +109,42 @@ namespace GraphAlgorithmRendererLib.Config
                 throw new ValidationException("Edge family names must be unique");
             }
 
-           /* foreach (var edgeFamily in Edges)
-            {
-                if (!Nodes.Any(x => x.Name.Equals(edgeFamily.Source.NodeFamilyName)))
+           foreach (var edgeFamily in Edges)
+           {
+               var sourceNode = Nodes.FirstOrDefault(x => x.Name.Equals(edgeFamily.Source.NodeFamilyName));
+                if (sourceNode == null)
                 {
-
+                    throw new ValidationException($"Cannot define a source of edge family {edgeFamily.Name}: node family with name {edgeFamily.Source.NodeFamilyName} doesn't exist");
                 }
-            }*/
+                var targetNode = Nodes.FirstOrDefault(x => x.Name.Equals(edgeFamily.Target.NodeFamilyName));
+                if (targetNode == null)
+                {
+                    throw new ValidationException($"Cannot define a target of edge family {edgeFamily.Name}: node family with name {edgeFamily.Target.NodeFamilyName} doesn't exist");
+                }
+
+                TwoSetsEquals(edgeFamily.Source.NamesWithTemplates.Keys.ToList(), 
+                    sourceNode.Ranges.Select(x => x.Name).ToList(),
+                    $"Source indices in edge family {edgeFamily.Name} differ with indices of node family {sourceNode.Name}");
+
+                TwoSetsEquals(edgeFamily.Target.NamesWithTemplates.Keys.ToList(),
+                    targetNode.Ranges.Select(x => x.Name).ToList(),
+                    $"Target indices in edge family {edgeFamily.Name} differ with indices of node family {targetNode.Name}");
+            }
+        }
+
+
+        private void TwoSetsEquals(IReadOnlyCollection<string> a, IReadOnlyCollection<string> b, string errorMessage)
+        {
+            if (a.Count != b.Count)
+            {
+                throw new ValidationException(errorMessage);
+            }
+
+            var intersect = a.Intersect(b);
+            if (intersect.Count() != a.Count)
+            {
+                throw new ValidationException(errorMessage);
+            }
         }
     }
 }

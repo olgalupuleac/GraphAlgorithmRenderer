@@ -12,7 +12,7 @@ namespace GraphAlgorithmRendererLib.Config
         AllStackFramesArgsOnly
     }
 
-    public class Condition
+    public class Condition : IValidatable
     {
         [JsonConstructor]
         public Condition(string template, string functionNameRegex = @".*",
@@ -30,6 +30,20 @@ namespace GraphAlgorithmRendererLib.Config
 
         [JsonProperty]
         public string FunctionNameRegex { get; set; }
+
+
+        public void Validate()
+        {
+            if (Template == null)
+            {
+                throw new ValidationException("Condition template is null");
+            }
+
+            if (FunctionNameRegex == null)
+            {
+                throw new ValidationException("Condition function name regex is null");
+            }
+        }
     }
 
     public class ConditionalProperty<T>
