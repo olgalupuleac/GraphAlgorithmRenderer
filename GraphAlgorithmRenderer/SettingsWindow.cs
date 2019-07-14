@@ -106,6 +106,7 @@ namespace GraphAlgorithmRenderer
 
         private void LoadOnClick(object sender, RoutedEventArgs e)
         {
+            
             var json = _control.Config.Text;
             if (String.IsNullOrWhiteSpace(json))
             {
@@ -116,7 +117,7 @@ namespace GraphAlgorithmRenderer
             HandleException(() =>
             {
                 SetConfig(() => ConfigSerializer.FromJson(json));
-
+                ((SettingsWindowPackage)Package).OptionJsonConfig = json;
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Json deserialization error");
@@ -163,7 +164,19 @@ namespace GraphAlgorithmRenderer
             _debugEvents.OnContextChanged +=
                 Update;
             _debugger = applicationObject.Debugger;
+            SolutionEvents = applicationObject.Events.SolutionEvents;
+           
+            ((SettingsWindowControl)Content).Config.Text = ((SettingsWindowPackage)Package).OptionJsonConfig;
+            DteEvents = applicationObject.Events.DTEEvents;
+            /*DteEvents.OnBeginShutdown += () =>
+            {
+                if (_config == null)
+                {
+                    return;
+                }
 
+                ((SettingsWindowPackage) Package).OptionJsonConfig = ConfigSerializer.ToJson(_config);
+            };*/
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>
             {
@@ -197,6 +210,7 @@ namespace GraphAlgorithmRenderer
             HandleException(() =>
             {
                 SetConfig(() => _control.MainControl.Config);
+                ((SettingsWindowPackage)Package).OptionJsonConfig = ConfigSerializer.ToJson(_config);
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Error while generating config");
@@ -245,6 +259,8 @@ namespace GraphAlgorithmRenderer
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
         private Debugger _debugger;
+        public SolutionEvents SolutionEvents { get; private set; }
+        public DTEEvents DteEvents { get; private set; }
 
 
         private void DrawGraph()
@@ -288,5 +304,8 @@ namespace GraphAlgorithmRenderer
             _dispatcherTimer.Stop();
             _drawingMode = DrawingMode.NotChanged;
         }
+
+        public string JsonConfig => ConfigSerializer.ToJson(_config);
+        
     }
 }
