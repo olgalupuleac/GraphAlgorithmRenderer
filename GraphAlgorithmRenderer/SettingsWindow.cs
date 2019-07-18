@@ -11,7 +11,7 @@ using GraphAlgorithmRendererLib.Serializer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using WpfExceptionViewer;
-using Debugger = EnvDTE.Debugger;
+using GraphRenderer = GraphAlgorithmRendererLib.GraphRenderer.GraphRenderer;
 using MessageBox = System.Windows.MessageBox;
 using Process = EnvDTE.Process;
 using Size = System.Drawing.Size;
@@ -144,39 +144,29 @@ namespace GraphAlgorithmRenderer
             _form.TopMost = _control.MainControl.OnTop.IsChecked == true;
         }
 
-        private void InitializeLog(DTE dte)
+        private void InitializeDebuggerOperations()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            EnvDTE.Window w = (EnvDTE.Window) dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+            var dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+            _debugEvents = dte.Events.DebuggerEvents;
+            _debugEvents.OnContextChanged +=
+                Update;
+            var debugger = dte.Debugger;
+            EnvDTE.Window w = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
             OutputWindow ow = (OutputWindow) w.Object;
             var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
-            DebuggerOperations.Log = outputWindowPane;
-            
+            _debuggerOperations = new DebuggerOperations(debugger, outputWindowPane);
         }
 
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
-            _debugEvents = applicationObject.Events.DebuggerEvents;
-            _debugEvents.OnContextChanged +=
-                Update;
-            _debugger = applicationObject.Debugger;
-            SolutionEvents = applicationObject.Events.SolutionEvents;
-           
+            InitializeDebuggerOperations();
+            _graphRenderer = new GraphRenderer(_debuggerOperations);
             ((SettingsWindowControl)Content).Config.Text = ((SettingsWindowPackage)Package).OptionJsonConfig;
-            DteEvents = applicationObject.Events.DTEEvents;
-            /*DteEvents.OnBeginShutdown += () =>
-            {
-                if (_config == null)
-                {
-                    return;
-                }
-
-                ((SettingsWindowPackage) Package).OptionJsonConfig = ConfigSerializer.ToJson(_config);
-            };*/
+            
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
             _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>
             {
@@ -188,7 +178,7 @@ namespace GraphAlgorithmRenderer
                 }
             };
 
-            InitializeLog(applicationObject);
+          
             _control.MainControl.OnTop.Checked += (sender, args) =>
             {
                 if (_form != null)
@@ -258,18 +248,17 @@ namespace GraphAlgorithmRenderer
         private DrawingMode _drawingMode = DrawingMode.NotChanged;
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
-        private Debugger _debugger;
-        public SolutionEvents SolutionEvents { get; private set; }
-        public DTEEvents DteEvents { get; private set; }
+        private DebuggerOperations _debuggerOperations;
+        private GraphRenderer _graphRenderer;
 
 
         private void DrawGraph()
         {
-            DebuggerOperations.ClearOutput();
+            _debuggerOperations.ClearOutput();
             _drawingMode = DrawingMode.Redrawing;
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_config == null || _debugger?.CurrentStackFrame == null)
+            if (_config == null || _debuggerOperations?.IsActive != true)
             {
                 _drawingMode = DrawingMode.NotChanged;
                 return;
@@ -277,11 +266,11 @@ namespace GraphAlgorithmRenderer
             
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var renderer = new GraphAlgorithmRendererLib.GraphRenderer.GraphRenderer(_config, _debugger);
-            Graph graph = renderer.RenderGraph();
+            
+            var graph = _graphRenderer.RenderGraph(_config);
             stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+            var ts = stopWatch.Elapsed;
+            var elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
 
             Debug.WriteLine($"total time {elapsedTime}");
             if (graph == null)

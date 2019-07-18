@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using GraphAlgorithmRendererLib.Config;
 using Microsoft.Msagl.Drawing;
-using Debugger = EnvDTE.Debugger;
-using StackFrame = EnvDTE.StackFrame;
 
 namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public class GraphRenderer
     {
-        private readonly GraphConfig _config;
-        private readonly Debugger _debugger;
+        private GraphConfig _config;
         private Graph _graph;
         private readonly Dictionary<Identifier, Edge> _edges;
         private readonly Dictionary<Identifier, Node> _nodes;
+        private readonly DebuggerOperations _debuggerOperations;
 
 
-        public GraphRenderer(GraphConfig config, Debugger debugger)
+        public GraphRenderer(DebuggerOperations debuggerOperations)
         {
-            _config = config;
-            _debugger = debugger;
             _graph = new Graph();
             _edges = new Dictionary<Identifier, Edge>();
             _nodes = new Dictionary<Identifier, Node>();
+            _debuggerOperations = debuggerOperations;
         }
 
-        public Graph RenderGraph()
+        public Graph RenderGraph(GraphConfig config)
         {
+            _config = config;
             _graph = new Graph();
             _edges.Clear();
             _nodes.Clear();
             foreach (var nodeFamily in _config.Nodes)
             {
                 void NodeAddition(GraphElementFamily<INodeProperty> family, Identifier identifier) =>
-                    AddNode(family as NodeFamily, identifier);
+                    AddNode(identifier);
 
                 ProcessGraphElementFamily(nodeFamily, NodeAddition, ApplyNodeProperty);
             }
@@ -45,10 +42,11 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
                 void EdgeAddition(GraphElementFamily<IEdgeProperty> family, Identifier identifier) =>
                     AddEdge(family as EdgeFamily, identifier);
 
-                ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);  
+                ProcessGraphElementFamily(edgeFamily, EdgeAddition, ApplyEdgeProperty);
             }
-            DebuggerOperations.WriteDebugOutput();
-            DebuggerOperations.Reset();
+
+            _debuggerOperations.WriteDebugOutput();
+            _debuggerOperations.Reset();
 
             return _graph;
         }
@@ -59,9 +57,11 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         private void AddEdge(EdgeFamily edgeFamily,
             Identifier identifier)
         {
-            var source = NodeIdentifier(edgeFamily.Source, identifier, $"Cannot identify source node for edge family {edgeFamily.Name}");
-            var target = NodeIdentifier(edgeFamily.Target, identifier, $"Cannot identify target node for edge family {edgeFamily.Name}");
-           
+            var source = NodeIdentifier(edgeFamily.Source, identifier,
+                $"Cannot identify source node for edge family {edgeFamily.Name}");
+            var target = NodeIdentifier(edgeFamily.Target, identifier,
+                $"Cannot identify target node for edge family {edgeFamily.Name}");
+
             var sourceNode = _graph.FindNode(source.Id());
             var targetNode = _graph.FindNode(target.Id());
             if (targetNode == null)
@@ -79,7 +79,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             edge.Attr.ArrowheadAtTarget = ArrowStyle.None;
         }
 
-        private void AddNode(NodeFamily nodeFamily, Identifier identifier)
+        private void AddNode(Identifier identifier)
         {
             _nodes[identifier] = _graph.AddNode(identifier.Id());
         }
@@ -112,7 +112,8 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         private List<Identifier> Create<T>(GraphElementFamily<T> family, AddGraphElement<T> add)
         {
             var identifiers =
-                GetIdentifiersForCondition(Identifier.GetIdentifiers(family.Name, family.Ranges, _debugger), family.ValidationTemplate);
+                GetIdentifiersForCondition(Identifier.GetIdentifiers(family.Name, family.Ranges, _debuggerOperations),
+                    family.ValidationTemplate);
             identifiers.ForEach(x => add(family, x));
             return identifiers;
         }
@@ -122,7 +123,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         private void ApplyEdgeProperty(IEdgeProperty property, Identifier identifier)
         {
             var edge = _edges[identifier];
-            property.Apply(edge, _debugger,
+            property.Apply(edge, _debuggerOperations,
                 identifier);
         }
 
@@ -130,51 +131,34 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         {
             var node = _nodes[identifier];
             property.Apply(node,
-                _debugger, identifier);
+                _debuggerOperations, identifier);
         }
 
-        private void ApplyPropertyStackFrame<T>(IEnumerable<Identifier> identifiers,
-            ConditionalProperty<T> conditionalProperty,
+        private void ApplyPropertyStackFrame<T>(List<Identifier> identifiers,
+            List<T> properties,
             ApplyProperty<T> applyProperty)
         {
-            identifiers.Where(id =>
-                    DebuggerOperations.CheckExpressionForIdentifier(conditionalProperty.Condition.Template, id, _debugger))
-                .ToList().ForEach(id => conditionalProperty.Properties.ForEach(p => applyProperty(p, id)));
+            identifiers.ForEach(id => properties.ForEach(p => applyProperty(p, id)));
         }
 
         private void ApplyPropertyCurrentStackFrame<T>(IEnumerable<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-
-            if (!Regex.IsMatch(DebuggerOperations.FunctionName(DebuggerOperations.CurrentStackFrame(_debugger)),
-                conditionalProperty.Condition.WrappedRegex))
-            {
-                return;
-            }
-
-            ApplyPropertyStackFrame(identifiers, conditionalProperty, applyProperty);
+            ApplyPropertyStackFrame(
+                _debuggerOperations.CheckExpression(conditionalProperty.Condition.Template,
+                    conditionalProperty.Condition.FunctionNameRegex, identifiers), conditionalProperty.Properties,
+                applyProperty);
         }
 
         private void ApplyPropertyAllStackFrames<T>(IReadOnlyCollection<Identifier> identifiers,
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            var currentStackFrame = DebuggerOperations.CurrentStackFrame(_debugger);
-            var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
-            foreach (StackFrame stackFrame in stackFrames)
-            {
-                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex))
-                {
-                    continue;
-                }
-
-                DebuggerOperations.SetStackFrame(stackFrame, _debugger);
-                ApplyPropertyStackFrame(identifiers,
-                    conditionalProperty, applyProperty);
-            }
-
-            DebuggerOperations.SetStackFrame(currentStackFrame, _debugger);
+            ApplyPropertyStackFrame(
+                _debuggerOperations.CheckExpressionAllStackFrames(conditionalProperty.Condition.Template,
+                    conditionalProperty.Condition.FunctionNameRegex, identifiers), conditionalProperty.Properties,
+                applyProperty);
         }
 
 
@@ -182,23 +166,10 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             ConditionalProperty<T> conditionalProperty,
             ApplyProperty<T> applyProperty)
         {
-            var stackFrames = DebuggerOperations.GetStackFrames(_debugger);
-            foreach (StackFrame stackFrame in stackFrames)
-            {
-                if (!Regex.IsMatch(DebuggerOperations.FunctionName(stackFrame), conditionalProperty.Condition.WrappedRegex))
-                {
-                    continue;
-                }
-
-                foreach (var id in identifiers)
-                {
-                    var expressionString = DebuggerOperations.Substitute(conditionalProperty.Condition.Template, id, stackFrame);
-                    if (DebuggerOperations.CheckExpression(expressionString, _debugger))
-                    {
-                        conditionalProperty.Properties.ForEach(p => applyProperty(p, id));
-                    }
-                }
-            }
+            ApplyPropertyStackFrame(
+                _debuggerOperations.CheckExpressionAllStackFramesArgsOnly(conditionalProperty.Condition.Template,
+                    conditionalProperty.Condition.FunctionNameRegex, identifiers), conditionalProperty.Properties,
+                applyProperty);
         }
 
         private List<Identifier> GetIdentifiersForCondition(List<Identifier> identifiers, string conditionTemplate)
@@ -206,7 +177,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             return String.IsNullOrEmpty(conditionTemplate)
                 ? identifiers
                 : identifiers.Where(id =>
-                    DebuggerOperations.CheckExpressionForIdentifier(conditionTemplate, id, _debugger)).ToList();
+                    _debuggerOperations.CheckExpressionForIdentifier(conditionTemplate, id)).ToList();
         }
 
 
@@ -216,7 +187,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             var res = new List<IdentifierPart>();
             foreach (var template in templates)
             {
-                var value = Identifier.GetNumber(template.Value ?? "", identifier, _debugger, message);
+                var value = Identifier.GetNumber(template.Value ?? "", identifier, _debuggerOperations, message);
                 res.Add(new IdentifierPart(template.Key, value));
             }
 

@@ -21,15 +21,14 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty] public string LabelTextExpression { get; }
         public double? FontSize { get; set; }
 
-        public void ApplyLabel(ILabeledObject graphElement, Debugger debugger, Identifier identifier)
+        public void ApplyLabel(ILabeledObject graphElement, DebuggerOperations debuggerOperations, Identifier identifier)
         {
            
             var label = Regex.Replace(LabelTextExpression, @"{.*?}", delegate(Match match)
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
-                var expression = DebuggerOperations.Substitute(v.Substring(1, v.Length - 2), identifier, DebuggerOperations.CurrentStackFrame(debugger));
-                return DebuggerOperations.GetExpressionForIdentifier(expression, identifier, debugger).Value;
+                return debuggerOperations.GetExpressionForIdentifier(v.Substring(1, v.Length - 2), identifier).Value;
             });
 
             if (FontSize.HasValue)

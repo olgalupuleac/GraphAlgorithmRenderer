@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Debugger = EnvDTE.Debugger;
@@ -15,19 +18,21 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
 
     public class DebuggerOperations
     {
-        public static OutputWindowPane Log { get; set; }
+        private readonly OutputWindowPane _log;
 
-        static int _numberOfGetExpressionCalls;
-        static TimeSpan _timeSpanGetExpressions;
+        private int _numberOfGetExpressionCalls;
+        private TimeSpan _timeSpanGetExpressions;
 
-        static int _numberOfCurrentStackFrameCalls;
-        static TimeSpan _timeSpanCurrentStackFrame;
+        private int _numberOfCurrentStackFrameCalls;
+        private TimeSpan _timeSpanCurrentStackFrame;
 
-        static int _numberOfFunctionNameCalls;
-        static TimeSpan _timeSpanFunctionName;
+        private int _numberOfFunctionNameCalls;
+        private TimeSpan _timeSpanFunctionName;
 
-        static int _numberOfSetStackFrameCalls;
-        static TimeSpan _timeSpanSetStackFrame;
+        private int _numberOfSetStackFrameCalls;
+        private TimeSpan _timeSpanSetStackFrame;
+
+        private readonly Debugger _debugger;
 
 
         private delegate T MakeAction<out T>();
@@ -43,45 +48,89 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             return res;
         }
 
-        public static GetExpressionResult GetExpression(string expression, Debugger debugger)
+        public DebuggerOperations(Debugger debugger, OutputWindowPane log)
+        {
+            _debugger = debugger;
+            _log = log;
+        }
+
+        public GetExpressionResult GetExpression(string expression)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var res = MeasureTime(() =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                var expr = debugger.GetExpression(expression);
+                var expr = _debugger.GetExpression(expression);
                 return new GetExpressionResult {IsValid = expr.IsValidValue, Value = expr.Value};
             }, ref _timeSpanGetExpressions, ref _numberOfGetExpressionCalls);
-       
+
             if (!res.IsValid)
             {
-                Log.OutputString($"Expression {expression} is not a valid value:\n{res.Value}\n");
+                _log.OutputString($"Expression {expression} is not a valid value:\n{res.Value}\n");
             }
 
             return res;
         }
 
-        public static GetExpressionResult GetExpressionForIdentifier(string template, Identifier identifier,
-            Debugger debugger)
+        public GetExpressionResult GetExpressionForIdentifier(string template, Identifier identifier)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return GetExpression(Substitute(template, identifier, CurrentStackFrame(debugger)), debugger);
+            return GetExpression(Substitute(template, identifier, CurrentStackFrame()));
         }
 
-        public static bool CheckExpression(string expression, Debugger debugger)
+        private bool CheckExpression(string expression)
         {
-            var res = GetExpression("(bool)" + "(" + expression + ")", debugger);
+            var res = GetExpression("(bool)" + "(" + expression + ")");
             return res.IsValid && res.Value.Equals("true");
         }
 
-        public static bool CheckExpressionForIdentifier(string template, Identifier identifier, Debugger debugger)
+        public List<Identifier> CheckExpression(string template, string functionRegex, IEnumerable<Identifier> identifiers)
         {
-            var res = GetExpressionForIdentifier(template, identifier, debugger);
+            return !Regex.IsMatch(FunctionName(CurrentStackFrame()), 
+                functionRegex) ? new List<Identifier>() : identifiers.Where(id => CheckExpressionForIdentifier(template, id)).ToList();
+        }
+
+        public bool CheckExpressionForIdentifier(string template, Identifier identifier)
+        {
+            var res = GetExpressionForIdentifier(template, identifier);
             return res.IsValid && res.Value.Equals("true");
         }
 
-        public static string FunctionName(StackFrame stackFrame)
+        public List<Identifier> CheckExpressionAllStackFrames(string template, string functionRegex, IReadOnlyCollection<Identifier> identifiers)
+        {
+            var currentStackFrame = CurrentStackFrame();
+            var res = new List<Identifier>();
+            foreach (StackFrame stackFrame in _debugger.CurrentThread.StackFrames)
+            {
+                if (!Regex.IsMatch(FunctionName(stackFrame), functionRegex))
+                {
+                    continue;
+                }
+                SetStackFrame(stackFrame);
+                res.AddRange(identifiers.Where(x => !res.Contains(x)).Where(id => CheckExpressionForIdentifier(template, id)));
+            }
+            SetStackFrame(currentStackFrame);
+            return res;
+        }
+
+        public List<Identifier> CheckExpressionAllStackFramesArgsOnly(string template, string functionRegex, IReadOnlyCollection<Identifier> identifiers)
+        {
+            var res = new List<Identifier>();
+            foreach (StackFrame stackFrame in _debugger.CurrentThread.StackFrames)
+            {
+                if (!Regex.IsMatch(FunctionName(stackFrame), functionRegex))
+                {
+                    continue;
+                }
+
+                res.AddRange(identifiers.Where(id => !res.Contains(id) && CheckExpression(Substitute(template, id, stackFrame))));
+            }
+
+            return res;
+        }
+
+        private string FunctionName(StackFrame stackFrame)
         {
             return MeasureTime(() =>
             {
@@ -91,32 +140,33 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             }, ref _timeSpanFunctionName, ref _numberOfFunctionNameCalls);
         }
 
-        public static void AddToLog(string log)
+        public void AddToLog(string log)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Log.OutputString(log);
+            _log.OutputString(log);
         }
 
-        public static StackFrame CurrentStackFrame(Debugger debugger)
+        private StackFrame CurrentStackFrame()
         {
             var res = MeasureTime(() =>
                 {
                     ThreadHelper.ThrowIfNotOnUIThread();
-                    return debugger.CurrentStackFrame;
+                    return _debugger.CurrentStackFrame;
                 }, ref _timeSpanCurrentStackFrame,
                 ref _numberOfCurrentStackFrameCalls);
             return res;
         }
 
-        public static string Substitute(string template, Identifier identifier, StackFrame stackFrame)
+        private string Substitute(string template, Identifier identifier, StackFrame stackFrame)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            
+
             var result = template;
             if (result.IndexOf("__CURRENT_FUNCTION__", StringComparison.Ordinal) != -1)
             {
                 result = result.Replace("__CURRENT_FUNCTION__", FunctionName(stackFrame));
             }
+
             for (int i = 1; i <= stackFrame.Arguments.Count; i++)
             {
                 if (result.IndexOf($"__ARG{i}__", StringComparison.Ordinal) == -1)
@@ -136,7 +186,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             return identifier.Substitute(result);
         }
 
-        public static void SetStackFrame(StackFrame stackFrame, Debugger debugger)
+        private void SetStackFrame(StackFrame stackFrame)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             try
@@ -144,7 +194,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
                 MeasureTime(() =>
                 {
                     ThreadHelper.ThrowIfNotOnUIThread();
-                    debugger.CurrentStackFrame = stackFrame;
+                    _debugger.CurrentStackFrame = stackFrame;
                     return 0;
                 }, ref _timeSpanSetStackFrame, ref _numberOfSetStackFrameCalls);
             }
@@ -154,13 +204,16 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             }
         }
 
-        public static StackFrames GetStackFrames(Debugger debugger)
+        private StackFrames GetStackFrames()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return debugger.CurrentThread.StackFrames;
+            return _debugger.CurrentThread.StackFrames;
         }
 
-        public static void WriteDebugOutput()
+        public bool IsActive => CurrentStackFrame() != null;
+        
+
+        public void WriteDebugOutput()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             Debug.WriteLine($"Got {_numberOfGetExpressionCalls} expressions in {_timeSpanGetExpressions}");
@@ -168,16 +221,15 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             Debug.WriteLine(
                 $"Get {_numberOfCurrentStackFrameCalls} current stack frames in {_timeSpanCurrentStackFrame}");
             Debug.WriteLine($"Get {_numberOfFunctionNameCalls} function names {_timeSpanFunctionName}");
-            
         }
 
-        public static void ClearOutput()
+        public void ClearOutput()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Log.Clear();
+            _log.Clear();
         }
 
-        public static void Reset()
+        public void Reset()
         {
             _numberOfGetExpressionCalls = 0;
             _timeSpanSetStackFrame = TimeSpan.Zero;

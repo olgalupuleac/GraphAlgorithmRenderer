@@ -9,7 +9,7 @@ namespace GraphAlgorithmRendererLib.Config
     public interface INodeProperty
     {
         string Type { get; }
-        void Apply(Node node, Debugger debugger, Identifier identifier);
+        void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier);
     }
 
     public class FillColorNodeProperty : INodeProperty
@@ -25,7 +25,7 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -2)]
         public string Type { get; } = "FillColor";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.FillColor = Color;
         }
@@ -46,7 +46,7 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -2)]
         public string Type { get; } = "Shape";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.Shape = Shape;
         }
@@ -62,9 +62,9 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -1)]
         public string Type { get; } = "Label";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
-            ApplyLabel(node, debugger, identifier);
+            ApplyLabel(node, debuggerOperations, identifier);
         }
     }
 
@@ -81,7 +81,7 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -2)]
         public string Type { get; } = "LineWidth";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.LineWidth = LineWidth;
         }
@@ -101,7 +101,7 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -2)]
         public string Type { get; } = "LineColor";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.Color = Color;
         }
@@ -122,7 +122,7 @@ namespace GraphAlgorithmRendererLib.Config
         [JsonProperty(Order = -2)]
         public string Type { get; } = "Style";
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.AddStyle(Style);
         }
