@@ -93,5 +93,10 @@ namespace GraphAlgorithmRenderer.UIControls
             }).ToList();
             Edges.SetNewWindows(edgeWindows);
         }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            FromConfig(new GraphConfig());
+        }
     }
 }

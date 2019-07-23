@@ -155,7 +155,7 @@ namespace GraphAlgorithmRenderer
             EnvDTE.Window w = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
             OutputWindow ow = (OutputWindow) w.Object;
-            var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
+            var outputWindowPane = ow.OutputWindowPanes.Add("Graph Algorithm Renderer");
             outputWindowPane.Activate();
             _debuggerOperations = new DebuggerOperations(debugger, outputWindowPane);
         }
@@ -168,7 +168,7 @@ namespace GraphAlgorithmRenderer
             ((SettingsWindowControl)Content).Config.Text = ((SettingsWindowPackage)Package).OptionJsonConfig;
             
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
-            _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>
+            _control.MainControl.ShowGraph.Click += (sender, e) =>
             {
                 if (_drawingMode == DrawingMode.Canceled)
                 {
