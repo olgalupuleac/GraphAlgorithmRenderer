@@ -290,7 +290,7 @@ namespace GraphAlgorithmRenderer
             }
 
             //_form.Focused = false;
-            _dispatcherTimer.Stop();
+            _dispatcherTimer?.Stop();
             _drawingMode = DrawingMode.NotChanged;
         }
 
