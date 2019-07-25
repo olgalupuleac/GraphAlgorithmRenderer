@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -33,6 +34,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         private TimeSpan _timeSpanSetStackFrame;
 
         private readonly Debugger _debugger;
+        private StringBuilder _buffer = new StringBuilder();
 
 
         private delegate T MakeAction<out T>();
@@ -67,7 +69,7 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
 
             if (!res.IsValid)
             {
-                _log.OutputString($"Expression {expression} is not a valid value:\n{res.Value}\n");
+                _buffer.Append($"Expression {expression} is not a valid value:\n{res.Value}\n");
             }
 
             return res;
@@ -164,16 +166,26 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
-                if (!Int32.TryParse(v.Substring(5, v.Length - 7), out int index))
+                if (!Int32.TryParse(v.Substring(5, v.Length - 7), out var index))
                 {
                     return v;
                 }
-                else
+
+                //TODO measure time
+                var args = stackFrame.Arguments;
+                if (args.Count < index)
                 {
-                    //TODO measure time
-                    return stackFrame.Arguments.Item(index).Value;
+                    _buffer.AppendLine($"{v}: argument is out of bounds");
+                    return v;
                 }
-                
+                var expr = args.Item(index);
+                var exprResult = new GetExpressionResult { IsValid = expr.IsValidValue, Value = expr.Value };
+                if (!exprResult.IsValid)
+                {
+                    _buffer.Append($"Argument {v} is invalid:\n {exprResult.Value}\n");
+                }
+                return exprResult.Value;
+
             });
             
             if (result.IndexOf("__CURRENT_FUNCTION__", StringComparison.Ordinal) != -1)
@@ -216,6 +228,11 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         public void WriteDebugOutput()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (!String.IsNullOrWhiteSpace(_buffer.ToString()))
+            {
+                _log.OutputString(_buffer.ToString());
+            }
+            _buffer.Clear();
             Debug.WriteLine($"Got {_numberOfGetExpressionCalls} expressions in {_timeSpanGetExpressions}");
             Debug.WriteLine($"Set {_numberOfSetStackFrameCalls} stack frames in {_timeSpanSetStackFrame}");
             Debug.WriteLine(
