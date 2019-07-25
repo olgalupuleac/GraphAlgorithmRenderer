@@ -1,319 +1,225 @@
 {
-  "$type": "GraphAlgorithmRenderer.Config.GraphConfig, GraphAlgorithmRenderer",
-  "Edges": {
-    "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer]], mscorlib",
-    "$values": [
-      {
-        "$type": "GraphAlgorithmRenderer.Config.EdgeFamily, GraphAlgorithmRenderer",
-        "Source": {
-          "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
-          "NodeFamilyName": "node#0",
-          "NamesWithTemplates": {
-            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-            "v": "edges[__e__].from"
-          }
-        },
-        "Target": {
-          "$type": "GraphAlgorithmRenderer.Config.EdgeFamily+EdgeEnd, GraphAlgorithmRenderer",
-          "NodeFamilyName": "node#0",
-          "NamesWithTemplates": {
-            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-            "v": "edges[__e__].to"
-          }
-        },
-        "Name": "edge#0",
-        "Ranges": {
-          "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer]], mscorlib",
-          "$values": [
+  "Nodes": [
+    {
+      "Name": "node#0",
+      "Ranges": [
+        {
+          "Name": "v",
+          "BeginTemplate": "0",
+          "EndTemplate": "n"
+        }
+      ],
+      "ValidationTemplate": "",
+      "ConditionalProperties": [
+        {
+          "Condition": {
+            "Template": "__ARG1__ == __v__",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": "dfs"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer",
-              "Name": "e",
-              "BeginTemplate": "0",
-              "EndTemplate": "edges.size()"
+              "Type": "FillColor",
+              "Color": {
+                "A": 255,
+                "R": 255,
+                "G": 0,
+                "B": 0
+              }
             }
           ]
         },
-        "ValidationTemplate": "__e__ < edges.size() && __e__ % 2 == 0",
-        "ConditionalProperties": {
-          "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
-          "$values": [
+        {
+          "Condition": {
+            "Template": "__ARG1__ == __v__",
+            "Mode": "AllStackFrames",
+            "FunctionNameRegex": "dfs"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "true",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LabelEdgeProperty, GraphAlgorithmRenderer",
-                    "HighlightIfChanged": false,
-                    "ColorToHighLight": null,
-                    "LabelTextExpression": "c={edges[__e__].cap}, f={edges[__e__].flow}",
-                    "FontSize": 6.0
-                  }
-                ]
+              "Type": "FillColor",
+              "Color": {
+                "A": 255,
+                "R": 128,
+                "G": 128,
+                "B": 128
               }
-            },
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "__v__ == t",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "!flow_edges[__e__] && (edges[__e__].cap == edges[__e__].flow || edges[__e__].cap == -edges[__e__].flow)",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LineWidthEdgeProperty, GraphAlgorithmRenderer",
-                    "LineWidth": 2.0
-                  },
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.StyleEdgeProperty, GraphAlgorithmRenderer",
-                    "Style": 1
-                  }
-                ]
-              }
-            },
+              "Type": "Label",
+              "LabelTextExpression": "t = {__v__}, d={d[__v__]}",
+              "FontSize": null
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "__v__ == s",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "flow_edges[__e__]",
-                "Mode": 0,
-                "FunctionNameRegex": "dfs"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LineColorEdgeProperty, GraphAlgorithmRenderer",
-                    "Color": {
-                      "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
-                      "A": 255,
-                      "R": 138,
-                      "G": 43,
-                      "B": 226
-                    }
-                  },
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LineWidthEdgeProperty, GraphAlgorithmRenderer",
-                    "LineWidth": 2.0
-                  }
-                ]
-              }
-            },
+              "Type": "Label",
+              "LabelTextExpression": "s = {__v__}, d={d[__v__]}",
+              "FontSize": null
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "true",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "dfs_edges[__e__]",
-                "Mode": 0,
-                "FunctionNameRegex": "dfs"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LineColorEdgeProperty, GraphAlgorithmRenderer",
-                    "Color": {
-                      "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
-                      "A": 255,
-                      "R": 255,
-                      "G": 0,
-                      "B": 0
-                    }
-                  },
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LineWidthEdgeProperty, GraphAlgorithmRenderer",
-                    "LineWidth": 1.2000000476837158
-                  }
-                ]
-              }
-            },
-            {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "edges[__e__].flow > 0",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
-                    "ArrowAtTarget": true,
-                    "ArrowAtSource": false
-                  }
-                ]
-              }
-            },
-            {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "edges[__e__].flow < 0",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IEdgeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.ArrowProperty, GraphAlgorithmRenderer",
-                    "ArrowAtTarget": false,
-                    "ArrowAtSource": true
-                  }
-                ]
-              }
+              "Type": "Label",
+              "LabelTextExpression": "{__v__}, d={d[__v__]}",
+              "FontSize": null
             }
           ]
         }
-      }
-    ]
-  },
-  "Nodes": {
-    "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.NodeFamily, GraphAlgorithmRenderer]], mscorlib",
-    "$values": [
-      {
-        "$type": "GraphAlgorithmRenderer.Config.NodeFamily, GraphAlgorithmRenderer",
-        "Name": "node#0",
-        "Ranges": {
-          "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer]], mscorlib",
-          "$values": [
+      ]
+    }
+  ],
+  "Edges": [
+    {
+      "Source": {
+        "NodeFamilyName": "node#0",
+        "NamesWithTemplates": {
+          "v": "edges[__e__].from"
+        }
+      },
+      "Target": {
+        "NodeFamilyName": "node#0",
+        "NamesWithTemplates": {
+          "v": "edges[__e__].to"
+        }
+      },
+      "Name": "edge#0",
+      "Ranges": [
+        {
+          "Name": "e",
+          "BeginTemplate": "0",
+          "EndTemplate": "edges.size()"
+        }
+      ],
+      "ValidationTemplate": "__e__ < edges.size() && __e__ % 2 == 0",
+      "ConditionalProperties": [
+        {
+          "Condition": {
+            "Template": "true",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.IdentifierPartTemplate, GraphAlgorithmRenderer",
-              "Name": "v",
-              "BeginTemplate": "0",
-              "EndTemplate": "n"
+              "Type": "Label",
+              "LabelTextExpression": "c={edges[__e__].cap}, f={edges[__e__].flow}",
+              "FontSize": 6.0
             }
           ]
         },
-        "ValidationTemplate": "",
-        "ConditionalProperties": {
-          "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer]], mscorlib",
-          "$values": [
+        {
+          "Condition": {
+            "Template": "!flow_edges[__e__] && (edges[__e__].cap == edges[__e__].flow || edges[__e__].cap == -edges[__e__].flow)",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "__ARG1__ == __v__",
-                "Mode": 0,
-                "FunctionNameRegex": "dfs"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.FillColorNodeProperty, GraphAlgorithmRenderer",
-                    "Color": {
-                      "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
-                      "A": 255,
-                      "R": 255,
-                      "G": 0,
-                      "B": 0
-                    }
-                  }
-                ]
+              "Type": "LineWidth",
+              "LineWidth": 2.0
+            },
+            {
+              "Type": "Style",
+              "Style": "Dashed"
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "flow_edges[__e__]",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": "dfs"
+          },
+          "Properties": [
+            {
+              "Type": "LineColor",
+              "Color": {
+                "A": 255,
+                "R": 138,
+                "G": 43,
+                "B": 226
               }
             },
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "__ARG1__ == __v__",
-                "Mode": 1,
-                "FunctionNameRegex": "dfs"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.FillColorNodeProperty, GraphAlgorithmRenderer",
-                    "Color": {
-                      "$type": "Microsoft.Msagl.Drawing.Color, Microsoft.Msagl.Drawing",
-                      "A": 255,
-                      "R": 128,
-                      "G": 128,
-                      "B": 128
-                    }
-                  }
-                ]
+              "Type": "LineWidth",
+              "LineWidth": 2.0
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "dfs_edges[__e__]",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": "dfs"
+          },
+          "Properties": [
+            {
+              "Type": "LineColor",
+              "Color": {
+                "A": 255,
+                "R": 255,
+                "G": 0,
+                "B": 0
               }
             },
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "__v__ == t",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LabelNodeProperty, GraphAlgorithmRenderer",
-                    "HighlightIfChanged": false,
-                    "ColorToHighLight": null,
-                    "LabelTextExpression": "t = {__v__}, d={d[__v__]}",
-                    "FontSize": null
-                  }
-                ]
-              }
-            },
+              "Type": "LineWidth",
+              "LineWidth": 1.2000000476837158
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "edges[__e__].flow > 0",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "__v__ == s",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LabelNodeProperty, GraphAlgorithmRenderer",
-                    "HighlightIfChanged": false,
-                    "ColorToHighLight": null,
-                    "LabelTextExpression": "s = {__v__}, d={d[__v__]}",
-                    "FontSize": null
-                  }
-                ]
-              }
-            },
+              "Type": "Arrow",
+              "ArrowAtTarget": true,
+              "ArrowAtSource": false
+            }
+          ]
+        },
+        {
+          "Condition": {
+            "Template": "edges[__e__].flow < 0",
+            "Mode": "CurrentStackFrame",
+            "FunctionNameRegex": ".*"
+          },
+          "Properties": [
             {
-              "$type": "GraphAlgorithmRenderer.Config.ConditionalProperty`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], GraphAlgorithmRenderer",
-              "Condition": {
-                "$type": "GraphAlgorithmRenderer.Config.Condition, GraphAlgorithmRenderer",
-                "Template": "true",
-                "Mode": 0,
-                "FunctionNameRegex": ".*"
-              },
-              "Properties": {
-                "$type": "System.Collections.Generic.List`1[[GraphAlgorithmRenderer.Config.INodeProperty, GraphAlgorithmRenderer]], mscorlib",
-                "$values": [
-                  {
-                    "$type": "GraphAlgorithmRenderer.Config.LabelNodeProperty, GraphAlgorithmRenderer",
-                    "HighlightIfChanged": false,
-                    "ColorToHighLight": null,
-                    "LabelTextExpression": "{__v__}, d={d[__v__]}",
-                    "FontSize": null
-                  }
-                ]
-              }
+              "Type": "Arrow",
+              "ArrowAtTarget": false,
+              "ArrowAtSource": true
             }
           ]
         }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }
