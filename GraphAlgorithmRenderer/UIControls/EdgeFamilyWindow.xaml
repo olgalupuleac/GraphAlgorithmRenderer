@@ -27,7 +27,7 @@
             <TextBox x:Name="FamilyName" Margin="10" TextWrapping="Wrap" />
             <Separator></Separator>
             <Label x:Name="label" Content="Validation template" Margin="15" />
-            <TextBox x:Name="validationTemplateBox" Margin="10" TextWrapping="Wrap" />
+            <local:SyntaxHighlighterTextBox x:Name="validationTemplateBox" Margin="10" />
         </StackPanel>
 
         <StackPanel Orientation="Vertical">

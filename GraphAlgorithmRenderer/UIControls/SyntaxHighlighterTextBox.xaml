@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
              mc:Ignorable="d" 
              xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit">
+    <Border BorderThickness="1" BorderBrush="LightGray">
     <avalonEdit:TextEditor  Name="CodeBox"
                             FontFamily="Consolas"
                             FontSize="10pt"  MaxHeight="320"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto"
     />
+    </Border>
 </UserControl>
