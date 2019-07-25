@@ -160,28 +160,28 @@ namespace GraphAlgorithmRendererLib.GraphRenderer
         private string Substitute(string template, Identifier identifier, StackFrame stackFrame)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
-            var result = template;
+            var result = Regex.Replace(template, @"__ARG([0-9]*)__", delegate (Match match)
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                string v = match.ToString();
+                if (!Int32.TryParse(v.Substring(5, v.Length - 7), out int index))
+                {
+                    return v;
+                }
+                else
+                {
+                    //TODO measure time
+                    return stackFrame.Arguments.Item(index).Value;
+                }
+                
+            });
+            
             if (result.IndexOf("__CURRENT_FUNCTION__", StringComparison.Ordinal) != -1)
             {
                 result = result.Replace("__CURRENT_FUNCTION__", FunctionName(stackFrame));
             }
 
-            for (int i = 1; i <= stackFrame.Arguments.Count; i++)
-            {
-                if (result.IndexOf($"__ARG{i}__", StringComparison.Ordinal) == -1)
-                {
-                    continue;
-                }
-
-                var i1 = i;
-                var result1 = result;
-                result = MeasureTime(() =>
-                {
-                    ThreadHelper.ThrowIfNotOnUIThread();
-                    return result1.Replace($"__ARG{i1}__", stackFrame.Arguments.Item(i1).Value);
-                }, ref _timeSpanGetExpressions, ref _numberOfGetExpressionCalls);
-            }
+           
 
             return identifier.Substitute(result);
         }
