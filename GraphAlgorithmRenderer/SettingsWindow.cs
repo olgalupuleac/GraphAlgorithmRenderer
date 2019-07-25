@@ -155,7 +155,7 @@ namespace GraphAlgorithmRenderer
             EnvDTE.Window w = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
             OutputWindow ow = (OutputWindow) w.Object;
-            var outputWindowPane = ow.OutputWindowPanes.Add("Graph Algorithm Renderer");
+            var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
             _debuggerOperations = new DebuggerOperations(debugger, outputWindowPane);
         }
