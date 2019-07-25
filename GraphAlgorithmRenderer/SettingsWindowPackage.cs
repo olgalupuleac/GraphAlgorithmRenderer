@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
+using System.ComponentModel;
 
 namespace GraphAlgorithmRenderer
 {
@@ -38,6 +39,8 @@ namespace GraphAlgorithmRenderer
     [ProvideToolWindow(typeof(SettingsWindow))]
     [Guid(SettingsWindowPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [ProvideOptionPage(typeof(OptionPageGrid),
+        "GraphAlgorithmRenderer Category", "JSON Config", 0, 0, true)]
     public sealed class SettingsWindowPackage : AsyncPackage
     {
         /// <summary>
@@ -54,6 +57,20 @@ namespace GraphAlgorithmRenderer
             // any Visual Studio service because at this point the package object is created but
             // not sited yet inside Visual Studio environment. The place to do all the other
             // initialization is the Initialize method.
+        }
+
+        public string OptionJsonConfig
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.JsonConfig;
+            }
+            set
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                page.JsonConfig = value;
+            }
         }
 
         #region Package Members
@@ -75,4 +92,13 @@ namespace GraphAlgorithmRenderer
 
         #endregion
     }
+
+    public class OptionPageGrid : DialogPage
+    {
+        [Category("GraphAlgorithmRenderer Category")]
+        [DisplayName("JSON config")]
+        [Description("JSON config of the last project")]
+        public string JsonConfig { get; set; }
+    }
+
 }

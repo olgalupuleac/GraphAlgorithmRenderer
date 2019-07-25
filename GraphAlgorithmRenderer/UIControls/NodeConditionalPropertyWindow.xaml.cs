@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using GraphAlgorithmRenderer.Config;
 using GraphAlgorithmRenderer.UIControls.Properties;
+using GraphAlgorithmRendererLib.Config;
 
 namespace GraphAlgorithmRenderer.UIControls
 {

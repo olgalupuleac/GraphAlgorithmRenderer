@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 using Debugger = EnvDTE.Debugger;
 
-namespace GraphAlgorithmRenderer.GraphRenderer
+namespace GraphAlgorithmRendererLib.GraphRenderer
 {
     public class IdentifierPartRange
     {
@@ -127,14 +127,14 @@ namespace GraphAlgorithmRenderer.GraphRenderer
         }
 
         public static List<Identifier> GetIdentifiers(string name, List<IdentifierPartTemplate> templates,
-            Debugger debugger)
+            DebuggerOperations debuggerOperations)
         {
             Identifier start = new Identifier(name: name, parts: new List<IdentifierPart>());
-            return GetIdentifiers(start, templates, debugger);
+            return GetIdentifiers(start, templates, debuggerOperations);
         }
 
         private static List<Identifier> GetIdentifiers(Identifier cur, List<IdentifierPartTemplate> templates,
-            Debugger debugger)
+            DebuggerOperations debuggerOperations)
         {
             if (templates.Count == 0)
             {
@@ -144,22 +144,22 @@ namespace GraphAlgorithmRenderer.GraphRenderer
             var head = templates.FirstOrDefault();
             Debug.Assert(head != null, nameof(head) + " != null");
            
-            int begin = GetNumber(head.BeginTemplate ?? "", cur, debugger, $"Begin range of index {head.Name} in {cur.Name}");
-            int end = GetNumber(head.EndTemplate ?? "", cur, debugger, $"End range of {head.Name} index in {cur.Name}");
+            int begin = GetNumber(head.BeginTemplate ?? "", cur, debuggerOperations, $"Begin range of index {head.Name} in {cur.Name}");
+            int end = GetNumber(head.EndTemplate ?? "", cur, debuggerOperations, $"End range of {head.Name} index in {cur.Name}");
             var res = new List<Identifier>();
             for (int i = begin; i < end; i++)
             {
                 var part = new IdentifierPart(head.Name, i);
-                var partRes = GetIdentifiers(cur.AddIdentifierPart(part), templates.Skip(1).ToList(), debugger);
+                var partRes = GetIdentifiers(cur.AddIdentifierPart(part), templates.Skip(1).ToList(), debuggerOperations);
                 res.AddRange(partRes);
             }
 
             return res;
         }
 
-        public static int GetNumber(string template, Identifier id, Debugger debugger, string message)
+        public static int GetNumber(string template, Identifier id, DebuggerOperations debuggerOperations, string message)
         {
-            var expressionResult = DebuggerOperations.GetExpressionForIdentifier(template, id, debugger);
+            var expressionResult = debuggerOperations.GetExpressionForIdentifier(template, id);
             if (!expressionResult.IsValid || !Int32.TryParse(expressionResult.Value, out var res))
             {
                 throw new GraphRenderException($"{message} \'{template}\' is not valid:\n{expressionResult.Value}");

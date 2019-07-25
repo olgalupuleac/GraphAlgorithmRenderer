@@ -55,19 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Config\NetConfigs.cs" />
-    <Compile Include="Config\AbstractLabelProperty.cs" />
-    <Compile Include="Config\ConditionalProperty.cs" />
-    <Compile Include="Config\GraphConfig.cs" />
-    <Compile Include="Config\IdentifierTemplate.cs" />
-    <Compile Include="Config\IEdgeProperty.cs" />
-    <Compile Include="Config\INodeProperty.cs" />
-    <Compile Include="GraphRenderer\Identifier.cs" />
-    <Compile Include="GraphRenderer\DebuggerOperations.cs" />
-    <Compile Include="GraphRenderer\GraphRenderer.cs" />
-    <Compile Include="GraphRenderer\GraphRenderException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer\ConfigSerializer.cs" />
     <Compile Include="SettingsWindow.cs" />
     <Compile Include="SettingsWindowCommand.cs" />
     <Compile Include="SettingsWindowControl.xaml.cs">
@@ -126,11 +114,16 @@
     <Compile Include="UIControls\Properties\StyleUiProperty.xaml.cs">
       <DependentUpon>StyleUiProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIControls\SyntaxHighlighterTextBox.xaml.cs">
+      <DependentUpon>SyntaxHighlighterTextBox.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Samples\BinaryHeap\config.json" />
     <None Include="Samples\Bridges\config.json" />
     <None Include="Samples\Components\config.json" />
@@ -152,6 +145,7 @@
     <Content Include="Resources\SettingsWindowPackage.ico" />
     <VSCTCompile Include="SettingsWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="Samples\BinaryHeap\sift_up.png" />
     <Content Include="Samples\BinaryHeap\Source.cpp" />
@@ -203,6 +197,12 @@
     </Reference>
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <HintPath>..\packages\FCTB.2.16.24\lib\FastColoredTextBox.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Msagl, Version=3.0.0.0, Culture=neutral, PublicKeyToken=640c57aa40e7ae7d, processorArchitecture=MSIL">
@@ -395,14 +395,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UIControls\SyntaxHighlighterTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\GraphAlgorithmRendererLib\GraphAlgorithmRendererLib.csproj">
+      <Project>{1115f06a-ebcf-4172-8ee7-ed3a3f1b2e5c}</Project>
+      <Name>GraphAlgorithmRendererLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.10\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.10\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" />

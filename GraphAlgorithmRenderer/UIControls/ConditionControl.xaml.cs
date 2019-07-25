@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 
 namespace GraphAlgorithmRenderer.UIControls
 {
@@ -12,6 +12,7 @@ namespace GraphAlgorithmRenderer.UIControls
         public ConditionControl()
         {
             InitializeComponent();
+            ConditionBox.Text = "true";
             var groupName = $"Mode{GetHashCode()}";
             CurSf.GroupName = groupName;
             AllSf.GroupName = groupName;
@@ -19,12 +20,12 @@ namespace GraphAlgorithmRenderer.UIControls
             CurSf.IsChecked = true;
         }
 
-        public GraphAlgorithmRenderer.Config.Condition Condition
+        public Condition Condition
         {
             get
             {
                 var mode = GetMode();
-                return new GraphAlgorithmRenderer.Config.Condition(ConditionBox.Text, RegexBox.Text, mode);
+                return new Condition(ConditionBox.Text, RegexBox.Text, mode);
             }
         }
 
@@ -48,7 +49,7 @@ namespace GraphAlgorithmRenderer.UIControls
             string.Join(" ", ConditionBox.Text, RegexBox.Text,
                 Enum.GetName(typeof(ConditionMode), GetMode()));
 
-        public void FromCondition(GraphAlgorithmRenderer.Config.Condition condition)
+        public void FromCondition(Condition condition)
         {
             ConditionBox.Text = condition.Template;
             RegexBox.Text = condition.FunctionNameRegex;

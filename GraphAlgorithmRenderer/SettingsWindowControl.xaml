@@ -8,6 +8,7 @@
              xmlns:ui="clr-namespace:GraphAlgorithmRenderer.UIControls"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
@@ -18,20 +19,24 @@
                <ui:MainControl x:Name="MainControl"/>
             </TabItem>
             <TabItem Header="Json">
+                
                 <StackPanel Orientation="Vertical">
 
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <TextBox x:Name="Config" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="220"
-                     Text="{Binding Path = JsonConfig, Mode=TwoWay}" TextChanged="Config_TextChanged" />
+                        <avalonEdit:TextEditor  Name="Config"
+                                                FontFamily="Consolas"
+                                                FontSize="10pt" 
+                                                MaxHeight="320"
+                     />
                     </ScrollViewer>
-                    <Button x:Name="Load" Content="Deserialize" Margin="20" MaxWidth="90"/>
-
-                    <Button x:Name="Export" Content="Serialize" Margin="20" MaxWidth="90"/>
-
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="Load" Content="Deserialize" Margin="10" MaxWidth="90"/>
+                        <Button x:Name="Export" Content="Serialize" Margin="10" MaxWidth="90"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
-            
+
 
         </TabControl>
     </Grid>

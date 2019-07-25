@@ -1,17 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using GraphAlgorithmRenderer.GraphRenderer;
+﻿using GraphAlgorithmRendererLib.GraphRenderer;
 using Microsoft.Msagl.Drawing;
-using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
-using Debugger = EnvDTE.Debugger;
+using Newtonsoft.Json.Converters;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public interface IEdgeProperty
     {
-        void Apply(Edge edge, Debugger debugger, Identifier identifier);
+        string Type { get; }
+        void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier);
     }
 
     public class LabelEdgeProperty : AbstractLabelProperty, IEdgeProperty
@@ -22,13 +19,16 @@ namespace GraphAlgorithmRenderer.Config
             FontSize = 6;
         }
 
-        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "Label";
+
+        public void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             if (edge.Label == null)
             {
                 edge.LabelText = "";
             }
-            ApplyLabel(edge, debugger, identifier);
+            ApplyLabel(edge, debuggerOperations, identifier);
         }
     }
 
@@ -42,7 +42,10 @@ namespace GraphAlgorithmRenderer.Config
             LineWidth = lineWidth;
         }
 
-        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "LineWidth";
+
+        public void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             edge.Attr.LineWidth = LineWidth;
         }
@@ -56,9 +59,12 @@ namespace GraphAlgorithmRenderer.Config
             Color = color;
         }
 
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "LineColor";
+
         [JsonProperty] public Color Color { get; }
 
-        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        public void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             edge.Attr.Color = Color;
         }
@@ -72,26 +78,35 @@ namespace GraphAlgorithmRenderer.Config
             Style = style;
         }
 
-        [JsonProperty] public Style Style { get; }
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "Style";
 
-        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Style Style { get; }
+
+        public void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             edge.Attr.AddStyle(Style);
         }
     }
 
-    public class ArrowProperty : IEdgeProperty
+    public class ArrowEdgeProperty : IEdgeProperty
     {
         public bool ArrowAtTarget { get; set; }
         public bool ArrowAtSource { get; set; }
+
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "Arrow";
+
         [JsonConstructor]
-        public ArrowProperty(bool arrowAtTarget, bool arrowAtSource)
+        public ArrowEdgeProperty(bool arrowAtTarget, bool arrowAtSource)
         {
             ArrowAtSource = arrowAtSource;
             ArrowAtTarget = arrowAtTarget;
         }
 
-        public void Apply(Edge edge, Debugger debugger, Identifier identifier)
+        public void Apply(Edge edge, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             edge.Attr.ArrowheadAtTarget = ArrowAtTarget ? ArrowStyle.Normal : ArrowStyle.None;
             edge.Attr.ArrowheadAtSource = ArrowAtSource ? ArrowStyle.Normal : ArrowStyle.None;

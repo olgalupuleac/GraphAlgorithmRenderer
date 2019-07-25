@@ -9,12 +9,21 @@
              Height="Auto" Width="Auto" SizeToContent="WidthAndHeight"
              MinWidth="200" MinHeight="60">
     <StackPanel Orientation="Vertical">
-        <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=EdgeEndIdParts}" >
-            <DataGrid.Resources>
-                <collections:ArrayList x:Key="EdgeEndIdParts">
-                   
-                </collections:ArrayList>
-            </DataGrid.Resources>
+        <DataGrid x:Name="dataGrid"  AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Index">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding IdPart}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Template" Binding="{Binding Template}" />
+
+                
+
+            </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="Ok" Content="Ok" Margin="20" Click="Ok_Click" IsDefault="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="60"/>
 

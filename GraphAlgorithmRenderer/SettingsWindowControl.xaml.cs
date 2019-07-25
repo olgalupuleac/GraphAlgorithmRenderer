@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace GraphAlgorithmRenderer
 {
@@ -17,28 +18,14 @@ namespace GraphAlgorithmRenderer
         public SettingsWindowControl()
         {
             this.InitializeComponent();
+            Config.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript");
+            Config.ShowLineNumbers = true;
+            
             this.DataContext = this;
         }
 
         public string JsonConfig { get; set; }
 
-        public bool IsReady { get; set; }
-
-
-        private void Load_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine(JsonConfig);
-            IsReady = true;
-        }
-
-        private void Config_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            IsReady = false;
-        }
-
-        private void Load_Copy_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

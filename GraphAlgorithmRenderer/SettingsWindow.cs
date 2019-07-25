@@ -5,13 +5,13 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using EnvDTE;
-using GraphAlgorithmRenderer.Config;
-using GraphAlgorithmRenderer.GraphRenderer;
-using GraphAlgorithmRenderer.Serializer;
+using GraphAlgorithmRendererLib.Config;
+using GraphAlgorithmRendererLib.GraphRenderer;
+using GraphAlgorithmRendererLib.Serializer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using WpfExceptionViewer;
-using Debugger = EnvDTE.Debugger;
+using GraphRenderer = GraphAlgorithmRendererLib.GraphRenderer.GraphRenderer;
 using MessageBox = System.Windows.MessageBox;
 using Process = EnvDTE.Process;
 using Size = System.Drawing.Size;
@@ -23,7 +23,7 @@ namespace GraphAlgorithmRenderer
     using System;
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
-    using GraphConfig = Config.GraphConfig;
+    using GraphConfig = GraphConfig;
 
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -49,6 +49,14 @@ namespace GraphAlgorithmRenderer
 
         public delegate void MakeAction();
 
+        public delegate GraphConfig CreateConfig();
+
+        private void SetConfig(CreateConfig createConfig)
+        {
+            _config = createConfig();
+            _config.Validate();
+        }
+
 
         private void HandleException(MakeAction makeAction, string headerMessage)
         {
@@ -63,7 +71,7 @@ namespace GraphAlgorithmRenderer
                     _drawingMode = DrawingMode.NotChanged;
                 }
 
-                if (e is GraphRenderException)
+                if (e is GraphRenderException || e is ValidationException)
                 {
                     MessageBox.Show(e.Message, headerMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -98,6 +106,7 @@ namespace GraphAlgorithmRenderer
 
         private void LoadOnClick(object sender, RoutedEventArgs e)
         {
+            
             var json = _control.Config.Text;
             if (String.IsNullOrWhiteSpace(json))
             {
@@ -107,8 +116,8 @@ namespace GraphAlgorithmRenderer
             }
             HandleException(() =>
             {
-                _config = ConfigSerializer.FromJson(json);
-
+                SetConfig(() => ConfigSerializer.FromJson(json));
+                ((SettingsWindowPackage)Package).OptionJsonConfig = json;
                 MessageBox.Show("Successfully deserialized config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Json deserialization error");
@@ -135,34 +144,31 @@ namespace GraphAlgorithmRenderer
             _form.TopMost = _control.MainControl.OnTop.IsChecked == true;
         }
 
-        private void InitializeLog(DTE dte)
+        private void InitializeDebuggerOperations()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            EnvDTE.Window w = (EnvDTE.Window) dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+            var dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+            _debugEvents = dte.Events.DebuggerEvents;
+            _debugEvents.OnContextChanged +=
+                Update;
+            var debugger = dte.Debugger;
+            EnvDTE.Window w = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
             w.Visible = true;
             OutputWindow ow = (OutputWindow) w.Object;
             var outputWindowPane = ow.OutputWindowPanes.Add("Graph Visualization");
             outputWindowPane.Activate();
-            DebuggerOperations.Log = outputWindowPane;
-            
+            _debuggerOperations = new DebuggerOperations(debugger, outputWindowPane);
         }
 
         protected override void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var applicationObject = (DTE) Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
-            _debugEvents = applicationObject.Events.DebuggerEvents;
-            _debugEvents.OnContextChanged +=
-                Update;
-            _debugger = applicationObject.Debugger;
-            Debug.WriteLine("DSU");
-            Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.DsuConfig));
-
-            Debug.WriteLine("Treap");
-            Debug.WriteLine(ConfigSerializer.ToJson(ConfigCreator.TreapConfig));
-
+            InitializeDebuggerOperations();
+            _graphRenderer = new GraphRenderer(_debuggerOperations);
+            ((SettingsWindowControl)Content).Config.Text = ((SettingsWindowPackage)Package).OptionJsonConfig;
+            
             _control.MainControl.GenerateConfig.Click += GenerateConfigOnClick;
-            _control.MainControl.ShowGraph.Click += (object sender, RoutedEventArgs e) =>
+            _control.MainControl.ShowGraph.Click += (sender, e) =>
             {
                 if (_drawingMode == DrawingMode.Canceled)
                 {
@@ -172,7 +178,7 @@ namespace GraphAlgorithmRenderer
                 }
             };
 
-            InitializeLog(applicationObject);
+          
             _control.MainControl.OnTop.Checked += (sender, args) =>
             {
                 if (_form != null)
@@ -193,7 +199,8 @@ namespace GraphAlgorithmRenderer
         {
             HandleException(() =>
             {
-                _config = _control.MainControl.Config;
+                SetConfig(() => _control.MainControl.Config);
+                ((SettingsWindowPackage)Package).OptionJsonConfig = ConfigSerializer.ToJson(_config);
                 MessageBox.Show("Successfully created config!", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }, "Error while generating config");
@@ -241,16 +248,17 @@ namespace GraphAlgorithmRenderer
         private DrawingMode _drawingMode = DrawingMode.NotChanged;
         private DispatcherTimer _dispatcherTimer;
         private readonly SettingsWindowControl _control;
-        private Debugger _debugger;
+        private DebuggerOperations _debuggerOperations;
+        private GraphRenderer _graphRenderer;
 
 
         private void DrawGraph()
         {
-            DebuggerOperations.ClearOutput();
+            _debuggerOperations.ClearOutput();
             _drawingMode = DrawingMode.Redrawing;
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_config == null || _debugger?.CurrentStackFrame == null)
+            if (_config == null || _debuggerOperations?.IsActive != true)
             {
                 _drawingMode = DrawingMode.NotChanged;
                 return;
@@ -258,11 +266,11 @@ namespace GraphAlgorithmRenderer
             
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var renderer = new GraphRenderer.GraphRenderer(_config, _debugger);
-            Graph graph = renderer.RenderGraph();
+            
+            var graph = _graphRenderer.RenderGraph(_config);
             stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+            var ts = stopWatch.Elapsed;
+            var elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
 
             Debug.WriteLine($"total time {elapsedTime}");
             if (graph == null)
@@ -282,8 +290,11 @@ namespace GraphAlgorithmRenderer
             }
 
             //_form.Focused = false;
-            _dispatcherTimer.Stop();
+            _dispatcherTimer?.Stop();
             _drawingMode = DrawingMode.NotChanged;
         }
+
+        public string JsonConfig => ConfigSerializer.ToJson(_config);
+        
     }
 }

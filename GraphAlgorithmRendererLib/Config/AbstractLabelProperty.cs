@@ -1,13 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using EnvDTE;
-using GraphAlgorithmRenderer.GraphRenderer;
+using GraphAlgorithmRendererLib.GraphRenderer;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
-using static GraphAlgorithmRenderer.GraphRenderer.DebuggerOperations;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public abstract class AbstractLabelProperty
     {
@@ -16,20 +14,21 @@ namespace GraphAlgorithmRenderer.Config
             LabelTextExpression = labelTextExpression;
         }
 
+        [JsonIgnore]
         public bool HighlightIfChanged { get; set; }
+        [JsonIgnore]
         public Color? ColorToHighLight { get; set; }
         [JsonProperty] public string LabelTextExpression { get; }
         public double? FontSize { get; set; }
 
-        public void ApplyLabel(ILabeledObject graphElement, Debugger debugger, Identifier identifier)
+        public void ApplyLabel(ILabeledObject graphElement, DebuggerOperations debuggerOperations, Identifier identifier)
         {
            
             var label = Regex.Replace(LabelTextExpression, @"{.*?}", delegate(Match match)
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 string v = match.ToString();
-                var expression = Substitute(v.Substring(1, v.Length - 2), identifier, CurrentStackFrame(debugger));
-                return GetExpressionForIdentifier(expression, identifier, debugger).Value;
+                return debuggerOperations.GetExpressionForIdentifier(v.Substring(1, v.Length - 2), identifier).Value;
             });
 
             if (FontSize.HasValue)

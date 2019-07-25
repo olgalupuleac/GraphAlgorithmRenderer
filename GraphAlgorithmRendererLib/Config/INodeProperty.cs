@@ -1,17 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using GraphAlgorithmRenderer.GraphRenderer;
+﻿using GraphAlgorithmRendererLib.GraphRenderer;
 using Microsoft.Msagl.Drawing;
-using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Debugger = EnvDTE.Debugger;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
     public interface INodeProperty
     {
-        void Apply(Node node, Debugger debugger, Identifier identifier);
+        string Type { get; }
+        void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier);
     }
 
     public class FillColorNodeProperty : INodeProperty
@@ -24,7 +22,10 @@ namespace GraphAlgorithmRenderer.Config
 
         [JsonProperty] public Color Color { get; }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "FillColor";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.FillColor = Color;
         }
@@ -38,9 +39,14 @@ namespace GraphAlgorithmRenderer.Config
             Shape = shape;
         }
 
-        [JsonProperty] public Shape Shape { get; }
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Shape Shape { get; }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "Shape";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.Shape = Shape;
         }
@@ -53,9 +59,12 @@ namespace GraphAlgorithmRenderer.Config
         {
         }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -1)]
+        public string Type { get; } = "Label";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
-            ApplyLabel(node, debugger, identifier);
+            ApplyLabel(node, debuggerOperations, identifier);
         }
     }
 
@@ -69,7 +78,10 @@ namespace GraphAlgorithmRenderer.Config
             LineWidth = lineWidth;
         }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "LineWidth";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.LineWidth = LineWidth;
         }
@@ -83,9 +95,13 @@ namespace GraphAlgorithmRenderer.Config
             Color = color;
         }
 
-        [JsonProperty] public Color Color { get; }
+        [JsonProperty]
+        public Color Color { get; }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "LineColor";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.Color = Color;
         }
@@ -99,9 +115,14 @@ namespace GraphAlgorithmRenderer.Config
             Style = style;
         }
 
-        [JsonProperty] public Style Style { get; }
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Style Style { get; }
 
-        public void Apply(Node node, Debugger debugger, Identifier identifier)
+        [JsonProperty(Order = -2)]
+        public string Type { get; } = "Style";
+
+        public void Apply(Node node, DebuggerOperations debuggerOperations, Identifier identifier)
         {
             node.Attr.AddStyle(Style);
         }

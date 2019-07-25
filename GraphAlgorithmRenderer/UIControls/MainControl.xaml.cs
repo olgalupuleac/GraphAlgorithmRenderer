@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using GraphAlgorithmRenderer.Config;
+using GraphAlgorithmRendererLib.Config;
 
 namespace GraphAlgorithmRenderer.UIControls
 {
@@ -32,9 +32,22 @@ namespace GraphAlgorithmRenderer.UIControls
                 ((NodeFamilyWindow) w).ok.Click +=
                     (o, sender) => i.Content = ((NodeFamilyWindow) w).FamilyName.Text;
             };
+            Nodes.AddProperty.Click += (sender, args) =>
+            {
+                foreach (var edgeWindow in Edges.Windows)
+                {
+                    ((EdgeFamilyWindow) edgeWindow).SetRadioButtons(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
+                }
+            };
+            Nodes.RemoveProperty.Click += (sender, args) =>
+            {
+                foreach (var edgeWindow in Edges.Windows)
+                {
+                    ((EdgeFamilyWindow)edgeWindow).SetRadioButtons(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
+                }
+            };
             Edges.WindowGenerator = () =>
-                new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow) kv.Value)){ NameIsSet = false };
+                new EdgeFamilyWindow(Nodes.Windows.Cast<NodeFamilyWindow>().ToList()) { NameIsSet = false };
             Edges.Description = w =>
             {
                 var textBox = ((EdgeFamilyWindow) w).FamilyName;
@@ -42,8 +55,7 @@ namespace GraphAlgorithmRenderer.UIControls
                 {
                     textBox.Text = $"edge#{Edges.properties.Items.Count}";
                 }
-                return textBox.Text;
-                
+                return textBox.Text;  
             };
             Edges.UpdateDescription = (w, i) =>
             {
@@ -75,12 +87,16 @@ namespace GraphAlgorithmRenderer.UIControls
             Nodes.SetNewWindows(nodeWindows);
             var edgeWindows = config.Edges.Select(e =>
             {
-                var w = new EdgeFamilyWindow(Nodes.WindowsWithDescriptions.ToDictionary(kv => kv.Key,
-                    kv => (NodeFamilyWindow) kv.Value));
+                var w = new EdgeFamilyWindow(Nodes.Windows.Cast<NodeFamilyWindow>().ToList());
                 w.FromEdgeFamily(e);
                 return (Window) w;
             }).ToList();
             Edges.SetNewWindows(edgeWindows);
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            FromConfig(new GraphConfig());
         }
     }
 }

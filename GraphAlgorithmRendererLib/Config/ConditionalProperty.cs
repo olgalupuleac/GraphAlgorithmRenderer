@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-namespace GraphAlgorithmRenderer.Config
+namespace GraphAlgorithmRendererLib.Config
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ConditionMode
     {
         CurrentStackFrame,
@@ -10,7 +12,7 @@ namespace GraphAlgorithmRenderer.Config
         AllStackFramesArgsOnly
     }
 
-    public class Condition
+    public class Condition : IValidatable
     {
         [JsonConstructor]
         public Condition(string template, string functionNameRegex = @".*",
@@ -23,13 +25,25 @@ namespace GraphAlgorithmRenderer.Config
         [JsonProperty] public string Template { get; }
         [JsonProperty] public ConditionMode Mode { get; }
 
-        public string WrappedRegex()
-        {
-            return "^" + FunctionNameRegex + "$";
-        }
+        [JsonIgnore]
+        public string WrappedRegex => "^" + FunctionNameRegex + "$";
 
         [JsonProperty]
         public string FunctionNameRegex { get; set; }
+
+
+        public void Validate()
+        {
+            if (Template == null)
+            {
+                throw new ValidationException("Condition template is null");
+            }
+
+            if (FunctionNameRegex == null)
+            {
+                throw new ValidationException("Condition function name regex is null");
+            }
+        }
     }
 
     public class ConditionalProperty<T>

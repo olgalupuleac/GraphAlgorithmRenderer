@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="GraphAlgorithmRenderer.UIControls.SyntaxHighlighterTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GraphAlgorithmRenderer.UIControls"
+             mc:Ignorable="d" 
+             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit">
+    <Border BorderThickness="1" BorderBrush="LightGray">
+    <avalonEdit:TextEditor  Name="CodeBox"
+                            FontFamily="Consolas"
+                            FontSize="10pt"  MaxHeight="320"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto"
+    />
+    </Border>
+</UserControl>
