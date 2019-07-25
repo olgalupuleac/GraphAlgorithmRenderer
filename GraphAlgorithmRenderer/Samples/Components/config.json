@@ -79,16 +79,16 @@
           "Condition": {
             "Template": "used_vertexes[__v__]",
             "Mode": "CurrentStackFrame",
-            "FunctionNameRegex": ".*"
+            "FunctionNameRegex": "dfs"
           },
           "Properties": [
             {
               "Type": "FillColor",
               "Color": {
                 "A": 255,
-                "R": 34,
-                "G": 139,
-                "B": 34
+                "R": 0,
+                "G": 128,
+                "B": 0
               }
             }
           ]
@@ -134,7 +134,7 @@
           "Properties": [
             {
               "Type": "LineWidth",
-              "LineWidth": 1.2000000476837158
+              "LineWidth": 1.20
             },
             {
               "Type": "Style",
@@ -157,10 +157,6 @@
                 "G": 0,
                 "B": 255
               }
-            },
-            {
-              "Type": "LineWidth",
-              "LineWidth": 2.0
             }
           ]
         }
