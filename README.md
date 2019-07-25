@@ -280,4 +280,4 @@ Now we will create a config. We will have one node family with the index `v`  wi
 7. Sometimes text boxes in Graph Visualization settings seem to be blocked and a text cannot be entered or it appears somewhere else, for example in the file with the code. You can try to close all other windows including the source file (it doesn't mean closing the Solution or stopping the debugger). We would be grateful if you help us to find out how to reproduce this bug.
 9. If you close the graph window, it will not appear until you click *Show graph* button on the main window.
 10. If the begin template, end template or edge source or target cannot be identified, the message box with the error will appear. All other invalid expressions are written to the log and ignored by default. To access the log open the *Output window* and set *Show output from* to *Graph Visualization*. The log is cleared before every new iteration.
-      ![1564076730199](C:\Users\olga\source\repos\GraphAlgorithmRenderer\images\output_window.png)
+      ![1564076730199](images/output_window.png)
