@@ -27,15 +27,11 @@ This Visual Studio extension was developed as an additional debugging tool for g
 
 ### Prerequisites
 
-You will need Visual Studio 2017 (the tool was tested on Visual Studio Community 2017 15.9.5) and Visual C++ installed (the extension should work on .NET projects as well, but it was designed for and tested on C++ projects).
+You will need Visual Studio 2017 or 2019 and Visual C++ installed (the extension should work on .NET projects as well, but it was designed for and tested on C++ projects).
 
 ### Installation
 
 To install the extension, download the VSIX file from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=OlgaLupuleac.graphrenderer2019) or the latest release here <https://github.com/olgalupuleac/GraphAlgorithmRenderer/releases>. Click on the downloaded file and follow the instructions. To open a graph visualization setting window select *View > Other windows > Graph visualization.*
-
-To remove the extension, select *Tools > Extensions and updates > Graph Visualization* and click uninstall.
-
-To update the extension, uninstall it first and then install a new version.
 
 ### Rendering DFS
 
@@ -51,8 +47,7 @@ To update the extension, uninstall it first and then install a new version.
 10. The window with the graph appears.
 11. Step into DFS.
 12. The window with the graph updates automatically.
-13. Play around with the configuration (clicking "Generate config" every time you change something) and do not forget to save the resulting JSON somewhere as __it will be erased__ when you exit Visual Studio.
-
+13. Play around with the configuration (clicking "Generate config" every time you change something).
 ### Other samples
 
 To explore other samples, look at the [Samples](<GraphAlgorithmRenderer/Samples>). Each folder contains a C++ code of some algorithm, JSON config, and screenshots of the resulting graph. To try it out, copy-paste C++ code and add the input file to your project if it is required, then deserialize the config, and start debugging. 
